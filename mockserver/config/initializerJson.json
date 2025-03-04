@@ -1,0 +1,56 @@
+[
+  {
+    "httpRequest" : {
+      "method" : "GET",
+      "path" : "/api/v1/books",
+      "queryStringParameters" : {
+        "code" : ["15345"]
+      }
+    },
+    "httpResponse" : {
+      "body" :
+        [
+          {
+            "taskId": "TASK-001",
+            "status": "Review",
+            "name": "Create integration"
+          },
+          {
+            "taskId": "TASK-002",
+            "status": "To do",
+            "name": "Update db"
+          },
+          {
+            "taskId": "TASK-003",
+            "status": "In progress",
+            "name": "Refactor controllers"
+          },
+          {
+            "taskId": "TASK-004",
+            "status": "In review",
+            "name": "Create API"
+          },
+          {
+            "taskId": "TASK-005",
+            "status": "Done",
+            "name": "Increase test coverage"
+          },
+          {
+            "taskId": "TASK-006",
+            "status": "To do",
+            "name": "Create integration"
+          },
+          {
+            "taskId": "TASK-007",
+            "status": "In progress",
+            "name": "Create API"
+          }
+        ]
+      ,
+      "headers" : {
+        "Access-Control-Allow-Origin": "*"
+      },
+      "statusCode": 200
+    }
+  }
+]
