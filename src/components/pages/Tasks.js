@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Box from '@mui/material/Box';
 import {
-    Autocomplete,
     Card,
     CardContent,
     Divider,
     FormControl,
-    FormHelperText, InputLabel, Link, Select,
-    Stack, styled,
-    TextField,
+    Link, Select,
+    Stack,
     Typography
 } from "@mui/material";
 import {getAllProjects, getTasks, getTaskStatuses} from "../../adapter/adapter";
@@ -32,7 +30,7 @@ export const Tasks = () => {
     useEffect(() => {
         if (project.length !== 0) {
             getTasks(project)
-                .then(tasks => setTasks(tasks))
+                .then(tasks => setTasks(tasks.tasks))
                 .catch(() => console.log("ERROR"));
         }
     }, [project]);
@@ -42,17 +40,15 @@ export const Tasks = () => {
     };
 
     return (
-        <div>
+        <Box>
             <Box>
-                <FormControl sx={{ m: 1, minWidth: 120, color: "white"}} >
-                    <InputLabel sx={{color: "white"}} id="demo-simple-select-standard-label">Age</InputLabel>
+                <FormControl sx={{minWidth: 120, backgroundColor: "white", borderRadius: 2, margin: 2, padding: 2}}>
+                    <Typography color="black">Choose project</Typography>
                     <Select
-                        sx={{color: "white"}}
-                        labelId="demo-simple-select-standard-label"
                         value={project.name}
                         onChange={handleChange}
                         displayEmpty
-                        label="Age"
+                        // label="Project"
                     >
                         {projects.map((project) => (
                             <MenuItem value={project.name}>
@@ -64,6 +60,7 @@ export const Tasks = () => {
             </Box>
             <Box>
                 <Stack
+                    sx={{borderRadius: 2, margin: 2, padding: 2}}
                     direction={"row"}
                     divider={<Divider orientation={"vertical"}/>}
                     spacing={2}
@@ -76,10 +73,14 @@ export const Tasks = () => {
                             spacing={2}
                             flexGrow={1}
                         >
-                            <Typography align={"center"}>
-                                {status}
-                            </Typography>
-                            {tasks.filter(task => task.status === status).map((task) => (
+                            <Card sx={{ borderRadius: 3}}>
+                                <CardContent>
+                                    <Typography align={"center"} sx={{ minWidth: 85, borderRadius: 2}} >
+                                        {status.value}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                            {tasks.filter(task => task.status === status.value).map((task) => (
                                 <Card>
                                     <CardContent>
                                         <Link href={window.location.href + "/" + task.key} underline="hover">
@@ -95,6 +96,6 @@ export const Tasks = () => {
                     ))}
                 </Stack>
             </Box>
-        </div>
+        </Box>
     );
 };

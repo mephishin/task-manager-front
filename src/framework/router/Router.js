@@ -3,6 +3,7 @@ import {Navigation} from "./Navigation";
 import {NoPage} from "../../components/pages/NoPage";
 import {Tasks} from "../../components/pages/Tasks";
 import HomePage from "../../components/pages/HomePage";
+import {Task} from "../../components/pages/Task";
 
 export const Router = () => {
     return (
@@ -12,7 +13,7 @@ export const Router = () => {
                     <Route index element={<HomePage />} />
                     <Route path="/tasks" element={<Tasks />} />
                     <Route path="*" element={<NoPage />} />
-                    <Route path="/tasks/:key" element={<Tasks />} />
+                    <Route path="/tasks/:key" element={<Task />} />
                 </Route>
             </Routes>
         </BrowserRouter>
