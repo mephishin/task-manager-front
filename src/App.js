@@ -1,12 +1,11 @@
 import {Router} from "./framework/router/Router";
-import Box from "@mui/material/Box";
+import {useAuth} from "./UseAuth";
 
-function App() {
-  return (
-      <Box>
-          <Router/>
-      </Box>
-  );
+export const App = () => {
+    useAuth();
+    return (
+        <div>
+            <Router />
+        </div>
+    )
 }
-
-export default App;

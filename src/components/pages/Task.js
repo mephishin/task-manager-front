@@ -1,36 +1,21 @@
-import {FormControl, Input, Stack, Typography} from "@mui/material";
+import {Input, Stack, Typography} from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {getTaskByKey, updateTaskByTaskKey} from "../../adapter/adapter";
 import {useParams} from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
 
 const fields = ["name", "description", "status", "type", "project"]
 
 export const Task = () => {
-    const [task, setTask] = useState({});
     const {key} = useParams();
-    const { control, handleSubmit, getValues, setValue } = useForm({
-        defaultValues: {
-            name: "",
-            description: "",
-            status: "",
-            type: "",
-            project: ""
-        },
-    })
+    const { control, handleSubmit, setValue } = useForm({})
 
     useEffect(() => {
         getTaskByKey(key)
             .then(task => {
-                    console.log(task)
-                    setValue("name", task.name);
-                    setValue("description", task.description);
-                    setValue("status", task.status);
-                    setValue("type", task.type);
-                    setValue("project", task.project);
+                    setData(task)
                 }
             )
             .catch(() => console.log("ERROR"));
@@ -41,18 +26,19 @@ export const Task = () => {
         console.log(data)
         updateTaskByTaskKey(data)
             .then(task => {
-                    setValue("name", task.name);
-                    setValue("description", task.description);
-                    setValue("status", task.status);
-                    setValue("type", task.type);
-                    setValue("project", task.project);
+                    setData(task)
                 }
             )
             .catch(() => console.log("ERROR"))
     }
 
+    const setData = (task) => {
+        fields.map(field => setValue(field, task[field]))
+    }
+
     return (
         <Box sx={{ borderRadius: 20}}>
+            <Typography>Edit task {key}:</Typography>
             <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5}}>
                 {fields.map((field) => (
                     <Controller

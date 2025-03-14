@@ -5,18 +5,37 @@ import {
     CardContent,
     Divider,
     FormControl,
-    Link, Select,
+    Link, Modal, Select,
     Stack,
     Typography
 } from "@mui/material";
 import {getAllProjects, getTasks, getTaskStatuses} from "../../adapter/adapter";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import {Task} from "./Task";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 export const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [taskStatuses, setStatuses] = useState([]);
     const [projects, setProjects] = useState([]);
     const [project, setProject] = useState('');
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
 
     useEffect(() => {
         getTaskStatuses()
@@ -41,6 +60,19 @@ export const Tasks = () => {
 
     return (
         <Box>
+            <Box sx={{ margin: 2 }}>
+                <Button sx={{ backgroundColor: "white" }} onClick={handleOpen}>Create task</Button>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Task />
+                    </Box>
+                </Modal>
+            </Box>
             <Box>
                 <FormControl sx={{minWidth: 120, backgroundColor: "white", borderRadius: 2, margin: 2, padding: 2}}>
                     <Typography color="black">Choose project</Typography>
