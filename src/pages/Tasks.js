@@ -9,7 +9,7 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {getAllProjects, getTasks, getTaskStatuses} from "../../adapter/adapter";
+import {getAllProjects, getTasks, getTaskStatuses} from "../adapter/resources";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import {Task} from "./Task";

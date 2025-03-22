@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import Keycloak from "keycloak-js";
 
-const client = new Keycloak({
+export const client = new Keycloak({
     url: "http://localhost:9090",
     realm: "task-manager",
     clientId: "task-manager-front",
 });
+
 
 export const useAuth = () => {
     const isRun = useRef(false);
@@ -22,9 +23,9 @@ export const useAuth = () => {
             })
             .then((res) => {
                 setLogin(res);
-                setToken(client.token);
                 localStorage.setItem("token", client.token)
             });
     }, []);
+
     return [isLogin, token];
 };

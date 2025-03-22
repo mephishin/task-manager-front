@@ -1,7 +1,7 @@
 import {Input, Stack, Typography} from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import React, {useEffect} from "react";
-import {getTaskByKey, updateTaskByTaskKey} from "../../adapter/adapter";
+import {getTaskByKey, updateTaskByTaskKey} from "../adapter/resources";
 import {useParams} from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";

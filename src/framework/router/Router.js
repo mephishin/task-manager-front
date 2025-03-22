@@ -1,9 +1,10 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import {Navigation} from "./Navigation";
-import {NoPage} from "../../components/pages/NoPage";
-import {Tasks} from "../../components/pages/Tasks";
-import HomePage from "../../components/pages/HomePage";
-import {Task} from "../../components/pages/Task";
+import {NoPage} from "../../pages/NoPage";
+import {Tasks} from "../../pages/Tasks";
+import HomePage from "../../pages/HomePage";
+import {Task} from "../../pages/Task";
+import {Auth} from "../../pages/Auth";
 
 export const Router = () => {
     return (
@@ -11,6 +12,7 @@ export const Router = () => {
             <Routes>
                 <Route path="/" element={<Navigation/>}>
                     <Route index element={<HomePage />} />
+                    <Route path="/auth" element={<Auth />}/>
                     <Route path="/tasks" element={<Tasks />} />
                     <Route path="*" element={<NoPage />} />
                     <Route path="/tasks/:key" element={<Task />} />

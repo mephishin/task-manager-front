@@ -1,5 +1,6 @@
 import {Router} from "./framework/router/Router";
-import {useAuth} from "./UseAuth";
+import {useAuth} from "./pages/UseAuth";
+
 
 export const App = () => {
     useAuth();
