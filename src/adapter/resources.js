@@ -1,5 +1,5 @@
 import axios from "axios";
-import {client} from "../pages/UseAuth";
+import AuthService from "../pages/AuthService";
 
 // export const getSomething = () =>
 //     fetch("http://localhost:1080/api/v1/books?code=15345", {
@@ -13,9 +13,13 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(function (config) {
-
-    config.headers.Authorization = "Bearer " + client.token
-    return config;
+    if (AuthService.isLoggedIn()) {
+        const cb = () => {
+            config.headers.Authorization = `Bearer ${AuthService.getToken()}`;
+            return Promise.resolve(config);
+        };
+        return AuthService.updateToken(cb);
+    }
 });
 
 export const getTasks = (projectName) =>
@@ -43,6 +47,6 @@ export const updateTaskByTaskKey = (task) =>
         .catch(error => console.error(error))
 
 export const getTaskByKey = (key) =>
-    axios.get(`http://localhost:8080/task/${key}`)
+    api.get(`http://localhost:8080/task/${key}`)
         .then(response => response.data)
         .catch(error => console.error(error));

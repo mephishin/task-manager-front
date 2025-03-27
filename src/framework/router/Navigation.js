@@ -6,14 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import {Outlet} from "react-router-dom";
-import {Link, List, ListItemButton, ListItemText} from "@mui/material";
+import {Link} from "@mui/material";
+import AuthService from "../../pages/AuthService";
 
 const pages = [
     {
@@ -25,7 +23,26 @@ const pages = [
         link: '/tasks'
     }
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [
+    {
+        name: 'Profile',
+        link: '/profile'
+    },
+    {
+        name: 'Account',
+        link: '/account'
+
+    },
+    {
+        name: 'Dashboard',
+        link: '/dashboard'
+    },
+    {
+        name: 'Logout',
+        link: '/logout'
+
+    }
+];
 
 
 export const Navigation = () => {
@@ -89,8 +106,13 @@ export const Navigation = () => {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                            <MenuItem key={setting.name} onClick={() => {
+                                handleCloseUserMenu();
+                                AuthService.doLogout();
+                            }
+
+                            }>
+                                <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
