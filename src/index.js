@@ -1,7 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {App} from "./App";
-import AuthService from "./pages/AuthService";
+import AuthService from "./AuthService";
 
 const renderApp = () =>
     createRoot(document.getElementById("root"))

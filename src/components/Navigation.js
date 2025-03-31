@@ -11,12 +11,12 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Outlet} from "react-router-dom";
 import {Link} from "@mui/material";
-import AuthService from "../../pages/AuthService";
+import AuthService from "../AuthService";
 
 const pages = [
     {
-        name: 'Home',
-        link: '/'
+        name: 'Something else',
+        link: '/something_else'
     },
     {
         name: 'Tasks',

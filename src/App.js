@@ -1,4 +1,4 @@
-import {Router} from "./framework/router/Router";
+import {Router} from "./components/Router";
 
 export const App = () => {
     return (

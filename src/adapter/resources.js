@@ -1,5 +1,5 @@
 import axios from "axios";
-import AuthService from "../pages/AuthService";
+import AuthService from "../AuthService";
 
 // export const getSomething = () =>
 //     fetch("http://localhost:1080/api/v1/books?code=15345", {
@@ -38,7 +38,7 @@ export const getAllProjects = () =>
         .catch(error => console.error(error))
 
 export const updateTaskByTaskKey = (task) =>
-    api.post("/task/update", task, {
+    api.put("/task", task, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         }
@@ -47,6 +47,15 @@ export const updateTaskByTaskKey = (task) =>
         .catch(error => console.error(error))
 
 export const getTaskByKey = (key) =>
-    api.get(`http://localhost:8080/task/${key}`)
+    api.get(`/task/${key}`)
         .then(response => response.data)
         .catch(error => console.error(error));
+
+export const createTask = (task) =>
+    api.post("/task", task, {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+    })
+        .then(response => response.data)
+        .catch(error => console.error(error))

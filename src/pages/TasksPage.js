@@ -12,7 +12,8 @@ import {
 import {getAllProjects, getTasks, getTaskStatuses} from "../adapter/resources";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import {Task} from "./Task";
+import {CreateTaskForm} from "../components/CreateTaskForm";
+
 
 const style = {
     position: 'absolute',
@@ -26,7 +27,7 @@ const style = {
     p: 4,
 };
 
-export const Tasks = () => {
+export const TasksPage = () => {
     const [tasks, setTasks] = useState([]);
     const [taskStatuses, setStatuses] = useState([]);
     const [projects, setProjects] = useState([]);
@@ -69,7 +70,7 @@ export const Tasks = () => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                        <Task />
+                        <CreateTaskForm handleClose={handleClose} />
                     </Box>
                 </Modal>
             </Box>
