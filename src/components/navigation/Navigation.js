@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Outlet} from "react-router-dom";
 import {Link} from "@mui/material";
-import AuthService from "../AuthService";
+import AuthService from "../../AuthService";
 
 const pages = [
     {

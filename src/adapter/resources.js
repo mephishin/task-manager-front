@@ -32,6 +32,11 @@ export const getTaskStatuses = () =>
         .then(response => response.data)
         .catch(error => console.error(error));
 
+export const getTaskTypes = () =>
+    api.get("/task/types")
+        .then(response => response.data)
+        .catch(error => console.error(error));
+
 export const getAllProjects = () =>
     api.get("/project")
         .then(response => response.data)

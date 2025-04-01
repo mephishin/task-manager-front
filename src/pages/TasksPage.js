@@ -12,7 +12,7 @@ import {
 import {getAllProjects, getTasks, getTaskStatuses} from "../adapter/resources";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import {CreateTaskForm} from "../components/CreateTaskForm";
+import {CreateTaskForm} from "../components/forms/CreateTaskForm";
 
 
 const style = {

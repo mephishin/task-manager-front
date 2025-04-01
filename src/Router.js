@@ -1,8 +1,8 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {Navigation} from "./Navigation";
-import {NoPage} from "../pages/NoPage";
-import {TasksPage} from "../pages/TasksPage";
-import {TaskPage} from "../pages/TaskPage";
+import {Navigation} from "./components/navigation/Navigation";
+import {NoPage} from "./pages/NoPage";
+import {TasksPage} from "./pages/TasksPage";
+import {TaskPage} from "./pages/TaskPage";
 
 export const Router = () => {
     return (

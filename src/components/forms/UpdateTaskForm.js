@@ -1,18 +1,31 @@
-import React from "react";
-import {createTask} from "../adapter/resources";
+import React, {useEffect} from "react";
+import {updateTaskByTaskKey} from "../../adapter/resources";
 import {Stack, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {fields} from "../model/TaskFormFields";
+import {fields} from "../../model/TaskFormFields";
 
-export const CreateTaskForm = (props) => {
-    const { control, handleSubmit} = useForm({})
+export const UpdateTaskForm = (props) => {
+    const {task, taskKey} = props;
+    const { control, handleSubmit, setValue } = useForm({})
+
+    useEffect(() => {
+        setData(task);
+    }, [])
 
     const onSubmit = (data) => {
-        createTask(data)
-            .catch(() => console.log("ERROR"))
-        props.handleClose()
+        data.key = taskKey;
+        updateTaskByTaskKey(data)
+            .then(task => {
+                    setData(task)
+                }
+            )
+            .catch(() => console.log("ERROR"));
+    }
+
+    const setData = (res) => {
+        fields.map(field => setValue(field, res[field]))
     }
 
     return(
