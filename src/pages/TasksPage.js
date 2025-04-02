@@ -1,55 +1,35 @@
 import React, { useState, useEffect} from 'react'
 import Box from '@mui/material/Box';
 import {
-    Autocomplete,
     Card,
     CardContent,
     Divider,
-    FormControl,
     Link,
-    Stack, TextField,
+    Stack,
     Typography
 } from "@mui/material";
-import {getAllProjects, getTasks, getTaskStatuses} from "../adapter/resources";
+import {getTasks, getTaskStatuses} from "../adapter/resources";
+import {useParams} from "react-router-dom";
 
 export const TasksPage = () => {
     const [tasks, setTasks] = useState([]);
     const [taskStatuses, setStatuses] = useState([]);
-    const [projects, setProjects] = useState([]);
-    const [project, setProject] = useState('');
+    const {project} = useParams();
 
     useEffect(() => {
         getTaskStatuses()
             .then(statuses => setStatuses(statuses))
             .catch(() => console.log("ERROR"));
-        getAllProjects()
-            .then(projects => setProjects(projects))
-            .catch(() => console.log("ERROR"));
         }, []);
 
     useEffect(() => {
-        if (project.length !== 0) {
-            getTasks(project)
-                .then(tasks => setTasks(tasks.tasks))
-                .catch(() => console.log("ERROR"));
-        }
+        getTasks(project)
+            .then(tasks => setTasks(tasks.tasks))
+            .catch(() => console.log("ERROR"));
     }, [project]);
 
     return (
         <Box>
-            <Box>
-                <FormControl sx={{minWidth: "25%", backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
-                    <Autocomplete
-                        value={project.name}
-                        onChange={(event, newValue) => setProject(newValue)}
-                        disablePortal
-                        options={projects.map(project => project.name)}
-                        renderInput={(params) => <TextField {...params} label="project" />}
-                        displayEmpty
-                    >
-                    </Autocomplete>
-                </FormControl>
-            </Box>
             <Box>
                 <Stack
                     sx={{borderRadius: 2, margin: 2, padding: 2}}

@@ -9,12 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import {Outlet} from "react-router-dom";
-import {Link, Modal} from "@mui/material";
+import {Outlet, useNavigate} from "react-router-dom";
+import {Autocomplete, FormControl, Link, Modal, TextField} from "@mui/material";
 import AuthService from "../../AuthService";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import {CreateTaskForm} from "../forms/CreateTaskForm";
+import {getAllProjects} from "../../adapter/resources";
 
 const pages = [
     {
@@ -60,6 +61,10 @@ const style = {
 
 
 export const Navigation = () => {
+    const [projects, setProjects] = useState([]);
+    const [project, setProject] = useState('');
+    const navigate = useNavigate();
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -81,6 +86,17 @@ export const Navigation = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const onChangeHandler = (newValue) => {
+        setProject(newValue);
+        navigate(`/tasks/${newValue}`);
+    };
+
+    useEffect(() => {
+        getAllProjects()
+            .then(projects => setProjects(projects))
+            .catch(() => console.log("ERROR"));
+    }, []);
 
     return (
         <AppBar>
@@ -109,6 +125,19 @@ export const Navigation = () => {
                             </MenuItem>
                         ))}
                     </Menu>
+                </Box>
+                <Box>
+                    <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
+                        <Autocomplete
+                            value={project.name}
+                            onChange={(event, newValue) => onChangeHandler(newValue)}
+                            disablePortal
+                            options={projects.map(project => project.name)}
+                            renderInput={(params) => <TextField {...params} label="project" />}
+                            displayEmpty
+                        >
+                        </Autocomplete>
+                    </FormControl>
                 </Box>
                 <Box>
                     <Button sx={{ backgroundColor: "white" }} onClick={handleOpen}>Create task</Button>

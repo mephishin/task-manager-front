@@ -10,7 +10,7 @@ export const Router = () => {
             <Routes>
                 <Route path="/" element={<Navigation/>}>
                     <Route index element={<Navigate to="/tasks" />} />
-                    <Route path="/tasks" element={<TasksPage />} />
+                    <Route path="/tasks/:project" element={<TasksPage />} />
                     <Route path="*" element={<NoPage />} />
                     <Route path="/tasks/:key" element={<TaskPage />} />
                 </Route>
