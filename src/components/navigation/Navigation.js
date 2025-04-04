@@ -33,15 +33,6 @@ const settings = [
         link: '/profile'
     },
     {
-        name: 'Account',
-        link: '/account'
-
-    },
-    {
-        name: 'Dashboard',
-        link: '/dashboard'
-    },
-    {
         name: 'Logout',
         link: '/logout'
 

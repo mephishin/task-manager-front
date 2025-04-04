@@ -12,7 +12,7 @@ export const Router = () => {
                     <Route index element={<Navigate to="/tasks" />} />
                     <Route path="/tasks/:project" element={<TasksPage />} />
                     <Route path="*" element={<NoPage />} />
-                    <Route path="/tasks/:key" element={<TaskPage />} />
+                    <Route path="/tasks/:project/:key" element={<TaskPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -3,7 +3,7 @@ import Keycloak from "keycloak-js";
 const client = new Keycloak({
     url: "http://localhost:9090",
     realm: "task-manager",
-    clientId: "task-manager-front",
+    clientId: "task-manager",
 });
 
 

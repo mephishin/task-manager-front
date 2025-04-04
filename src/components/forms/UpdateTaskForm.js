@@ -12,10 +12,11 @@ export const UpdateTaskForm = (props) => {
 
     useEffect(() => {
         setData(task);
-    }, [])
+    }, [task])
 
     const onSubmit = (data) => {
         data.key = taskKey;
+        console.log(data);
         updateTaskByTaskKey(data)
             .then(task => {
                     setData(task)
@@ -35,7 +36,7 @@ export const UpdateTaskForm = (props) => {
                     <Controller
                         name={field}
                         control={control}
-                        render={({ field }) => <TextField {...field} label={field.name} sx={{ margin: 5}}/>}
+                        render={({ field }) => <TextField {...field} slotProps={{ inputLabel: { shrink: true } }} label={field.name} sx={{ margin: 3}}/>}
                     />
                 ))}
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
