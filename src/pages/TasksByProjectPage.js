@@ -8,23 +8,25 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {getTasksByAuthParticipant, getTaskStatuses} from "../adapter/resources";
+import {getTasks, getTaskStatuses} from "../adapter/resources";
+import {useParams} from "react-router-dom";
 
-export const TasksPage = () => {
+export const TasksByProjectPage = () => {
     const [tasks, setTasks] = useState([]);
     const [taskStatuses, setStatuses] = useState([]);
+    const {project} = useParams();
 
     useEffect(() => {
         getTaskStatuses()
             .then(statuses => setStatuses(statuses))
             .catch(() => console.log("ERROR"));
-    }, []);
+        }, []);
 
     useEffect(() => {
-        getTasksByAuthParticipant()
+        getTasks(project)
             .then(tasks => setTasks(tasks.tasks))
             .catch(() => console.log("ERROR"));
-    }, []);
+    }, [project]);
 
     return (
         <Box>

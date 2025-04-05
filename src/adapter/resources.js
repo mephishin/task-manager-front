@@ -64,3 +64,8 @@ export const createTask = (task) =>
     })
         .then(response => response.data)
         .catch(error => console.error(error))
+
+export const getTasksByAuthParticipant = () =>
+    api.get("/task/all")
+        .then(response => response.data)
+        .catch(error => console.error(error))
