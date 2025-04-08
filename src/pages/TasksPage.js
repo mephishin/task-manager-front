@@ -1,71 +1,19 @@
 import React, { useState, useEffect} from 'react'
-import Box from '@mui/material/Box';
-import {
-    Card,
-    CardContent,
-    Divider,
-    Link,
-    Stack,
-    Typography
-} from "@mui/material";
 import {getTasksByAuthParticipant, getTaskStatuses} from "../adapter/resources";
+import {TasksTable} from "../components/tasks/TasksTable";
 
 export const TasksPage = () => {
-    const [tasks, setTasks] = useState([]);
-    const [taskStatuses, setStatuses] = useState([]);
-
-    useEffect(() => {
-        getTaskStatuses()
-            .then(statuses => setStatuses(statuses))
-            .catch(() => console.log("ERROR"));
-    }, []);
+    const [participants, setParticipants] = useState([]);
+    const [statuses, setStatuses] = useState([]);
 
     useEffect(() => {
         getTasksByAuthParticipant()
-            .then(tasks => setTasks(tasks.tasks))
-            .catch(() => console.log("ERROR"));
+            .then(res => setParticipants(res.participants))
+        getTaskStatuses()
+            .then(res => setStatuses(res))
     }, []);
 
-    return (
-        <Box>
-            <Box>
-                <Stack
-                    sx={{borderRadius: 2, margin: 2, padding: 2}}
-                    direction={"row"}
-                    divider={<Divider orientation={"vertical"}/>}
-                    spacing={2}
-                    flexGrow={1}
-                >
-                    {taskStatuses.map((status) => (
-                        <Stack
-                            direction={"column"}
-                            divider={<Divider orientation={"horizontal"}/>}
-                            spacing={2}
-                            flexGrow={1}
-                        >
-                            <Card sx={{ borderRadius: 3}}>
-                                <CardContent>
-                                    <Typography align={"center"} sx={{ minWidth: 85, borderRadius: 2}} >
-                                        {status.value}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                            {tasks.filter(task => task.status === status.value).map((task) => (
-                                <Card>
-                                    <CardContent>
-                                        <Link href={window.location.href + "/" + task.key} underline="hover">
-                                            {task.key}
-                                        </Link>
-                                        <Typography>
-                                            {task.name}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </Stack>
-                    ))}
-                </Stack>
-            </Box>
-        </Box>
-    );
+    return(
+        <TasksTable participants={participants} statuses={statuses}/>
+    )
 };

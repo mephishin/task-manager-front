@@ -14,9 +14,7 @@ export const TaskPage = () => {
         getTaskByKey(key)
             .then(res => {
                     setTask(res)
-                }
-            )
-            .catch(() => console.log("ERROR"));
+            })
     }, []);
 
     return (

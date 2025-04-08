@@ -16,20 +16,16 @@ export const CreateTaskForm = (props) => {
 
     const onSubmit = (data) => {
         createTask(data)
-            .catch(() => console.log("ERROR"))
         props.handleClose()
     }
 
     useEffect(() => {
         getTaskTypes()
             .then(types => setTypes(types))
-            .catch(() => console.log("ERROR"))
         getTaskStatuses()
             .then(statuses => setStatuses(statuses))
-            .catch(() => console.log("ERROR"));
         getAllProjects()
             .then(projects => setProjects(projects))
-            .catch(() => console.log("ERROR"));
     }, [])
 
     return(

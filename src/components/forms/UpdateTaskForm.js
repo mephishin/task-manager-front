@@ -22,7 +22,6 @@ export const UpdateTaskForm = (props) => {
                     setData(task)
                 }
             )
-            .catch(() => console.log("ERROR"));
     }
 
     const setData = (res) => {
