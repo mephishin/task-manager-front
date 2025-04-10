@@ -5,15 +5,20 @@ import {TasksTable} from "../components/tasks/TasksTable";
 export const TasksPage = () => {
     const [participants, setParticipants] = useState([]);
     const [statuses, setStatuses] = useState([]);
+    const [notAssignedTasks, setNotAssignedTasks] = useState([]);
 
     useEffect(() => {
         getTasksByAuthParticipant()
-            .then(res => setParticipants(res.participants))
+            .then(res => {
+                setParticipants(res.participants)
+                setNotAssignedTasks(res.notAssignedTasks)
+            })
         getTaskStatuses()
             .then(res => setStatuses(res))
     }, []);
 
     return(
-        <TasksTable participants={participants} statuses={statuses}/>
+        <TasksTable notAssignedTasks={notAssignedTasks} statuses={statuses} participants={participants}/>
     )
 };
+

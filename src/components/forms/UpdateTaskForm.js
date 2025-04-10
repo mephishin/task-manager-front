@@ -4,11 +4,11 @@ import {Stack, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {fields} from "../../model/TaskFormFields";
 
 export const UpdateTaskForm = (props) => {
     const {task, taskKey} = props;
     const { control, handleSubmit, setValue } = useForm({})
+    const fields = []
 
     useEffect(() => {
         setData(task);

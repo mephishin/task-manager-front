@@ -69,3 +69,8 @@ export const getTasksByAuthParticipant = () =>
     api.get("/task/all")
         .then(response => response.data)
         .catch(error => console.error(error))
+
+export const getAllParticipants = () =>
+    api.get("/participant/all")
+        .then(response => response.data)
+        .catch(error => console.error(error))

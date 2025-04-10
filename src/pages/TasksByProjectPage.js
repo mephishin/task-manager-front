@@ -4,15 +4,15 @@ import {useParams} from "react-router-dom";
 import {TasksTable} from "../components/tasks/TasksTable";
 
 export const TasksByProjectPage = () => {
-    const [participants, setParticipants] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const {project} = useParams();
 
     useEffect(() => {
         getTasks(project)
-            .then(res => setParticipants(res.participants))
+            .then(res => setTasks(res))
     }, [project]);
 
     return (
-        <TasksTable participants={participants}/>
+        <TasksTable tasks={tasks}/>
     );
 };

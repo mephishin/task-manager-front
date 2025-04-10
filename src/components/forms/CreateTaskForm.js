@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {createTask, getAllProjects, getTaskStatuses, getTaskTypes} from "../../adapter/resources";
+import {createTask, getAllParticipants, getAllProjects, getTaskStatuses, getTaskTypes} from "../../adapter/resources";
 import {Autocomplete, FormControl, InputLabel, Select, Stack, TextField, Typography} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
@@ -12,7 +12,7 @@ export const CreateTaskForm = (props) => {
     const [projects, setProjects] = useState([])
     const [types, setTypes] = useState([])
     const [statuses, setStatuses] = useState([])
-
+    const [participants, setParticipants] = useState([])
 
     const onSubmit = (data) => {
         createTask(data)
@@ -26,6 +26,8 @@ export const CreateTaskForm = (props) => {
             .then(statuses => setStatuses(statuses))
         getAllProjects()
             .then(projects => setProjects(projects))
+        getAllParticipants()
+            .then(participants => setParticipants(participants))
     }, [])
 
     return(
@@ -91,6 +93,23 @@ export const CreateTaskForm = (props) => {
                             disablePortal
                             options={projects.map(project => project.name)}
                             renderInput={(params) => <TextField {...params} label="project" />}
+                            displayEmpty
+                            {...rest}
+                            sx={{ margin: 5}}
+                        >
+                        </Autocomplete>
+                    }
+                />
+                <Controller
+                    name="assignee"
+                    control={control}
+                    render={({ field: {onChange, value, ...rest} }) =>
+                        <Autocomplete
+                            value={value}
+                            onChange={(event, newValue) => onChange(newValue)}
+                            disablePortal
+                            options={participants.map(project => project.username)}
+                            renderInput={(params) => <TextField {...params} label="assignee" />}
                             displayEmpty
                             {...rest}
                             sx={{ margin: 5}}

@@ -2,7 +2,7 @@ import {Card, CardContent, Grid2, Link, Stack, Typography} from "@mui/material";
 import React from "react";
 
 export const TasksTable = (props) => {
-    const {participants, statuses} = props;
+    const {notAssignedTasks, participants, statuses} = props;
 
     return (
         <Grid2 direction={"column"} columns={statuses.length * 2} spacing={2}>
@@ -23,9 +23,9 @@ export const TasksTable = (props) => {
                 <Grid2 container spacing={2}>
                     {statuses.map((_status) => (
                         <Grid2 size={2}>
-                            <Stack spacing={2} sx={{marginY: 5}}>
+                            <Stack spacing={2} sx={{marginY: 3}}>
                                 {participant.tasks.filter((task) => task.status === _status.value).map((task) => (
-                                    <Card sx={{marginY: 5}}>
+                                    <Card>
                                         <CardContent>
                                             <Link href={window.location.href + "/" + task.key} underline="hover">
                                                 {task.key}
@@ -44,6 +44,29 @@ export const TasksTable = (props) => {
                     ))}
                 </Grid2>
             ))}
+            <Grid2 container spacing={2}>
+                {statuses.map((_status) => (
+                    <Grid2 size={2}>
+                        <Stack spacing={2} sx={{marginY: 3}}>
+                            {notAssignedTasks.filter((task) => task.status === _status.value).map((task) => (
+                                <Card>
+                                    <CardContent>
+                                        <Link href={window.location.href + "/" + task.key} underline="hover">
+                                            {task.key}
+                                        </Link>
+                                        <Typography>
+                                            {task.name}
+                                        </Typography>
+                                        <Typography>
+                                            Not assigned
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </Stack>
+                    </Grid2>
+                ))}
+            </Grid2>
         </Grid2>
     )
 }
