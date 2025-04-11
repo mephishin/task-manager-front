@@ -1,19 +1,20 @@
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {Navigation} from "./components/navigation/Navigation";
 import {NoPage} from "./pages/NoPage";
-import {TasksByProjectPage} from "./pages/TasksByProjectPage";
+import {ProjectPage} from "./pages/ProjectPage";
 import {TaskPage} from "./pages/TaskPage";
-import {TasksPage} from "./pages/TasksPage";
+import {MyProjectPage} from "./pages/MyProjectPage";
 
 export const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Navigation/>}>
-                    <Route index element={<Navigate to="/tasks" />} />
-                    <Route path="/tasks" element={<TasksPage />} />
-                    <Route path="/tasks/:project" element={<TasksByProjectPage />} />
-                    <Route path="/tasks/:project/:key" element={<TaskPage />} />
+                    <Route path="/project" >
+                        <Route index element={<MyProjectPage />} />
+                        <Route path=":project" element={<ProjectPage />} />
+                    </Route>
+                    <Route path="/task/:key" element={<TaskPage />} />
                     <Route path="*" element={<NoPage />} />
                 </Route>
             </Routes>

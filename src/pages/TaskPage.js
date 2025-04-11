@@ -1,23 +1,28 @@
 import React, {useEffect, useState} from "react";
-import {getTaskByKey} from "../adapter/resources";
+import {getAllParticipants, getTaskByKey, getTaskStatuses, getTaskTypes} from "../adapter/resources";
 import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
 
-class Task {
-}
-
 export const TaskPage = () => {
-    const [task, setTask] = useState(new Task());
     const {key} = useParams();
 
-    useEffect(() => {
+    const [types, setTypes] = useState([])
+    const [participants, setParticipants] = useState([])
+    const [statuses, setStatuses] = useState([])
+    const [task, setTask] = useState([])
+
+    useEffect( () => {
+        getTaskTypes()
+            .then(types => setTypes(types))
+        getTaskStatuses()
+            .then(statuses => setStatuses(statuses))
+        getAllParticipants()
+            .then(participants => setParticipants(participants))
         getTaskByKey(key)
-            .then(res => {
-                    setTask(res)
-            })
-    }, []);
+            .then(task => setTask(task))
+    }, [])
 
     return (
-        <UpdateTaskForm task={task} taskKey={key}/>
+        <UpdateTaskForm taskKey={key} types={types} participants={participants} statuses={statuses} task={task}/>
     )
 }

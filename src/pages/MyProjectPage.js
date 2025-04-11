@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react'
 import {getTasksByAuthParticipant, getTaskStatuses} from "../adapter/resources";
 import {TasksTable} from "../components/tasks/TasksTable";
 
-export const TasksPage = () => {
+export const MyProjectPage = () => {
     const [participants, setParticipants] = useState([]);
     const [statuses, setStatuses] = useState([]);
     const [notAssignedTasks, setNotAssignedTasks] = useState([]);

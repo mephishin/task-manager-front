@@ -18,20 +18,20 @@ import {CreateTaskForm} from "../forms/CreateTaskForm";
 import {getAllProjects} from "../../adapter/resources";
 
 const pages = [
+    // {
+    //     name: 'Something else',
+    //     link: '/something_else'
+    // },
     {
-        name: 'Something else',
-        link: '/something_else'
-    },
-    {
-        name: 'Tasks',
-        link: '/tasks'
+        name: 'My project',
+        link: '/project'
     }
 ];
 const settings = [
-    {
-        name: 'Profile',
-        link: '/profile'
-    },
+    // {
+    //     name: 'Profile',
+    //     link: '/profile'
+    // },
     {
         name: 'Logout',
         link: '/logout'
@@ -80,7 +80,7 @@ export const Navigation = () => {
 
     const onChangeHandler = (newValue) => {
         setProject(newValue);
-        navigate(`/tasks/${newValue}`);
+        navigate(`/project/${newValue}`);
     };
 
     useEffect(() => {
@@ -91,7 +91,7 @@ export const Navigation = () => {
 
     return (
         <AppBar>
-            <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+            <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
                 <Box>
                     <IconButton
                         size="large"
@@ -101,7 +101,7 @@ export const Navigation = () => {
                         onClick={handleOpenNavMenu}
                         color="inherit"
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Menu
                         id="menu-appbar"
@@ -112,7 +112,7 @@ export const Navigation = () => {
                     >
                         {pages.map((page) => (
                             <MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} href={page.link}>
-                                <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
+                                <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
@@ -124,14 +124,14 @@ export const Navigation = () => {
                             onChange={(event, newValue) => onChangeHandler(newValue)}
                             disablePortal
                             options={projects.map(project => project.name)}
-                            renderInput={(params) => <TextField {...params} label="project" />}
+                            renderInput={(params) => <TextField {...params} label="project"/>}
                             displayEmpty
                         >
                         </Autocomplete>
                     </FormControl>
                 </Box>
                 <Box>
-                    <Button sx={{ backgroundColor: "white" }} onClick={handleOpen}>Create task</Button>
+                    <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Create task</Button>
                     <Modal
                         open={open}
                         onClose={handleClose}
@@ -139,14 +139,14 @@ export const Navigation = () => {
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style}>
-                            <CreateTaskForm handleClose={handleClose} />
+                            <CreateTaskForm handleClose={handleClose}/>
                         </Box>
                     </Modal>
                 </Box>
                 <Box>
-                    <Tooltip title="Open settings">
+                    <Tooltip title="">
                         <IconButton onClick={handleOpenUserMenu}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
                         </IconButton>
                     </Tooltip>
                     <Menu
@@ -163,13 +163,13 @@ export const Navigation = () => {
                             }
 
                             }>
-                                <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
+                                <Typography sx={{textAlign: 'center'}}>{setting.name}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
                 </Box>
             </Toolbar>
-            <Outlet />
+            <Outlet/>
         </AppBar>
     );
 }
