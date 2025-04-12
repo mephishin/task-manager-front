@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {getAllParticipants, getTaskByKey, getTaskStatuses, getTaskTypes} from "../adapter/resources";
+import {
+    getAllParticipants,
+    getTaskByKey,
+    getTaskStatuses,
+    getTaskTypes,
+    updateTaskByTaskKey
+} from "../adapter/resources";
 import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
 
@@ -22,7 +28,12 @@ export const TaskPage = () => {
             .then(task => setTask(task))
     }, [])
 
+    const updateTask = (task) => {
+        updateTaskByTaskKey(task)
+            .then(task => setTask(task))
+    }
+
     return (
-        <UpdateTaskForm taskKey={key} types={types} participants={participants} statuses={statuses} task={task}/>
+        <UpdateTaskForm taskKey={key} types={types} participants={participants} statuses={statuses} task={task} updateTask={updateTask}/>
     )
 }
