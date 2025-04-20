@@ -10,12 +10,17 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Outlet, useNavigate} from "react-router-dom";
-import {Autocomplete, FormControl, Link, Modal, TextField} from "@mui/material";
+import {Autocomplete, CircularProgress, FormControl, Link, Modal, TextField} from "@mui/material";
 import AuthService from "../../AuthService";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Button from "@mui/material/Button";
 import {CreateTaskForm} from "../forms/CreateTaskForm";
-import {getAllProjects} from "../../adapter/resources";
+import {
+    createTask, getAllParticipants,
+    getAllProjects,
+    getTaskTypes
+} from "../../adapter/resources";
+import {useQueries} from "@tanstack/react-query";
 
 const pages = [
     // {
@@ -52,7 +57,6 @@ const style = {
 
 
 export const Navigation = () => {
-    const [projects, setProjects] = useState([]);
     const [project, setProject] = useState('');
     const navigate = useNavigate();
 
@@ -83,93 +87,121 @@ export const Navigation = () => {
         navigate(`/project/${newValue}`);
     };
 
-    useEffect(() => {
-        getAllProjects()
-            .then(projects => setProjects(projects))
-            .catch(() => console.log("ERROR"));
-    }, []);
+    const onSubmitCreateTask = (data) => {
+        createTask(data)
+        handleClose()
+    }
 
-    return (
-        <AppBar>
-            <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
-                <Box>
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleOpenNavMenu}
-                        color="inherit"
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorElNav}
-                        keepMounted
-                        open={Boolean(anchorElNav)}
-                        onClose={handleCloseNavMenu}
-                    >
-                        {pages.map((page) => (
-                            <MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} href={page.link}>
-                                <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </Box>
-                <Box>
-                    <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
-                        <Autocomplete
-                            value={project.name}
-                            onChange={(event, newValue) => onChangeHandler(newValue)}
-                            disablePortal
-                            options={projects.map(project => project.name)}
-                            renderInput={(params) => <TextField {...params} label="project"/>}
-                            displayEmpty
+    const [typesQuery, participantsQuery, projectsQuery] = useQueries({
+        queries: [
+            {
+                queryKey: ['types'],
+                queryFn: () => getTaskTypes()
+            },
+            {
+                queryKey: ['participants'],
+                queryFn: () => getAllProjects()
+            },
+            {
+                queryKey: ['projects'],
+                queryFn: () => getAllParticipants()
+            }
+        ],
+    });
+    if (
+        !typesQuery.isPending
+        && !participantsQuery.isPending
+        && !projectsQuery.isPending
+    ) {
+        return (
+            <AppBar>
+                <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
+                    <Box>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            color="inherit"
                         >
-                        </Autocomplete>
-                    </FormControl>
-                </Box>
-                <Box>
-                    <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Create task</Button>
-                    <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={style}>
-                            <CreateTaskForm handleClose={handleClose}/>
-                        </Box>
-                    </Modal>
-                </Box>
-                <Box>
-                    <Tooltip title="">
-                        <IconButton onClick={handleOpenUserMenu}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                            <MenuIcon/>
                         </IconButton>
-                    </Tooltip>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorElUser}
-                        keepMounted
-                        open={Boolean(anchorElUser)}
-                        onClose={handleCloseUserMenu}
-                    >
-                        {settings.map((setting) => (
-                            <MenuItem key={setting.name} onClick={() => {
-                                handleCloseUserMenu();
-                                AuthService.doLogout();
-                            }
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorElNav}
+                            keepMounted
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                        >
+                            {pages.map((page) => (
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} href={page.link}>
+                                    <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                    <Box>
+                        <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
+                            <Autocomplete
+                                value={project.name}
+                                onChange={(event, newValue) => onChangeHandler(newValue)}
+                                disablePortal
+                                options={projectsQuery.data.map(project => project.name)}
+                                renderInput={(params) => <TextField {...params} label="project"/>}
+                                displayEmpty
+                            >
+                            </Autocomplete>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Create task</Button>
+                        <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={style}>
+                                <CreateTaskForm
+                                    handleClose={handleClose}
+                                    onSubmit={onSubmitCreateTask}
+                                    types={typesQuery.data}
+                                    participants={participantsQuery.data}
+                                    projects={projectsQuery.data}
+                                />
+                            </Box>
+                        </Modal>
+                    </Box>
+                    <Box>
+                        <Tooltip title="">
+                            <IconButton onClick={handleOpenUserMenu}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            keepMounted
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting.name} onClick={() => {
+                                    handleCloseUserMenu();
+                                    AuthService.doLogout();
+                                }
 
-                            }>
-                                <Typography sx={{textAlign: 'center'}}>{setting.name}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </Box>
-            </Toolbar>
-            <Outlet/>
-        </AppBar>
-    );
+                                }>
+                                    <Typography sx={{textAlign: 'center'}}>{setting.name}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                </Toolbar>
+                <Outlet/>
+            </AppBar>
+        );
+    } else return <CircularProgress/>
+
 }

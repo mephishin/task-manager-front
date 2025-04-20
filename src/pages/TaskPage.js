@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
     getAllParticipants,
     getTaskByKey,
@@ -8,32 +8,63 @@ import {
 } from "../adapter/resources";
 import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
+import {useMutation, useQueries, useQueryClient} from "@tanstack/react-query";
+import {CircularProgress} from "@mui/material";
 
 export const TaskPage = () => {
     const {key} = useParams();
+    const queryClient = useQueryClient()
 
-    const [types, setTypes] = useState([])
-    const [participants, setParticipants] = useState([])
-    const [statuses, setStatuses] = useState([])
-    const [task, setTask] = useState([])
+    const [
+        taskTypesQuery,
+        taskStatusesQuery,
+        allParticipantsQuery,
+        taskByKeyQuery
+    ] = useQueries({
+        queries: [
+            {
+                queryKey: ['taskTypes'],
+                queryFn: () => getTaskTypes()
+            },
+            {
+                queryKey: ['taskStatuses'],
+                queryFn: () => getTaskStatuses()
+            },
+            {
+                queryKey: ['allParticipants'],
+                queryFn: () => getAllParticipants()
+            },
+            {
+                queryKey: ['taskByKey'],
+                queryFn: () => getTaskByKey(key)
+            },
+        ],
+    });
 
-    useEffect( () => {
-        getTaskTypes()
-            .then(types => setTypes(types))
-        getTaskStatuses()
-            .then(statuses => setStatuses(statuses))
-        getAllParticipants()
-            .then(participants => setParticipants(participants))
-        getTaskByKey(key)
-            .then(task => setTask(task))
-    }, [])
+    const taskByKeyMutation = useMutation({
+        mutationFn: updateTaskByTaskKey,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["taskByKey"]
+            })
+        }
+    })
 
-    const updateTask = (task) => {
-        updateTaskByTaskKey(task)
-            .then(task => setTask(task))
-    }
-
-    return (
-        <UpdateTaskForm taskKey={key} types={types} participants={participants} statuses={statuses} task={task} updateTask={updateTask}/>
-    )
+    if (
+        !taskTypesQuery.isPending
+        && !taskStatusesQuery.isPending
+        && !allParticipantsQuery.isPending
+        && !taskByKeyQuery.isPending
+    ) {
+        return (
+            <UpdateTaskForm
+                taskKey={key}
+                types={taskTypesQuery.data}
+                participants={allParticipantsQuery.data}
+                statuses={taskStatusesQuery.data}
+                task={taskByKeyQuery.data}
+                updateTask={taskByKeyMutation}
+            />
+        )
+    } else return <CircularProgress color={"white"}/>
 }

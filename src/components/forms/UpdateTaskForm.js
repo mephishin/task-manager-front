@@ -4,7 +4,6 @@ import {useController, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
-import {updateTaskByTaskKey} from "../../adapter/resources";
 
 function Input({ control, name }) {
     const {
@@ -98,7 +97,7 @@ export const UpdateTaskForm = (props) => {
     const onSubmit = (data) => {
         data.key = taskKey
         console.log(data)
-        updateTask(data)
+        updateTask.mutate(data)
     }
 
     useEffect(() => {

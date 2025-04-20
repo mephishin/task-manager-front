@@ -13,9 +13,9 @@ export const TasksTable = (props) => {
 
     return (
         <Box >
-            <Grid2 direction={"column"} columns={(statuses || []).length * 2} style={{maxHeight: '92vh', overflow: 'auto'}}>
+            <Grid2 direction={"column"} columns={statuses.length * 2} style={{maxHeight: '92vh', overflow: 'auto'}}>
                 <Grid2 container spacing={3}>
-                    {(statuses || []).map((_status) => (
+                    {statuses.map((_status) => (
                         <Grid2 size={2}>
                             <Card sx={{ borderRadius: 3}}>
                                 <CardContent>
@@ -27,7 +27,7 @@ export const TasksTable = (props) => {
                         </Grid2>
                     ))}
                 </Grid2>
-                {(participants || []).map((participant) => (
+                {participants.map((participant) => (
                     <Grid2 container spacing={3}>
                         {statuses.map((_status) => (
                             <Grid2 size={2}>
@@ -53,7 +53,7 @@ export const TasksTable = (props) => {
                     </Grid2>
                 ))}
                 <Grid2 container spacing={3}>
-                    {(statuses || []).map((_status) => (
+                    {statuses.map((_status) => (
                         <Grid2 size={2}>
                             <Stack spacing={2} sx={{marginY: 2}}>
                                 {notAssignedTasks.filter((task) => task.status === _status.value).map((task) => (

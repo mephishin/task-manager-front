@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {createTask, getAllParticipants, getAllProjects, getTaskTypes} from "../../adapter/resources";
+import React from "react";
 import {Autocomplete, FormControl, InputLabel, Select, Stack, TextField, Typography} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
@@ -7,25 +6,9 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 
 export const CreateTaskForm = (props) => {
+    const {onSubmit, types, projects, participants} = props;
+
     const {control, handleSubmit} = useForm({})
-
-    const [projects, setProjects] = useState([])
-    const [types, setTypes] = useState([])
-    const [participants, setParticipants] = useState([])
-
-    const onSubmit = (data) => {
-        createTask(data)
-        props.handleClose()
-    }
-
-    useEffect(() => {
-        getTaskTypes()
-            .then(types => setTypes(types))
-        getAllProjects()
-            .then(projects => setProjects(projects))
-        getAllParticipants()
-            .then(participants => setParticipants(participants))
-    }, [])
 
     return (
         <Box sx={{borderRadius: 20}}>
