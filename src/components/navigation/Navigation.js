@@ -21,22 +21,16 @@ import {
     getTaskTypes
 } from "../../adapter/resources";
 import {useQueries} from "@tanstack/react-query";
+import {AutocompleteController} from "../forms/FormFieldsControllers";
+import {useForm} from "react-hook-form";
 
 const pages = [
-    // {
-    //     name: 'Something else',
-    //     link: '/something_else'
-    // },
     {
         name: 'My project',
         link: '/project'
     }
 ];
 const settings = [
-    // {
-    //     name: 'Profile',
-    //     link: '/profile'
-    // },
     {
         name: 'Logout',
         link: '/logout'
@@ -84,6 +78,7 @@ export const Navigation = () => {
 
     const onChangeHandler = (newValue) => {
         setProject(newValue);
+        navigate(0)
         navigate(`/project/${newValue}`);
     };
 
@@ -100,11 +95,11 @@ export const Navigation = () => {
             },
             {
                 queryKey: ['participants'],
-                queryFn: () => getAllProjects()
+                queryFn: () => getAllParticipants()
             },
             {
                 queryKey: ['projects'],
-                queryFn: () => getAllParticipants()
+                queryFn: () => getAllProjects()
             }
         ],
     });
@@ -146,10 +141,8 @@ export const Navigation = () => {
                             <Autocomplete
                                 value={project.name}
                                 onChange={(event, newValue) => onChangeHandler(newValue)}
-                                disablePortal
                                 options={projectsQuery.data.map(project => project.name)}
                                 renderInput={(params) => <TextField {...params} label="project"/>}
-                                displayEmpty
                             >
                             </Autocomplete>
                         </FormControl>

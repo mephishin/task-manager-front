@@ -10,10 +10,8 @@ export const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Navigation/>}>
-                    <Route path="/project" >
-                        <Route index element={<MyProjectPage />} />
-                        <Route path=":project" element={<ProjectPage />} />
-                    </Route>
+                    <Route path="/project" element={<MyProjectPage />} />
+                    <Route path="/project/:project" element={<ProjectPage />} />
                     <Route path="/task/:key" element={<TaskPage />} />
                     <Route path="*" element={<NoPage />} />
                 </Route>
