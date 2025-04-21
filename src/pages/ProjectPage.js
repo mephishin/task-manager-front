@@ -1,12 +1,12 @@
 import React from 'react'
-import {getTasks, getTaskStatuses} from "../adapter/resources";
-import {useParams} from "react-router-dom";
+import {getTasks, getTasksByAuthParticipant, getTaskStatuses} from "../adapter/resources";
+import {useOutletContext} from "react-router-dom";
 import {TasksTable} from "../components/tasks/TasksTable";
 import {useQueries} from "@tanstack/react-query";
 import {CircularProgress} from "@mui/material";
 
 export const ProjectPage = () => {
-    const {project} = useParams();
+    const project = useOutletContext();
 
     const [statusesQuery, tasksQuery] = useQueries({
         queries: [
@@ -15,9 +15,9 @@ export const ProjectPage = () => {
                 queryFn: () => getTaskStatuses()
             },
             {
-                queryKey: ['tasks'],
-                queryFn: () => getTasks(project)
-            },
+                queryKey: ['tasks', project],
+                queryFn: () => project ? getTasks(project) : getTasksByAuthParticipant()
+            }
         ],
     });
 

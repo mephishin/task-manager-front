@@ -77,9 +77,10 @@ export const Navigation = () => {
     };
 
     const onChangeHandler = (newValue) => {
-        setProject(newValue);
-        navigate(0)
-        navigate(`/project/${newValue}`);
+        if (newValue) {
+            setProject(newValue);
+            navigate(`/project/${newValue}`)
+        }
     };
 
     const onSubmitCreateTask = (data) => {
@@ -192,7 +193,7 @@ export const Navigation = () => {
                         </Menu>
                     </Box>
                 </Toolbar>
-                <Outlet/>
+                <Outlet context={project}/>
             </AppBar>
         );
     } else return <CircularProgress/>
