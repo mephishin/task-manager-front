@@ -21,8 +21,8 @@ import {
     getTaskTypes
 } from "../../adapter/resources";
 import {useQueries} from "@tanstack/react-query";
-import {AutocompleteController} from "../forms/FormFieldsControllers";
-import {useForm} from "react-hook-form";
+import {Project} from "../../model/project/Project";
+import {CreateTask} from "../../model/task/Task";
 
 const pages = [
     {
@@ -51,20 +51,20 @@ const style = {
 
 
 export const Navigation = () => {
-    const [project, setProject] = useState('');
+    const [project, setProject] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-    const handleOpenNavMenu = (event) => {
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
 
@@ -76,14 +76,14 @@ export const Navigation = () => {
         setAnchorElUser(null);
     };
 
-    const onChangeHandler = (newValue) => {
+    const onChangeHandler = (newValue: string | null) => {
         if (newValue) {
             setProject(newValue);
             navigate(`/project/${newValue}`)
         }
     };
 
-    const onSubmitCreateTask = (data) => {
+    const onSubmitCreateTask = (data: CreateTask) => {
         createTask(data)
         handleClose()
     }
@@ -140,9 +140,9 @@ export const Navigation = () => {
                     <Box>
                         <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
                             <Autocomplete
-                                value={project.name}
-                                onChange={(event, newValue) => onChangeHandler(newValue)}
-                                options={projectsQuery.data.map(project => project.name)}
+                                value={project}
+                                onChange={(event, newValue: string | null) => onChangeHandler(newValue)}
+                                options={projectsQuery.data.map((project: Project) => project.name)}
                                 renderInput={(params) => <TextField {...params} label="project"/>}
                             >
                             </Autocomplete>
@@ -158,7 +158,6 @@ export const Navigation = () => {
                         >
                             <Box sx={style}>
                                 <CreateTaskForm
-                                    handleClose={handleClose}
                                     onSubmit={onSubmitCreateTask}
                                     types={typesQuery.data}
                                     participants={participantsQuery.data}

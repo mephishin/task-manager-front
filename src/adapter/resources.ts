@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {InternalAxiosRequestConfig} from "axios";
 import AuthService from "../AuthService";
 
 // export const getSomething = () =>
@@ -12,17 +12,14 @@ const api = axios.create({
    baseURL: "http://localhost:8080"
 });
 
-api.interceptors.request.use(function (config) {
+api.interceptors.request.use(async (config: any) => {
     if (AuthService.isLoggedIn()) {
-        const cb = () => {
-            config.headers.Authorization = `Bearer ${AuthService.getToken()}`;
-            return Promise.resolve(config);
-        };
-        return AuthService.updateToken(cb);
+        await AuthService.updateToken(() => config.headers.Authorization = `Bearer ${AuthService.getToken()}`)
+        return config
     }
-});
+})
 
-export const getTasks = (projectName) =>
+export const getTasks = (projectName: any) =>
     api.get(`/task/all/${projectName}`)
         .then(response => response.data)
         .catch(error => console.error(error))
@@ -42,7 +39,7 @@ export const getAllProjects = () =>
         .then(response => response.data)
         .catch(error => console.error(error))
 
-export const updateTaskByTaskKey = (task) =>
+export const updateTaskByTaskKey = (task: any) =>
     api.put("/task", task, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -51,12 +48,12 @@ export const updateTaskByTaskKey = (task) =>
         .then(response => response.data)
         .catch(error => console.error(error))
 
-export const getTaskByKey = (key) =>
+export const getTaskByKey = (key: any) =>
     api.get(`/task/${key}`)
         .then(response => response.data)
         .catch(error => console.error(error));
 
-export const createTask = (task) =>
+export const createTask = (task: any) =>
     api.post("/task", task, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8'

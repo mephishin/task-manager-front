@@ -1,8 +1,13 @@
-import {useController} from "react-hook-form";
+import {Control, useController} from "react-hook-form";
 import {Autocomplete, FormControl, InputLabel, Select, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 
-export function InputController({ control, name }) {
+interface InputControllerProps {
+    control: Control<any, any, any>,
+    name: string
+}
+
+export function InputController({ control, name }: InputControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -18,15 +23,19 @@ export function InputController({ control, name }) {
             onChange={field.onChange} // send value to hook form
             onBlur={field.onBlur} // notify when input is touched/blur
             value={field.value || ''} // input value
-            name={field.name} // send down the input name
-            inputRef={field.ref} // send input ref, so we can focus on input when error appear
             label={field.name}
             sx={{margin: 5}}
         />
     )
 }
 
-export function SelectController({ control, name, options}) {
+interface SelectControllerProps {
+    control: Control<any, any, any>,
+    name: string,
+    options: string[]
+}
+
+export function SelectController({ control, name, options}: SelectControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -44,8 +53,6 @@ export function SelectController({ control, name, options}) {
                 onChange={field.onChange} // send value to hook form
                 onBlur={field.onBlur} // notify when input is touched/blur
                 value={field.value || ''} // input value
-                name={field.name} // send down the input name
-                inputRef={field.ref} // send input ref, so we can focus on input when error appear
                 labelId={"select-label"}
                 label={field.name}
             >
@@ -59,7 +66,13 @@ export function SelectController({ control, name, options}) {
     )
 }
 
-export function AutocompleteController({ control, name, options}) {
+interface AutocompleteControllerProps {
+    control: Control<any, any, any>,
+    name: string,
+    options: string[]
+}
+
+export function AutocompleteController({ control, name, options}: AutocompleteControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -77,8 +90,6 @@ export function AutocompleteController({ control, name, options}) {
                 field.onChange(newValue)
             }}
             onBlur={field.onBlur}
-            inputRef={field.name}
-            name={field.name}
             options={options}
             renderInput={(params) => <TextField {...params} label={field.name}/>}
             sx={{margin: 5}}

@@ -10,6 +10,7 @@ import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
 import {useMutation, useQueries, useQueryClient} from "@tanstack/react-query";
 import {CircularProgress} from "@mui/material";
+import {UpdateTask} from "../model/task/Task";
 
 export const TaskPage = () => {
     const {key} = useParams();
@@ -41,7 +42,7 @@ export const TaskPage = () => {
         ],
     });
 
-    const taskByKeyMutation = useMutation({
+    const mutation = useMutation({
         mutationFn: updateTaskByTaskKey,
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -49,6 +50,11 @@ export const TaskPage = () => {
             })
         }
     })
+
+    const updateTask = (data: UpdateTask) => {
+        mutation.mutate(data)
+        return taskByKeyQuery.data
+    }
 
     if (
         !taskTypesQuery.isPending
@@ -63,8 +69,8 @@ export const TaskPage = () => {
                 participants={allParticipantsQuery.data}
                 statuses={taskStatusesQuery.data}
                 task={taskByKeyQuery.data}
-                updateTask={taskByKeyMutation}
+                updateTask={updateTask}
             />
         )
-    } else return <CircularProgress color={"white"}/>
+    } else return <CircularProgress color={"secondary"}/>
 }

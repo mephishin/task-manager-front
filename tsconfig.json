@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "jsx": "preserve",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+  }
+}

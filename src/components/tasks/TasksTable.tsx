@@ -2,12 +2,19 @@ import {Card, CardContent, Grid2, Link, Stack, Typography} from "@mui/material";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
+import {Participant, Task} from "../../model/task/TaskPage";
+import {TaskStatus} from "../../model/task/TaskStatus";
 
-export const TasksTable = (props) => {
-    const {notAssignedTasks, participants, statuses} = props;
+interface TaskTableProps {
+    notAssignedTasks: Array<Task>
+    participants: Array<Participant>
+    statuses: Array<TaskStatus>
+}
+
+export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
     const navigate = useNavigate();
 
-    const handleLink = (task) => {
+    const handleLink = (task: Task) => {
         navigate(`/task/${task.key}`)
     }
 

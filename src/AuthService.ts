@@ -7,7 +7,7 @@ const client = new Keycloak({
 });
 
 
-const initKeycloak = (onAuthenticatedCallback) => {
+const initKeycloak = (onAuthenticatedCallback:any) => {
     client
         .init({
             onLoad: "login-required",
@@ -32,14 +32,14 @@ const getTokenParsed = () => client.tokenParsed;
 
 const isLoggedIn = () => !!client.token;
 
-const updateToken = (successCallback) =>
-    client.updateToken(5)
+const updateToken = (successCallback:any) =>
+    client.updateToken(1)
         .then(successCallback)
         .catch(doLogin);
 
 const getUsername = () => client.tokenParsed?.preferred_username;
 
-const hasRole = (roles) => roles.some((role) => client.hasRealmRole(role));
+const hasRole = (roles:any) => roles.some((role:any) => client.hasRealmRole(role));
 
 const AuthService = {
     initKeycloak,

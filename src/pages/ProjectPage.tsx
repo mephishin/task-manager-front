@@ -29,5 +29,5 @@ export const ProjectPage = () => {
                 notAssignedTasks={tasksQuery.data.notAssignedTasks}
             />
         )
-    } else return <CircularProgress color={"white"}/>
+    } else return <CircularProgress color={"warning"}/>
 };
