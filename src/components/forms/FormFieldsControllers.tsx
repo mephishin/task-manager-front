@@ -32,7 +32,7 @@ export function InputController({ control, name }: InputControllerProps) {
 interface SelectControllerProps {
     control: Control<any, any, any>,
     name: string,
-    options: string[]
+    options?: Array<string>
 }
 
 export function SelectController({ control, name, options}: SelectControllerProps) {
@@ -56,7 +56,7 @@ export function SelectController({ control, name, options}: SelectControllerProp
                 labelId={"select-label"}
                 label={field.name}
             >
-                {options.map((option) => (
+                {options?.map((option) => (
                     <MenuItem value={option}>
                         {option}
                     </MenuItem>
@@ -69,7 +69,7 @@ export function SelectController({ control, name, options}: SelectControllerProp
 interface AutocompleteControllerProps {
     control: Control<any, any, any>,
     name: string,
-    options: string[]
+    options: Array<string | unknown>
 }
 
 export function AutocompleteController({ control, name, options}: AutocompleteControllerProps) {

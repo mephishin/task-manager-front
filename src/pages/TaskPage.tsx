@@ -1,74 +1,38 @@
 import React from "react";
-import {
-    getAllParticipants,
-    getTaskByKey,
-    getTaskStatuses,
-    getTaskTypes,
-    updateTaskByTaskKey
-} from "../adapter/resources";
 import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
-import {useMutation, useQueries, useQueryClient} from "@tanstack/react-query";
 import {CircularProgress} from "@mui/material";
 import {UpdateTask} from "../model/task/Task";
+import {useTaskGet, useTaskStatusesGet, useTaskTypesGet, useTaskUpdate} from "../hooks/useTask";
+import {useParticipantsGet} from "../hooks/useParticipant";
 
 export const TaskPage = () => {
     const {key} = useParams();
-    const queryClient = useQueryClient()
 
-    const [
-        taskTypesQuery,
-        taskStatusesQuery,
-        allParticipantsQuery,
-        taskByKeyQuery
-    ] = useQueries({
-        queries: [
-            {
-                queryKey: ['taskTypes'],
-                queryFn: () => getTaskTypes()
-            },
-            {
-                queryKey: ['taskStatuses'],
-                queryFn: () => getTaskStatuses()
-            },
-            {
-                queryKey: ['allParticipants'],
-                queryFn: () => getAllParticipants()
-            },
-            {
-                queryKey: ['taskByKey'],
-                queryFn: () => getTaskByKey(key)
-            },
-        ],
-    });
-
-    const mutation = useMutation({
-        mutationFn: updateTaskByTaskKey,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["taskByKey"]
-            })
-        }
-    })
+    const taskTypesQuery = useTaskTypesGet();
+    const taskStatusesQuery = useTaskStatusesGet();
+    const participantsQuery = useParticipantsGet();
+    const taskQuery = useTaskGet(key);
+    const updateTaskMutation = useTaskUpdate();
 
     const updateTask = (data: UpdateTask) => {
-        mutation.mutate(data)
-        return taskByKeyQuery.data
+        updateTaskMutation.mutate(data)
+        return taskQuery.data
     }
 
     if (
         !taskTypesQuery.isPending
         && !taskStatusesQuery.isPending
-        && !allParticipantsQuery.isPending
-        && !taskByKeyQuery.isPending
+        && !participantsQuery.isPending
+        && !taskQuery.isPending
     ) {
         return (
             <UpdateTaskForm
                 taskKey={key}
                 types={taskTypesQuery.data}
-                participants={allParticipantsQuery.data}
+                participants={participantsQuery.data}
                 statuses={taskStatusesQuery.data}
-                task={taskByKeyQuery.data}
+                task={taskQuery.data}
                 updateTask={updateTask}
             />
         )

@@ -10,19 +10,16 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Outlet, useNavigate} from "react-router-dom";
-import {Autocomplete, CircularProgress, FormControl, Link, Modal, TextField} from "@mui/material";
+import {Autocomplete, CircularProgress, FormControl, Modal, TextField} from "@mui/material";
 import AuthService from "../../AuthService";
 import {useState} from "react";
 import Button from "@mui/material/Button";
 import {CreateTaskForm} from "../forms/CreateTaskForm";
-import {
-    createTask, getAllParticipants,
-    getAllProjects,
-    getTaskTypes
-} from "../../adapter/resources";
-import {useQueries} from "@tanstack/react-query";
 import {Project} from "../../model/project/Project";
 import {CreateTask} from "../../model/task/Task";
+import {useParticipantsGet} from "../../hooks/useParticipant";
+import {useTaskCreate, useTaskTypesGet} from "../../hooks/useTask";
+import {useProjectsGet} from "../../hooks/useProject";
 
 const pages = [
     {
@@ -51,6 +48,11 @@ const style = {
 
 
 export const Navigation = () => {
+    const participants = useParticipantsGet();
+    const taskTypes = useTaskTypesGet();
+    const projects = useProjectsGet();
+    const createTask = useTaskCreate();
+
     const [project, setProject] = useState<string | null>(null);
     const navigate = useNavigate();
 
@@ -58,8 +60,8 @@ export const Navigation = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement | undefined>(null);
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement | undefined>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -84,30 +86,14 @@ export const Navigation = () => {
     };
 
     const onSubmitCreateTask = (data: CreateTask) => {
-        createTask(data)
+        createTask.mutate(data)
         handleClose()
     }
 
-    const [typesQuery, participantsQuery, projectsQuery] = useQueries({
-        queries: [
-            {
-                queryKey: ['types'],
-                queryFn: () => getTaskTypes()
-            },
-            {
-                queryKey: ['participants'],
-                queryFn: () => getAllParticipants()
-            },
-            {
-                queryKey: ['projects'],
-                queryFn: () => getAllProjects()
-            }
-        ],
-    });
     if (
-        !typesQuery.isPending
-        && !participantsQuery.isPending
-        && !projectsQuery.isPending
+        !taskTypes.isPending
+        && !participants.isPending
+        && !projects.isPending
     ) {
         return (
             <AppBar>
@@ -131,7 +117,7 @@ export const Navigation = () => {
                             onClose={handleCloseNavMenu}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} href={page.link}>
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu} href={page.link}>
                                     <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
                                 </MenuItem>
                             ))}
@@ -142,7 +128,7 @@ export const Navigation = () => {
                             <Autocomplete
                                 value={project}
                                 onChange={(event, newValue: string | null) => onChangeHandler(newValue)}
-                                options={projectsQuery.data.map((project: Project) => project.name)}
+                                options={projects.data?.map((project: Project) => project.name)}
                                 renderInput={(params) => <TextField {...params} label="project"/>}
                             >
                             </Autocomplete>
@@ -159,9 +145,9 @@ export const Navigation = () => {
                             <Box sx={style}>
                                 <CreateTaskForm
                                     onSubmit={onSubmitCreateTask}
-                                    types={typesQuery.data}
-                                    participants={participantsQuery.data}
-                                    projects={projectsQuery.data}
+                                    types={taskTypes?.data}
+                                    participants={participants?.data}
+                                    projects={projects?.data}
                                 />
                             </Box>
                         </Modal>

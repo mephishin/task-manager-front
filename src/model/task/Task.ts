@@ -20,10 +20,10 @@ export interface CreateTask {
 
 export interface UpdateTask {
     key?: string,
-    name: string,
-    description: string,
-    status: string,
-    type: string,
-    assignee: string
+    name?: string,
+    description?: string,
+    status?: string,
+    type?: string,
+    assignee?: string
 }
 

@@ -11,9 +11,9 @@ import {CreateTask} from "../../model/task/Task";
 
 interface CreateTaskFormProps {
     onSubmit: SubmitHandler<CreateTask>,
-    types: TaskType[],
-    projects: Project[],
-    participants: Participant[]
+    types?: Array<TaskType>,
+    projects?: Array<Project> ,
+    participants?: Array<Participant>
 }
 
 export const CreateTaskForm = ({onSubmit, types, projects, participants}: CreateTaskFormProps) => {
@@ -25,9 +25,9 @@ export const CreateTaskForm = ({onSubmit, types, projects, participants}: Create
                 <Typography>Создание новой задачи</Typography>
                 <InputController control={control} name={"name"}/>
                 <InputController control={control} name={"description"}/>
-                <SelectController control={control} name={"type"} options={types.map((type) => type.value)}/>
-                <AutocompleteController control={control} name={"project"} options={projects.map((project) => project.name)}/>
-                <AutocompleteController control={control} name={"assignee"} options={participants.map((project) => project.username)}/>
+                <SelectController control={control} name={"type"} options={types?.map((type) => type.value)}/>
+                <AutocompleteController control={control} name={"project"} options={projects!.map((project) => project.name)}/>
+                <AutocompleteController control={control} name={"assignee"} options={participants!.map((project) => project.username)}/>
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
             </Stack>
         </Box>

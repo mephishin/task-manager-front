@@ -10,22 +10,22 @@ import {Participant} from "../../model/participant/Participant";
 import {TaskType} from "../../model/task/TaskType";
 
 interface UpdateTaskFormProps {
-    taskKey: string | undefined,
-    task: Task,
-    statuses: Array<TaskStatus>,
-    participants: Array<Participant>,
-    types: Array<TaskType>,
+    taskKey?: string,
+    task?: Task,
+    statuses?: Array<TaskStatus>,
+    participants?: Array<Participant>,
+    types?: Array<TaskType>,
     updateTask: SubmitHandler<UpdateTask>
 }
 
 export const UpdateTaskForm = ({taskKey, task, statuses, participants, types, updateTask}: UpdateTaskFormProps) => {
     const {control, handleSubmit} = useForm({
         defaultValues: {
-            name: task.name,
-            description: task.description,
-            status: task.status,
-            type: task.type,
-            assignee: task.assignee
+            name: task?.name,
+            description: task?.description,
+            status: task?.status,
+            type: task?.type,
+            assignee: task?.assignee
         }
     })
 
@@ -40,9 +40,9 @@ export const UpdateTaskForm = ({taskKey, task, statuses, participants, types, up
             <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
                 <InputController control={control} name={"name"}/>
                 <InputController control={control} name={"description"}/>
-                <SelectController control={control} name={"status"} options={statuses.map((status: TaskStatus) => status.value)}/>
-                <SelectController control={control} name={"type"} options={types.map((type: TaskType) => type.value)}/>
-                <AutocompleteController control={control} name={"assignee"} options={participants.map((participant: Participant) => participant.username)}/>
+                <SelectController control={control} name={"status"} options={statuses?.map((status: TaskStatus) => status.value)}/>
+                <SelectController control={control} name={"type"} options={types?.map((type: TaskType) => type.value)}/>
+                <AutocompleteController control={control} name={"assignee"} options={participants!.map((participant: Participant) => participant.username)}/>
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
             </Stack>
         </Box>
