@@ -71,6 +71,8 @@ export const Navigation = () => {
     };
 
     const handleCloseNavMenu = () => {
+        navigate(`/project`)
+        setProject(null)
         setAnchorElNav(null);
     };
 
@@ -117,7 +119,7 @@ export const Navigation = () => {
                             onClose={handleCloseNavMenu}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu} href={page.link}>
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                                     <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
                                 </MenuItem>
                             ))}

@@ -7,6 +7,8 @@ export interface Task {
     project: string,
     assignee: string,
     reporter: string
+    created: string,
+    edited: string
 }
 
 export interface CreateTask {

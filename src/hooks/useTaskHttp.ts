@@ -27,7 +27,7 @@ export function useTaskHttp() {
 //         .catch(error => console.error(error));
 
     const getTasks = (projectName: string | undefined): Promise<TasksPage> =>
-        api.get(projectName ? `/tasks?name=${projectName}` : `/tasks`)
+        api.get(projectName ? `/tasks?project=${projectName}` : `/tasks`)
             .then(response => response.data)
 
     const getTaskStatuses = (): Promise<Array<TaskStatus>> =>
