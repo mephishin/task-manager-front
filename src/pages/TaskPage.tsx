@@ -3,10 +3,11 @@ import {useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
 import {CircularProgress, Grid2, Stack} from "@mui/material";
 import {UpdateTask} from "../model/task/Task";
-import {useTaskGet, useTaskStatusesGet, useTaskTypesGet, useTaskUpdate} from "../hooks/useTask";
+import {useCloseTask, useTaskGet, useTaskStatusesGet, useTaskTypesGet, useTaskUpdate} from "../hooks/useTask";
 import {useParticipantsGet} from "../hooks/useParticipant";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 export const TaskPage = () => {
     const {key} = useParams();
@@ -15,11 +16,16 @@ export const TaskPage = () => {
     const taskStatusesQuery = useTaskStatusesGet();
     const participantsQuery = useParticipantsGet();
     const taskQuery = useTaskGet(key);
-    const updateTaskMutation = useTaskUpdate();
+    const updateTaskMutation = useTaskUpdate(key);
+    const closeTask = useCloseTask();
 
     const updateTask = (data: UpdateTask) => {
         updateTaskMutation.mutate(data)
         return taskQuery.data
+    }
+
+    const cancelTask = () => {
+        closeTask.mutate({taskKey: key})
     }
 
     if (
@@ -41,16 +47,25 @@ export const TaskPage = () => {
                     />
                 </Grid2>
                 <Grid2 size={3}>
-                    <Box sx={{borderRadius: 20}}>
-                        <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
-                            <Typography sx={{margin: 5, color:"black"}}>
-                                Created: {taskQuery.data?.created}
-                            </Typography>
-                            <Typography sx={{margin: 5, color:"black"}} >
-                                Edited: {taskQuery.data?.edited}
-                            </Typography>
-                        </Stack>
-                    </Box>
+                    <Stack>
+                        <Box sx={{borderRadius: 20}}>
+                            <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
+                                <Typography sx={{margin: 5, color:"black"}}>
+                                    Created: {taskQuery.data?.created}
+                                </Typography>
+                                <Typography sx={{margin: 5, color:"black"}} >
+                                    Edited: {taskQuery.data?.edited}
+                                </Typography>
+                            </Stack>
+                        </Box>
+                        <Box sx={{borderRadius: 20}}>
+                            <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
+                                <Button onClick={cancelTask}>
+                                    Close task
+                                </Button>
+                            </Stack>
+                        </Box>
+                    </Stack>
                 </Grid2>
             </Grid2>
 

@@ -1,20 +1,18 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Stack} from "@mui/material";
 import {SubmitHandler, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {AutocompleteController, InputController, SelectController} from "./FormFieldsControllers";
+import {AutocompleteController, InputController} from "./FormFieldsControllers";
 import {Task, UpdateTask} from "../../model/task/Task";
-import {TaskStatus} from "../../model/task/TaskStatus";
 import {Participant} from "../../model/participant/Participant";
-import {TaskType} from "../../model/task/TaskType";
 
 interface UpdateTaskFormProps {
     taskKey?: string,
     task?: Task,
-    statuses?: Array<TaskStatus>,
+    statuses?: Array<string>,
     participants?: Array<Participant>,
-    types?: Array<TaskType>,
+    types?: Array<string>,
     updateTask: SubmitHandler<UpdateTask>
 }
 
@@ -40,8 +38,6 @@ export const UpdateTaskForm = ({taskKey, task, statuses, participants, types, up
             <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
                 <InputController control={control} name={"name"}/>
                 <InputController control={control} name={"description"}/>
-                <SelectController control={control} name={"status"} options={statuses?.map((status: TaskStatus) => status.value)}/>
-                <SelectController control={control} name={"type"} options={types?.map((type: TaskType) => type.value)}/>
                 <AutocompleteController control={control} name={"assignee"} options={participants!.map((participant: Participant) => participant.username)}/>
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
             </Stack>

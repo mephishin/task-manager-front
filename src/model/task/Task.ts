@@ -11,15 +11,6 @@ export interface Task {
     edited: string
 }
 
-export interface CreateTask {
-    name: string,
-    description: string,
-    status: string,
-    type: string,
-    project: string,
-    assignee: string
-}
-
 export interface UpdateTask {
     key?: string,
     name?: string,

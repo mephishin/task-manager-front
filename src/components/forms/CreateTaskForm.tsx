@@ -4,14 +4,13 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {AutocompleteController, InputController, SelectController} from "./FormFieldsControllers";
-import {TaskType} from "../../model/task/TaskType";
 import {Project} from "../../model/project/Project";
 import {Participant} from "../../model/participant/Participant";
-import {CreateTask} from "../../model/task/Task";
+import {CreateTask} from "../../model/task/CreateTask";
 
 interface CreateTaskFormProps {
     onSubmit: SubmitHandler<CreateTask>,
-    types?: Array<TaskType>,
+    types?: Array<string>,
     projects?: Array<Project> ,
     participants?: Array<Participant>
 }
@@ -25,7 +24,7 @@ export const CreateTaskForm = ({onSubmit, types, projects, participants}: Create
                 <Typography>Создание новой задачи</Typography>
                 <InputController control={control} name={"name"}/>
                 <InputController control={control} name={"description"}/>
-                <SelectController control={control} name={"type"} options={types?.map((type) => type.value)}/>
+                <SelectController control={control} name={"type"} options={types?.map((type) => type)}/>
                 <AutocompleteController control={control} name={"project"} options={projects!.map((project) => project.name)}/>
                 <AutocompleteController control={control} name={"assignee"} options={participants!.map((project) => project.username)}/>
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>

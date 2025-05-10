@@ -1,18 +1,21 @@
-import {Card, CardContent, Grid2, Link, Stack, Typography} from "@mui/material";
+import {Grid2, Stack} from "@mui/material";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {Participant, Task} from "../../model/task/TasksPage";
-import {TaskStatus} from "../../model/task/TaskStatus";
+import {useChangeTaskStatus} from "../../hooks/useTask";
+import { TaskCard } from "./TaskCard";
+import { StatusCard } from "./StatusCard";
 
 interface TaskTableProps {
     notAssignedTasks?: Array<Task>
     participants?: Array<Participant>
-    statuses?: Array<TaskStatus>
+    statuses?: Array<string>
 }
 
 export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
     const navigate = useNavigate();
+    const changeTaskStatus = useChangeTaskStatus();
 
     const handleLink = (task: Task) => {
         navigate(`/task/${task.key}`)
@@ -24,13 +27,7 @@ export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTable
                 <Grid2 container spacing={3}>
                     {statuses?.map((_status) => (
                         <Grid2 size={2}>
-                            <Card sx={{ borderRadius: 3}}>
-                                <CardContent>
-                                    <Typography align={"center"} sx={{ minWidth: 85, borderRadius: 2}} >
-                                        {_status.value}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                            <StatusCard status={_status}/>
                         </Grid2>
                     ))}
                 </Grid2>
@@ -39,20 +36,13 @@ export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTable
                         {statuses?.map((_status) => (
                             <Grid2 size={2}>
                                 <Stack spacing={2} sx={{marginY: 2}}>
-                                    {participant.tasks.filter((task) => task.status === _status.value).map((task) => (
-                                        <Card>
-                                            <CardContent>
-                                                <Link onClick={() => handleLink(task)} underline="hover">
-                                                    {task.key}
-                                                </Link>
-                                                <Typography>
-                                                    {task.name}
-                                                </Typography>
-                                                <Typography>
-                                                    Assigned: {participant.username}
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
+                                    {participant.tasks.filter((task) => task.status === _status).map((task) => (
+                                        <TaskCard
+                                            handleLink={handleLink}
+                                            task={task}
+                                            participant={participant}
+                                            handleChangeStatus={changeTaskStatus.mutate}
+                                        />
                                     ))}
                                 </Stack>
                             </Grid2>
@@ -63,20 +53,12 @@ export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTable
                     {statuses?.map((_status) => (
                         <Grid2 size={2}>
                             <Stack spacing={2} sx={{marginY: 2}}>
-                                {notAssignedTasks!.filter((task) => task.status === _status.value).map((task) => (
-                                    <Card>
-                                        <CardContent>
-                                            <Link onClick={() => handleLink(task)} underline="hover">
-                                                {task.key}
-                                            </Link>
-                                            <Typography>
-                                                {task.name}
-                                            </Typography>
-                                            <Typography>
-                                                Not assigned
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
+                                {notAssignedTasks!.filter((task) => task.status === _status).map((task) => (
+                                   <TaskCard
+                                        handleLink={handleLink}
+                                        task={task}
+                                        handleChangeStatus={changeTaskStatus.mutate}
+                                   />
                                 ))}
                             </Stack>
                         </Grid2>

@@ -16,10 +16,10 @@ import {useState} from "react";
 import Button from "@mui/material/Button";
 import {CreateTaskForm} from "../forms/CreateTaskForm";
 import {Project} from "../../model/project/Project";
-import {CreateTask} from "../../model/task/Task";
 import {useParticipantsGet} from "../../hooks/useParticipant";
 import {useTaskCreate, useTaskTypesGet} from "../../hooks/useTask";
 import {useProjectsGet} from "../../hooks/useProject";
+import {CreateTask} from "../../model/task/CreateTask";
 
 const pages = [
     {
@@ -46,7 +46,6 @@ const style = {
     p: 4,
 };
 
-
 export const Navigation = () => {
     const participants = useParticipantsGet();
     const taskTypes = useTaskTypesGet();
@@ -60,8 +59,8 @@ export const Navigation = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement | undefined>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement | undefined>(null);
+    const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
+    const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -129,7 +128,7 @@ export const Navigation = () => {
                         <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
                             <Autocomplete
                                 value={project}
-                                onChange={(event, newValue: string | null) => onChangeHandler(newValue)}
+                                onChange={(event, newValue) => onChangeHandler(newValue)}
                                 options={projects.data?.map((project: Project) => project.name)}
                                 renderInput={(params) => <TextField {...params} label="project"/>}
                             >
@@ -147,9 +146,9 @@ export const Navigation = () => {
                             <Box sx={style}>
                                 <CreateTaskForm
                                     onSubmit={onSubmitCreateTask}
-                                    types={taskTypes?.data}
-                                    participants={participants?.data}
-                                    projects={projects?.data}
+                                    types={taskTypes.data}
+                                    participants={participants.data}
+                                    projects={projects.data}
                                 />
                             </Box>
                         </Modal>

@@ -7,7 +7,7 @@
     "jsx": "preserve",
     "moduleResolution": "bundler",
     "allowJs": true,
-    "module": "CommonJS",
+    "module": "ES2022",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,

@@ -1,11 +1,10 @@
 import AuthService from "../AuthService";
-import {CreateTask, Task, UpdateTask} from "../model/task/Task";
-import {TaskStatus} from "../model/task/TaskStatus";
-import {TaskType} from "../model/task/TaskType";
+import {Task, UpdateTask} from "../model/task/Task";
 import {Project} from "../model/project/Project";
 import {Participant} from "../model/participant/Participant";
 import axios from "axios";
 import {TasksPage} from "../model/task/TasksPage";
+import {CreateTask} from "../model/task/CreateTask";
 
 export function useTaskHttp() {
     const api = axios.create({
@@ -26,15 +25,15 @@ export function useTaskHttp() {
 //         .then(response => response.json())
 //         .catch(error => console.error(error));
 
-    const getTasks = (projectName: string | undefined): Promise<TasksPage> =>
+    const getTasks = (projectName?: string): Promise<TasksPage> =>
         api.get(projectName ? `/tasks?project=${projectName}` : `/tasks`)
             .then(response => response.data)
 
-    const getTaskStatuses = (): Promise<Array<TaskStatus>> =>
+    const getTaskStatuses = (): Promise<Array<string>> =>
         api.get("/task/statuses")
             .then(response => response.data)
 
-    const getTaskTypes = (): Promise<Array<TaskType>> =>
+    const getTaskTypes = (): Promise<Array<string>> =>
         api.get("/task/types")
             .then(response => response.data)
 
@@ -66,6 +65,23 @@ export function useTaskHttp() {
         api.get("/participants")
             .then(response => response.data)
 
+    const changeTaskStatus = (variables: {
+        key: string,
+        status: string
+    }): Promise<void> =>
+        api.put(`task/${variables.key}/status?status=${variables.status}`)
+
+    const closeTask = (variables: {
+        taskKey?: string
+    }): Promise<void> =>
+        api.delete(`task/${variables.taskKey}`)
+
+    const getAllowedTaskStatuses = (variables: {
+        taskKey?: string
+    }): Promise<Array<string>> =>
+        api.get(`task/${variables.taskKey}/allowedStatuses`)
+            .then(response => response.data)
+
     return {
         getTasks,
         getTaskStatuses,
@@ -74,6 +90,9 @@ export function useTaskHttp() {
         putTask,
         getTask,
         postTask,
-        getParticipants
+        getParticipants,
+        changeTaskStatus,
+        closeTask,
+        getAllowedTaskStatuses
     }
 }
