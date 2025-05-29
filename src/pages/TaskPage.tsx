@@ -56,6 +56,9 @@ export const TaskPage = () => {
                                 <Typography sx={{margin: 5, color:"black"}} >
                                     Edited: {taskQuery.data?.edited}
                                 </Typography>
+                                <Typography sx={{margin: 5, color:"black"}} >
+                                    Total: {taskQuery.data?.total}
+                                </Typography>
                             </Stack>
                         </Box>
                         <Box sx={{borderRadius: 20}}>

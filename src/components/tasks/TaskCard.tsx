@@ -12,7 +12,7 @@ interface TaskCardProps {
 
 export const TaskCard = ({handleLink, task, participant, handleChangeStatus}: TaskCardProps) => {
     const getAllowedStatuses = useAllowedTaskStatusesGet(task.key);
-    const changeTaskStatus = useChangeTaskStatus();
+    const changeTaskStatus = useChangeTaskStatus(task.key);
 
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
 

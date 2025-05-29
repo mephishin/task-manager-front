@@ -55,7 +55,7 @@ export function useAllowedTaskStatusesGet(key?: string) {
     const { getAllowedTaskStatuses } = useTaskHttp();
 
     return useQuery({
-        queryKey: [KEYS.getAllowedTaskStatuses],
+        queryKey: [KEYS.getAllowedTaskStatuses, key],
         queryFn: () => getAllowedTaskStatuses({taskKey: key})
     });
 }
@@ -72,7 +72,7 @@ export function useTaskCreate() {
     });
 }
 
-export function useChangeTaskStatus() {
+export function useChangeTaskStatus(key?: string) {
     const { changeTaskStatus } = useTaskHttp();
     const queryClient = useQueryClient();
 
@@ -80,13 +80,17 @@ export function useChangeTaskStatus() {
     return useMutation({
         mutationKey: [KEYS.changeTaskStatus],
         mutationFn: changeTaskStatus,
-        onSuccess: () =>
+        onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [KEYS.getTasks]})
-
+            queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === KEYS.getAllowedTaskStatuses && query.queryKey[1] === key,
+            })
+        }
     });
 }
 
-export function useCloseTask() {
+export function useCloseTask(key?: string) {
     const { closeTask } = useTaskHttp();
     const queryClient = useQueryClient();
 
@@ -94,8 +98,11 @@ export function useCloseTask() {
     return useMutation({
         mutationKey: [KEYS.closeTask],
         mutationFn: closeTask,
-        onSuccess: () =>
+        onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [KEYS.getTasks]})
+            queryClient.invalidateQueries({queryKey: [KEYS.getTask, key]})
+        }
+
     });
 }
 

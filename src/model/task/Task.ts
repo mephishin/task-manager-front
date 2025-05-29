@@ -9,6 +9,7 @@ export interface Task {
     reporter: string
     created: string,
     edited: string
+    total: string
 }
 
 export interface UpdateTask {
