@@ -1,6 +1,8 @@
 import {useTaskHttp} from "./useTaskHttp";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getKey} from "./QueryUtility";
+import {Project} from "../model/project/Project";
+import {SearchTask} from "../model/task/SearchTask";
 
 const KEYS = {
     getTask: getKey('GET', 'TASK', 'SINGLE','QUERY'),
@@ -11,7 +13,8 @@ const KEYS = {
     update: getKey('UPDATE', 'TASK', 'SINGLE', 'MUTATION'),
     changeTaskStatus: getKey('UPDATE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
     closeTask: getKey('DELETE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
-    getAllowedTaskStatuses: getKey('GET', 'ALLOWED-TASK-STATUS', 'MULTIPLE', 'QUERY')
+    getAllowedTaskStatuses: getKey('GET', 'ALLOWED-TASK-STATUS', 'MULTIPLE', 'QUERY'),
+    getSearchTasks: getKey('GET', 'SEARCH-TASKS', 'MULTIPLE','QUERY'),
 }
 
 export function useTaskGet(key?: string) {
@@ -23,12 +26,22 @@ export function useTaskGet(key?: string) {
     })
 }
 
-export function useTasksGet(projectName?: string) {
+export function useSearchTaskGet() {
+    const { getTasksToSearch } = useTaskHttp();
+
+    return useQuery({
+        queryKey: [KEYS.getSearchTasks],
+        queryFn: getTasksToSearch,
+        initialData: new Array<SearchTask>()
+    })
+}
+
+export function useTasksGet(project?: Project) {
     const { getTasks } = useTaskHttp();
 
     return useQuery({
-        queryKey: [KEYS.getTasks, projectName],
-        queryFn: () => getTasks(projectName)
+        queryKey: [KEYS.getTasks, project?.name],
+        queryFn: () => getTasks(project?.name)
     })
 }
 

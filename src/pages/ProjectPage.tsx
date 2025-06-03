@@ -3,9 +3,10 @@ import {useOutletContext} from "react-router-dom";
 import {TasksTable} from "../components/tasks/TasksTable";
 import {CircularProgress} from "@mui/material";
 import {useTasksGet, useTaskStatusesGet} from "../hooks/useTask";
+import {Project} from "../model/project/Project";
 
 export const ProjectPage = () => {
-    const project: string = useOutletContext();
+    const project: Project = useOutletContext();
 
     const taskStatusesQuery = useTaskStatusesGet();
     const tasksQuery = useTasksGet(project);

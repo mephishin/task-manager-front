@@ -5,6 +5,7 @@ import {Participant} from "../model/participant/Participant";
 import axios from "axios";
 import {TasksPage} from "../model/task/TasksPage";
 import {CreateTask} from "../model/task/CreateTask";
+import {SearchTask} from "../model/task/SearchTask";
 
 export function useTaskHttp() {
     const api = axios.create({
@@ -27,6 +28,10 @@ export function useTaskHttp() {
 
     const getTasks = (projectName?: string): Promise<TasksPage> =>
         api.get(projectName ? `/tasks?project=${projectName}` : `/tasks`)
+            .then(response => response.data)
+
+    const getTasksToSearch = (): Promise<Array<SearchTask>> =>
+        api.get("/task")
             .then(response => response.data)
 
     const getTaskStatuses = (): Promise<Array<string>> =>
@@ -93,6 +98,7 @@ export function useTaskHttp() {
         getParticipants,
         changeTaskStatus,
         closeTask,
-        getAllowedTaskStatuses
+        getAllowedTaskStatuses,
+        getTasksToSearch
     }
 }

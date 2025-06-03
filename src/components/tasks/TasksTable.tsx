@@ -22,7 +22,7 @@ export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTable
     }
 
     return (
-        <Box >
+        <Box style={{margin: 10}}>
             <Grid2 direction={"column"} columns={statuses!.length * 2} style={{maxHeight: '92vh', overflow: 'auto'}}>
                 <Grid2 container spacing={3}>
                     {statuses?.map((_status) => (

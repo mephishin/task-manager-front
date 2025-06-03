@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -17,16 +16,12 @@ import Button from "@mui/material/Button";
 import {CreateTaskForm} from "../forms/CreateTaskForm";
 import {Project} from "../../model/project/Project";
 import {useParticipantsGet} from "../../hooks/useParticipant";
-import {useTaskCreate, useTaskTypesGet} from "../../hooks/useTask";
+import {useSearchTaskGet, useTaskCreate, useTaskTypesGet} from "../../hooks/useTask";
 import {useProjectsGet} from "../../hooks/useProject";
 import {CreateTask} from "../../model/task/CreateTask";
+import {SearchTask} from "../../model/task/SearchTask";
+import {NavigationButton} from "./NavigationButton";
 
-const pages = [
-    {
-        name: 'My project',
-        link: '/project'
-    }
-];
 const settings = [
     {
         name: 'Logout',
@@ -51,38 +46,38 @@ export const Navigation = () => {
     const taskTypes = useTaskTypesGet();
     const projects = useProjectsGet();
     const createTask = useTaskCreate();
+    const searchTasks = useSearchTaskGet();
 
-    const [project, setProject] = useState<string | null>(null);
+    const [project, setProject] = useState<Project | null>(null);
+    const [searchTask, setSearchTask] = useState<SearchTask | null>(null);
     const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        navigate(`/project`)
-        setProject(null)
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
 
-    const onChangeHandler = (newValue: string | null) => {
+    const onChangeProjectHandler = (newValue: Project | null) => {
         if (newValue) {
             setProject(newValue);
-            navigate(`/project/${newValue}`)
+            navigate(`/project/${newValue.name}`);
+        }
+    };
+
+    const onChangeSearchTaskHandler = (newValue: SearchTask | null) => {
+        if (newValue) {
+            setSearchTask(newValue);
+            navigate(`/task/${newValue.taskKey}`)
         }
     };
 
@@ -98,39 +93,33 @@ export const Navigation = () => {
     ) {
         return (
             <AppBar>
-                <Toolbar disableGutters sx={{justifyContent: "space-between"}}>
-                    <Box>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon/>
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            keepMounted
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                                    <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                <Toolbar sx={{justifyContent: "space-between"}}>
+                    <NavigationButton setProject={setProject}/>
                     <Box>
                         <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
                             <Autocomplete
                                 value={project}
-                                onChange={(event, newValue) => onChangeHandler(newValue)}
-                                options={projects.data?.map((project: Project) => project.name)}
+                                onChange={(event, newValue) => onChangeProjectHandler(newValue)}
+                                options={projects.data}
+                                getOptionLabel={(option: Project) => option.name}
                                 renderInput={(params) => <TextField {...params} label="project"/>}
+                            >
+                            </Autocomplete>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
+                            <Autocomplete
+                                value={searchTask}
+                                options={searchTasks.data}
+                                loading={searchTasks.isLoading}
+                                onChange={(event, newValue) => onChangeSearchTaskHandler(newValue)}
+                                getOptionLabel={(option: SearchTask) => option.name}
+                                renderInput={(params) => <TextField {...params} label="task"/>}
+                                filterOptions={(options: Array<SearchTask>, state: any) => {
+                                    return options.filter((option: SearchTask) =>
+                                        option.taskKey.includes(state.inputValue) || option.name.includes(state.inputValue) || option.description.includes(state.inputValue))
+                                }}
                             >
                             </Autocomplete>
                         </FormControl>
@@ -156,7 +145,7 @@ export const Navigation = () => {
                     <Box>
                         <Tooltip title="">
                             <IconButton onClick={handleOpenUserMenu}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                <Avatar alt="Remy Sharp"/>
                             </IconButton>
                         </Tooltip>
                         <Menu
