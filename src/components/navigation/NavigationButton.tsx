@@ -13,7 +13,6 @@ const pages = [
 
 interface NavigationButtonProps {
     setProject: (value: (((prevState: (Project | null)) => (Project | null)) | Project | null)) => void
-
 }
 
 export const NavigationButton = ({setProject} : NavigationButtonProps) => {
@@ -48,11 +47,11 @@ export const NavigationButton = ({setProject} : NavigationButtonProps) => {
                 onClose={handleCloseNavMenu}
             >
                 {pages.map((page) => (
-                        <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                    <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
-            </MenuItem>
-        ))}
+                    <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                        <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
+                    </MenuItem>
+                ))}
             </Menu>
-            </Box>
+        </Box>
     )
 }

@@ -1,5 +1,5 @@
 export interface SearchTask {
-    taskKey: string,
+    key: string,
     name: string,
     description: string,
     project: string,

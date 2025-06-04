@@ -50,7 +50,8 @@ export function useTaskTypesGet() {
 
     return useQuery({
         queryKey: [KEYS.getTaskTypes],
-        queryFn: getTaskTypes
+        queryFn: getTaskTypes,
+        initialData: new Array<string>()
     });
 }
 

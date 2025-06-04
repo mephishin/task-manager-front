@@ -1,5 +1,5 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {Navigation} from "./components/navigation/Navigation";
+import {NavigationAppBar} from "./components/navigation/NavigationAppBar";
 import {NoPage} from "./pages/NoPage";
 import {TaskPage} from "./pages/TaskPage";
 import {ProjectPage} from "./pages/ProjectPage";
@@ -8,7 +8,7 @@ export const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Navigation />}>
+                <Route path="/" element={<NavigationAppBar />}>
                     <Route index element={<Navigate to={"/project"} />} />
                     <Route path="/project" element={<ProjectPage />} />
                     <Route path="/project/:project" element={<ProjectPage />} />
