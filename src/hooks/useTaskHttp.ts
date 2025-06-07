@@ -27,23 +27,23 @@ export function useTaskHttp() {
 //         .catch(error => console.error(error));
 
     const getTasks = (projectName?: string): Promise<TasksPage> =>
-        api.get(projectName ? `/tasks?project=${projectName}` : `/tasks`)
+        api.get(projectName ? `/tasksPage?project=${projectName}` : `/tasksPage`)
             .then(response => response.data)
 
     const getTasksToSearch = (): Promise<Array<SearchTask>> =>
-        api.get("/task")
+        api.get("/searchTasks")
             .then(response => response.data)
 
     const getTaskStatuses = (): Promise<Array<string>> =>
-        api.get("/task/statuses")
+        api.get("/statuses")
             .then(response => response.data)
 
     const getTaskTypes = (): Promise<Array<string>> =>
-        api.get("/task/types")
+        api.get("/types")
             .then(response => response.data)
 
     const getProjects = (): Promise<Array<Project>> =>
-        api.get("/project")
+        api.get("/projects")
             .then(response => response.data)
 
     const putTask = (task: UpdateTask): Promise<Task> =>
@@ -74,7 +74,7 @@ export function useTaskHttp() {
         key: string,
         status: string
     }): Promise<void> =>
-        api.put(`task/${variables.key}/status?status=${variables.status}`)
+        api.put(`task/${variables.key}/status/${variables.status}`)
 
     const closeTask = (variables: {
         taskKey?: string
@@ -84,7 +84,7 @@ export function useTaskHttp() {
     const getAllowedTaskStatuses = (variables: {
         taskKey?: string
     }): Promise<Array<string>> =>
-        api.get(`task/${variables.taskKey}/allowedStatuses`)
+        api.get(`task/${variables.taskKey}/statuses?allowed=true`)
             .then(response => response.data)
 
     return {
