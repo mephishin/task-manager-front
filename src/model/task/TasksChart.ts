@@ -1,4 +1,4 @@
-export interface TasksPage {
+export interface TasksChart {
     participants: Array<Participant>,
     notAssignedTasks: Array<Task>
 }

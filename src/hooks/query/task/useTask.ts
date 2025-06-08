@@ -1,12 +1,11 @@
-import {useTaskHttp} from "./useTaskHttp";
+import {useTaskHttp} from "../../http/task/useTaskHttp";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getKey} from "./QueryUtility";
-import {Project} from "../model/project/Project";
-import {SearchTask} from "../model/task/SearchTask";
+import {getKey} from "../QueryUtility";
+import {SearchTask} from "../../../model/task/SearchTask";
 
 const KEYS = {
+    getTasksChart: getKey('GET', 'TASK', 'MULTIPLE','QUERY'),
     getTask: getKey('GET', 'TASK', 'SINGLE','QUERY'),
-    getTasks: getKey('GET', 'TASK', 'MULTIPLE','QUERY'),
     getTaskStatuses: getKey('GET', 'TASK-STATUS', 'MULTIPLE','QUERY'),
     getTaskTypes: getKey('GET', 'TASK-TYPE', 'MULTIPLE','QUERY'),
     create: getKey('POST', 'TASK', 'SINGLE', 'MUTATION'),
@@ -33,15 +32,6 @@ export function useSearchTaskGet() {
         queryKey: [KEYS.getSearchTasks],
         queryFn: getTasksToSearch,
         initialData: new Array<SearchTask>()
-    })
-}
-
-export function useTasksGet(project?: Project) {
-    const { getTasks } = useTaskHttp();
-
-    return useQuery({
-        queryKey: [KEYS.getTasks, project?.name],
-        queryFn: () => getTasks(project?.name)
     })
 }
 
@@ -82,7 +72,7 @@ export function useTaskCreate() {
         mutationKey: [KEYS.create],
         mutationFn: postTask,
         onSuccess: () =>
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasks]})
+            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
     });
 }
 
@@ -95,7 +85,7 @@ export function useChangeTaskStatus(key?: string) {
         mutationKey: [KEYS.changeTaskStatus],
         mutationFn: changeTaskStatus,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasks]})
+            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
             queryClient.invalidateQueries({
                 predicate: (query) =>
                     query.queryKey[0] === KEYS.getAllowedTaskStatuses && query.queryKey[1] === key,
@@ -113,7 +103,7 @@ export function useCloseTask(key?: string) {
         mutationKey: [KEYS.closeTask],
         mutationFn: closeTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasks]})
+            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
             queryClient.invalidateQueries({queryKey: [KEYS.getTask, key]})
         }
 

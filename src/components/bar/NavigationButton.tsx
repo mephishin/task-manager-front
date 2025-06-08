@@ -2,7 +2,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {Project} from "../../model/project/Project";
 
 const pages = [
     {
@@ -12,7 +11,7 @@ const pages = [
 ];
 
 interface NavigationButtonProps {
-    setProject: (value: (((prevState: (Project | null)) => (Project | null)) | Project | null)) => void
+    setProject: (arg: any) => void
 }
 
 export const NavigationButton = ({setProject} : NavigationButtonProps) => {

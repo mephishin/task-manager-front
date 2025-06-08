@@ -8,8 +8,8 @@ const queryClient = new QueryClient()
 
 export const App = () => {
     return (
-            <QueryClientProvider client={queryClient}>
-                <Router />
-            </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+            <Router />
+        </QueryClientProvider>
     )
 }

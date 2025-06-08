@@ -1,7 +1,7 @@
 import {Box, Button, Card, CardContent, Link, Menu, MenuItem, Typography} from "@mui/material"
-import { Participant, Task } from "../../model/task/TasksPage"
+import { Participant, Task } from "../../model/task/TasksChart"
 import * as React from "react";
-import {useAllowedTaskStatusesGet, useChangeTaskStatus} from "../../hooks/useTask";
+import {useAllowedTaskStatusesGet, useChangeTaskStatus} from "../../hooks/query/task/useTask";
 
 interface TaskCardProps {
     handleLink: (task: Task) => void,

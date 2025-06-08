@@ -6,10 +6,11 @@ import {Autocomplete, Box, FormControl, TextField} from "@mui/material";
 interface ProjectAutocompleteProps {
     projects: Array<Project>;
     project: Project | null;
-    setProject: (value: (((prevState: (Project | null)) => (Project | null)) | Project | null)) => void;
+    setProject: (project: Project) => void;
+    authParticipantProject: Project;
 }
 
-export const ProjectAutocomplete = ({projects, project, setProject} : ProjectAutocompleteProps) => {
+export const ProjectAutocomplete = ({projects, project, setProject, authParticipantProject} : ProjectAutocompleteProps) => {
     const navigate = useNavigate();
     const onChangeProjectHandler = (newValue: Project | null) => {
         if (newValue) {
@@ -17,6 +18,11 @@ export const ProjectAutocomplete = ({projects, project, setProject} : ProjectAut
             navigate(`/project/${newValue.name}`);
         }
     };
+
+    if (project === null) {
+        setProject(authParticipantProject)
+
+    }
 
     return(
         <Box>

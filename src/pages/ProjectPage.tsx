@@ -1,23 +1,28 @@
 import React from 'react'
 import {useOutletContext} from "react-router-dom";
-import {TasksTable} from "../components/tasks/TasksTable";
-import {CircularProgress} from "@mui/material";
-import {useTasksGet, useTaskStatusesGet} from "../hooks/useTask";
+import {TasksChart} from "../components/project/TasksChart";
+import {Box, CircularProgress} from "@mui/material";
+import {useTaskStatusesGet} from "../hooks/query/task/useTask";
 import {Project} from "../model/project/Project";
+import {useTasksChartGet} from "../hooks/query/tasksChart/useTasksChart";
+import {PeriodBar} from "../components/project/PeriodBar";
 
 export const ProjectPage = () => {
     const project: Project = useOutletContext();
 
     const taskStatusesQuery = useTaskStatusesGet();
-    const tasksQuery = useTasksGet(project);
+    const tasksQuery = useTasksChartGet(project);
 
     if (!taskStatusesQuery.isPending && !tasksQuery.isPending) {
         return(
-            <TasksTable
-                participants={tasksQuery?.data?.participants}
-                statuses={taskStatusesQuery?.data}
-                notAssignedTasks={tasksQuery?.data?.notAssignedTasks}
-            />
+            <Box>
+                <PeriodBar project={project}/>
+                <TasksChart
+                    participants={tasksQuery?.data?.participants}
+                    statuses={taskStatusesQuery?.data}
+                    notAssignedTasks={tasksQuery?.data?.notAssignedTasks}
+                />
+            </Box>
         )
     } else return <CircularProgress color={"warning"}/>
 };

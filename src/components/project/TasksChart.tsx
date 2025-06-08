@@ -2,8 +2,8 @@ import {Grid2, Stack} from "@mui/material";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
-import {Participant, Task} from "../../model/task/TasksPage";
-import {useChangeTaskStatus} from "../../hooks/useTask";
+import {Participant, Task} from "../../model/task/TasksChart";
+import {useChangeTaskStatus} from "../../hooks/query/task/useTask";
 import { TaskCard } from "./TaskCard";
 import { StatusCard } from "./StatusCard";
 
@@ -13,7 +13,7 @@ interface TaskTableProps {
     statuses?: Array<string>
 }
 
-export const TasksTable = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
+export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
     const navigate = useNavigate();
     const changeTaskStatus = useChangeTaskStatus();
 

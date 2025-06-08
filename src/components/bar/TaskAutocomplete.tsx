@@ -3,7 +3,7 @@ import * as React from "react";
 import {Autocomplete, Box, FormControl, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {useSearchTaskGet} from "../../hooks/useTask";
+import {useSearchTaskGet} from "../../hooks/query/task/useTask";
 
 export const TaskAutocomplete = () => {
     const searchTasks = useSearchTaskGet();

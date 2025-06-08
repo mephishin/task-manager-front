@@ -1,15 +1,14 @@
-import {useTaskHttp} from "./useTaskHttp";
 import {useQuery} from "@tanstack/react-query";
-import {getKey} from "./QueryUtility";
-import {Project} from "../model/project/Project";
-import {Participant} from "../model/participant/Participant";
+import {getKey} from "../QueryUtility";
+import {Participant} from "../../../model/participant/Participant";
+import {useParticipantsHttp} from "../../http/participant/useParticipantsHttp";
 
 const KEYS = {
     get: getKey('GET', 'TASK', 'MULTIPLE','QUERY')
 }
 
 export function useParticipantsGet() {
-    const { getParticipants } = useTaskHttp();
+    const { getParticipants } = useParticipantsHttp();
 
     return useQuery({
         queryKey: [KEYS.get],

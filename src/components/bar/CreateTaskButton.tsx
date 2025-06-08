@@ -3,7 +3,7 @@ import * as React from "react";
 import {Box, Button, Modal} from "@mui/material";
 import {CreateTask} from "../../model/task/CreateTask";
 import {useState} from "react";
-import {useTaskCreate} from "../../hooks/useTask";
+import {useTaskCreate} from "../../hooks/query/task/useTask";
 import {Project} from "../../model/project/Project";
 import {Participant} from "../../model/participant/Participant";
 
