@@ -11,7 +11,6 @@ export const Router = () => {
                 <Route path="/" element={<NavigationAppBar />}>
                     <Route index element={<Navigate to={"/project"} />} />
                     <Route path="/project" element={<ProjectPage />} />
-                    <Route path="/project/:project" element={<ProjectPage />} />
                     <Route path="/task/:key" element={<TaskPage />} />
                     <Route path="*" element={<NoPage />} />
                 </Route>

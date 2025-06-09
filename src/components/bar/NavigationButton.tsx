@@ -1,12 +1,11 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
 
 const pages = [
     {
         name: 'My project',
-        link: '/project'
+        link: '/'
     }
 ];
 
@@ -19,9 +18,7 @@ export const NavigationButton = ({setProject} : NavigationButtonProps) => {
         setAnchorElNav(event.currentTarget);
     };
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
-    const navigate = useNavigate();
     const handleCloseNavMenu = () => {
-        navigate(`/project`)
         setProject(null)
         setAnchorElNav(null);
     };

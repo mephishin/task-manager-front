@@ -1,7 +1,8 @@
 import {useQuery} from "@tanstack/react-query";
 import {getKey} from "../QueryUtility";
 import {Project} from "../../../model/project/Project";
-import {useProjectHttp} from "../../http/project/useProjectHttp";
+import {useProjectHttp} from "./useProjectHttp";
+import {useCreateAxiosInstance} from "../HttpUtils";
 
 const KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE','QUERY'),
@@ -10,7 +11,7 @@ const KEYS = {
 }
 
 export function useProjectsGet() {
-    const { getProjects } = useProjectHttp();
+    const { getProjects } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
         queryKey: [KEYS.getAll],
@@ -20,7 +21,7 @@ export function useProjectsGet() {
 }
 
 export function useAuthParticipantProjectGet() {
-    const { getProjectByAuth } = useProjectHttp();
+    const { getProjectByAuth } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
         queryKey: [KEYS.get],

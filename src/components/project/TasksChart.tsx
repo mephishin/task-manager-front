@@ -13,6 +13,12 @@ interface TaskTableProps {
     statuses?: Array<string>
 }
 
+const styleGrid = {
+    marginY: 2,
+    p: 1,
+    backgroundColor: '#F4F5F7'
+}
+
 export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
     const navigate = useNavigate();
     const changeTaskStatus = useChangeTaskStatus();
@@ -21,12 +27,35 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
         navigate(`/task/${task.key}`)
     }
 
+    const renderNotAssignedTasks = (statuses?: Array<String>, notAssignedTasks?: Array<Task>) => {
+      if (notAssignedTasks && notAssignedTasks?.length > 0) {
+          return (
+              <Grid2 container spacing={3}>
+                  {statuses?.map((_status) => (
+                          <Grid2 size={2} sx={styleGrid}>
+                              <Stack spacing={2}>
+                                  {notAssignedTasks!.filter((task) => task.status === _status).map((task) => (
+                                      <TaskCard
+                                          handleLink={handleLink}
+                                          task={task}
+                                          handleChangeStatus={changeTaskStatus.mutate}
+                                      />
+                                  ))}
+                              </Stack>
+                          </Grid2>
+                      )
+                  )}
+              </Grid2>
+              )
+      }
+    }
+
     return (
         <Box style={{margin: 10}}>
             <Grid2 direction={"column"} columns={statuses!.length * 2} style={{maxHeight: '92vh', overflow: 'auto'}}>
-                <Grid2 container spacing={3}>
+                <Grid2 container spacing={3} >
                     {statuses?.map((_status) => (
-                        <Grid2 size={2}>
+                        <Grid2 size={2} sx={styleGrid}>
                             <StatusCard status={_status}/>
                         </Grid2>
                     ))}
@@ -34,8 +63,8 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
                 {participants?.map((participant) => (
                     <Grid2 container spacing={3}>
                         {statuses?.map((_status) => (
-                            <Grid2 size={2}>
-                                <Stack spacing={2} sx={{marginY: 2}}>
+                            <Grid2 size={2} sx={styleGrid}>
+                                <Stack spacing={2}>
                                     {participant.tasks.filter((task) => task.status === _status).map((task) => (
                                         <TaskCard
                                             handleLink={handleLink}
@@ -49,21 +78,9 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
                         ))}
                     </Grid2>
                 ))}
-                <Grid2 container spacing={3}>
-                    {statuses?.map((_status) => (
-                        <Grid2 size={2}>
-                            <Stack spacing={2} sx={{marginY: 2}}>
-                                {notAssignedTasks!.filter((task) => task.status === _status).map((task) => (
-                                   <TaskCard
-                                        handleLink={handleLink}
-                                        task={task}
-                                        handleChangeStatus={changeTaskStatus.mutate}
-                                   />
-                                ))}
-                            </Stack>
-                        </Grid2>
-                    ))}
-                </Grid2>
+                {
+                    renderNotAssignedTasks(statuses, notAssignedTasks)
+                }
             </Grid2>
         </Box>
     )

@@ -1,6 +1,6 @@
 import {Project} from "../../../model/project/Project";
 import {getKey} from "../QueryUtility";
-import {useTasksChartHttp} from "../../http/taskChart/useTasksChartHttp";
+import {useTasksChartHttp} from "./useTasksChartHttp";
 import {useQuery} from "@tanstack/react-query";
 
 const KEYS = {

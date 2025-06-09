@@ -28,12 +28,15 @@ export const NavigationAppBar = () => {
         && !projects.isPending
         && !authParticipantProject.isPending
     ) {
-        console.log(authParticipantProject)
+        if (project === null) {
+            setProject(authParticipantProject.data!)
+        }
+
         return (
             <AppBar>
                 <Toolbar sx={{justifyContent: "space-between"}}>
                     <NavigationButton setProject={(project: Project) => setProject(project)}/>
-                    <ProjectAutocomplete projects={projects.data} project={project} authParticipantProject={authParticipantProject.data!} setProject={(project: Project) => setProject(project)}/>
+                    <ProjectAutocomplete projects={projects.data} project={project} setProject={(project: Project) => setProject(project)}/>
                     <TaskAutocomplete/>
                     <CreateTaskButton taskTypes={taskTypes.data} participants={participants.data} projects={projects.data}/>
                     <ProfileButton/>

@@ -6,12 +6,12 @@ interface StatusCardProps {
 
 export const StatusCard = ({status}: StatusCardProps) => {
     return (
-        <Card sx={{ borderRadius: 3}}>
-            <CardContent>
-                <Typography align={"center"} sx={{ minWidth: 85, borderRadius: 2}} >
+        // <Card>
+        //     <CardContent>
+                <Typography align={"center"} sx={{ minWidth: 85, borderRadius: 2, color: '#5E6C84'}} >
                     {status}
                 </Typography>
-            </CardContent>
-        </Card>
+        //     </CardContent>
+        // </Card>
     )
 }

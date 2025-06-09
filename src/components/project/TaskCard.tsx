@@ -33,20 +33,20 @@ export const TaskCard = ({handleLink, task, participant, handleChangeStatus}: Ta
         return (
             <Card>
                 <CardContent>
-                    <Link onClick={() => handleLink(task)} underline="hover">
+                    <Link sx={{color: 'black'}} onClick={() => handleLink(task)} underline="hover">
                         {task.key}
                     </Link>
-                    <Typography>
+                    <Typography sx={{color: '#5E6C84'}}>
                         {task.name}
                     </Typography>
                     {
                         participant ? (
                             <Box>
-                                <Typography>
+                                <Typography sx={{color: '#5E6C84'}}>
                                     Assigned: {participant.username}
                                 </Typography>
                                 <Box>
-                                    <Button
+                                    <Button sx={{color: '#5E6C84'}}
                                         size="large"
                                         aria-label="account of current user"
                                         aria-controls="menu-appbar"
