@@ -3,7 +3,6 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {Participant, Task} from "../../model/task/TasksChart";
-import {useChangeTaskStatus} from "../../hooks/query/task/useTask";
 import { TaskCard } from "./TaskCard";
 import { StatusCard } from "./StatusCard";
 
@@ -21,7 +20,6 @@ const styleGrid = {
 
 export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTableProps) => {
     const navigate = useNavigate();
-    const changeTaskStatus = useChangeTaskStatus();
 
     const handleLink = (task: Task) => {
         navigate(`/task/${task.key}`)
@@ -38,7 +36,6 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
                                       <TaskCard
                                           handleLink={handleLink}
                                           task={task}
-                                          handleChangeStatus={changeTaskStatus.mutate}
                                       />
                                   ))}
                               </Stack>
@@ -70,7 +67,6 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
                                             handleLink={handleLink}
                                             task={task}
                                             participant={participant}
-                                            handleChangeStatus={changeTaskStatus.mutate}
                                         />
                                     ))}
                                 </Stack>

@@ -1,4 +1,4 @@
-import {Box, Button, Card, CardContent, Link, Menu, MenuItem, Typography} from "@mui/material"
+import {Box, Button, Card, CardContent, Menu, MenuItem, Typography} from "@mui/material"
 import { Participant, Task } from "../../model/task/TasksChart"
 import * as React from "react";
 import {useAllowedTaskStatusesGet, useChangeTaskStatus} from "../../hooks/query/task/useTask";
@@ -7,10 +7,9 @@ interface TaskCardProps {
     handleLink: (task: Task) => void,
     task: Task,
     participant?: Participant,
-    handleChangeStatus: (variables: {key: string, status: string}) => void
 }
 
-export const TaskCard = ({handleLink, task, participant, handleChangeStatus}: TaskCardProps) => {
+export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
     const getAllowedStatuses = useAllowedTaskStatusesGet(task.key);
     const changeTaskStatus = useChangeTaskStatus(task.key);
 
@@ -33,9 +32,9 @@ export const TaskCard = ({handleLink, task, participant, handleChangeStatus}: Ta
         return (
             <Card>
                 <CardContent>
-                    <Link sx={{color: 'black'}} onClick={() => handleLink(task)} underline="hover">
+                    <Button onClick={() => handleLink(task)} sx={{padding: 0, minHeight: 0, minWidth: 0}}>
                         {task.key}
-                    </Link>
+                    </Button>
                     <Typography sx={{color: '#5E6C84'}}>
                         {task.name}
                     </Typography>
@@ -72,7 +71,7 @@ export const TaskCard = ({handleLink, task, participant, handleChangeStatus}: Ta
                                 </Box>
                             </Box>
                         ) : (
-                            <Typography>
+                            <Typography sx={{color: '#5E6C84'}}>
                                 Not assigned
                             </Typography>
                         )

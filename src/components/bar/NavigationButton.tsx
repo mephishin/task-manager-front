@@ -1,6 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 const pages = [
     {
@@ -14,11 +15,13 @@ interface NavigationButtonProps {
 }
 
 export const NavigationButton = ({setProject} : NavigationButtonProps) => {
+    const navigate = useNavigate();
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
     const handleCloseNavMenu = () => {
+        navigate("/")
         setProject(null)
         setAnchorElNav(null);
     };
