@@ -30,7 +30,7 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
           return (
               <Grid2 container spacing={3}>
                   {statuses?.map((_status) => (
-                          <Grid2 size={2} sx={styleGrid}>
+                          <Grid2 size={12 / statuses!.length} sx={styleGrid}>
                               <Stack spacing={2}>
                                   {notAssignedTasks!.filter((task) => task.status === _status).map((task) => (
                                       <TaskCard
@@ -52,7 +52,7 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
             <Grid2 direction={"column"} columns={statuses!.length * 2} style={{maxHeight: '92vh', overflow: 'auto'}}>
                 <Grid2 container spacing={3} >
                     {statuses?.map((_status) => (
-                        <Grid2 size={2} sx={styleGrid}>
+                        <Grid2 size={12 / statuses!.length} sx={styleGrid}>
                             <StatusCard status={_status}/>
                         </Grid2>
                     ))}
@@ -60,7 +60,7 @@ export const TasksChart = ({notAssignedTasks, participants, statuses}: TaskTable
                 {participants?.map((participant) => (
                     <Grid2 container spacing={3}>
                         {statuses?.map((_status) => (
-                            <Grid2 size={2} sx={styleGrid}>
+                            <Grid2 size={12 / statuses!.length} sx={styleGrid}>
                                 <Stack spacing={2}>
                                     {participant.tasks.filter((task) => task.status === _status).map((task) => (
                                         <TaskCard

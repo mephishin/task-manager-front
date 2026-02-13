@@ -12,8 +12,8 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const getTaskStatuses = (): Promise<Array<string>> =>
-        axiosInstance.get("/statuses")
+    const getTaskStatuses = (projectKey: string | undefined): Promise<Array<string>> =>
+        axiosInstance.get(`/statuses/${projectKey}`)
             .then((response: AxiosResponse) => {
                 console.log("Got taskStatuses: ")
                 console.log(response.data)

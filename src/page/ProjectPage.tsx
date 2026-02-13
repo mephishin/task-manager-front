@@ -9,8 +9,7 @@ import {PeriodBar} from "../components/period/PeriodBar";
 
 export const ProjectPage = () => {
     const project: Project = useOutletContext();
-
-    const taskStatusesQuery = useTaskStatusesGet();
+    const taskStatusesQuery = useTaskStatusesGet(project.key);
     const tasksQuery = useTasksChartGet(project);
 
     if (!taskStatusesQuery.isPending && !tasksQuery.isPending) {

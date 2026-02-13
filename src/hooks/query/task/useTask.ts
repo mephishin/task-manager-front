@@ -46,12 +46,12 @@ export function useTaskTypesGet() {
     });
 }
 
-export function useTaskStatusesGet() {
+export function useTaskStatusesGet(key?: string) {
     const { getTaskStatuses } = useTaskHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getTaskStatuses],
-        queryFn: getTaskStatuses,
+        queryKey: [KEYS.getTaskStatuses, key],
+        queryFn: () => getTaskStatuses(key),
         initialData: new Array<string>()
     });
 }

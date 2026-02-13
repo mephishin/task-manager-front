@@ -79,13 +79,14 @@ export function AutocompleteController({ control, name, options}: AutocompleteCo
         // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
-        control,
+        control
         // rules: { required: true },
     })
 
+
     return (
         <Autocomplete
-            value={field.value || ''}
+            value={field.value}
             onChange={(event, newValue) => {
                 field.onChange(newValue)
             }}
