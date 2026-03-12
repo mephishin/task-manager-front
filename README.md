@@ -2,11 +2,12 @@
 ## Локальный запуск приложения
 ### Запуск
 - Cкачать, установить и запустить Docker
-- Выполнить команду
+- Выполнить команду 
 ```
 cd mockserver
 docker compose -f mockserver-docker-compose.yml up -d
 ```
+- а потом npm start
 
 ### Остановка
 ```

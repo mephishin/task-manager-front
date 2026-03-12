@@ -15,7 +15,6 @@ export const TaskPage = () => {
     const navigate = useNavigate();
 
     const taskTypesQuery = useTaskTypesGet();
-    const taskStatusesQuery = useTaskStatusesGet();
     const participantsQuery = useParticipantsGet();
     const taskQuery = useTaskGet(key);
     const updateTaskMutation = useTaskUpdate(key);
@@ -32,7 +31,6 @@ export const TaskPage = () => {
 
     if (
         !taskTypesQuery.isPending
-        && !taskStatusesQuery.isPending
         && !participantsQuery.isPending
         && !taskQuery.isPending
     ) {
@@ -47,7 +45,6 @@ export const TaskPage = () => {
                             taskKey={key}
                             types={taskTypesQuery.data}
                             participants={participantsQuery.data}
-                            statuses={taskStatusesQuery.data}
                             task={taskQuery.data}
                             updateTask={updateTask}
                         />
