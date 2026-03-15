@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 const pages = [
     {
-        name: 'My project',
+        name: 'Мой проект',
         link: '/'
     }
 ];

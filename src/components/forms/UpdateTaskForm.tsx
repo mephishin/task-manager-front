@@ -36,9 +36,9 @@ export const UpdateTaskForm = ({taskKey, task, statuses, participants, types, up
     return (
         <Box sx={{borderRadius: 20}}>
             <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
-                <InputController control={control} name={"name"}/>
-                <InputController control={control} name={"description"}/>
-                <AutocompleteController control={control} name={"assignee"} options={participants!.map((participant: Participant) => participant.username)}/>
+                <InputController label="Название" control={control} name={"name"}/>
+                <InputController label="Описание" control={control} name={"description"}/>
+                <AutocompleteController label="Исоплнитель задачи" control={control} name={"assignee"} options={participants!.map((participant: Participant) => participant.username)}/>
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
             </Stack>
         </Box>

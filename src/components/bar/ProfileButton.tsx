@@ -2,13 +2,6 @@ import AuthService from "../../AuthService";
 import * as React from "react";
 import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 
-const settings = [
-    {
-        name: 'Logout',
-        link: '/logout'
-    }
-];
-
 export const ProfileButton = () => {
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
 
@@ -19,7 +12,6 @@ export const ProfileButton = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-
     return(
         <Box>
             <Tooltip title="">
@@ -34,16 +26,15 @@ export const ProfileButton = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                {settings.map((setting) => (
-                    <MenuItem key={setting.name} onClick={() => {
-                        handleCloseUserMenu();
-                        AuthService.doLogout();
-                    }
-
-                    }>
-                        <Typography sx={{textAlign: 'center'}}>{setting.name}</Typography>
-                    </MenuItem>
-                ))}
+                <MenuItem key="Logout" onClick={() => {
+                    handleCloseUserMenu();
+                    AuthService.doLogout();
+                }}>
+                    <Typography sx={{textAlign: 'center'}}>Выйти</Typography>
+                </MenuItem>
+                <MenuItem key="Role">
+                    <Typography sx={{textAlign: 'center'}}>Роли: {AuthService.getRoles()}</Typography>
+                </MenuItem>
             </Menu>
         </Box>
     )

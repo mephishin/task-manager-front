@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import { formatISORus } from "../util/LocalInterval";
 
 export const TaskPage = () => {
     const {key} = useParams();
@@ -54,20 +55,20 @@ export const TaskPage = () => {
                             <Box sx={{borderRadius: 20}}>
                                 <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
                                     <Typography sx={{margin: 5, color:"black"}}>
-                                        Created: {taskQuery.data?.created}
+                                        Создана: {taskQuery.data?.created}
                                     </Typography>
                                     <Typography sx={{margin: 5, color:"black"}} >
-                                        Edited: {taskQuery.data?.edited}
+                                        Отредактирована: {taskQuery.data?.edited}
                                     </Typography>
                                     <Typography sx={{margin: 5, color:"black"}} >
-                                        Total: {taskQuery.data?.total}
+                                        Общее время работы над задачей: {formatISORus(taskQuery.data?.total!)}
                                     </Typography>
                                 </Stack>
                             </Box>
                             <Box sx={{borderRadius: 20}}>
                                 <Stack sx={{backgroundColor: "white", margin: 5, borderRadius: 5}}>
                                     <Button onClick={cancelTask}>
-                                        Close task
+                                        Закрыть задачу
                                     </Button>
                                 </Stack>
                             </Box>

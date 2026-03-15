@@ -42,7 +42,7 @@ export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
                         participant ? (
                             <Box>
                                 <Typography sx={{color: '#5E6C84'}}>
-                                    Assigned: {participant.username}
+                                    Закреплена: {participant.username}
                                 </Typography>
                                 <Box>
                                     <Button sx={{color: '#5E6C84'}}
@@ -53,7 +53,7 @@ export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
                                         onClick={handleOpenNavMenu}
                                         color="inherit"
                                     >
-                                        Change status
+                                        Поменять статус
                                     </Button>
                                     <Menu
                                         id="menu-appbar"
@@ -72,7 +72,7 @@ export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
                             </Box>
                         ) : (
                             <Typography sx={{color: '#5E6C84'}}>
-                                Not assigned
+                                Не закреплена
                             </Typography>
                         )
                     }

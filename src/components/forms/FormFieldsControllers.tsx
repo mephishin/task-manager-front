@@ -4,10 +4,11 @@ import MenuItem from "@mui/material/MenuItem";
 
 interface InputControllerProps {
     control: Control<any, any, any>,
-    name: string
+    name: string,
+    label: string
 }
 
-export function InputController({ control, name }: InputControllerProps) {
+export function InputController({ label, control, name }: InputControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -23,7 +24,7 @@ export function InputController({ control, name }: InputControllerProps) {
             onChange={field.onChange} // send value to hook form
             onBlur={field.onBlur} // notify when input is touched/blur
             value={field.value || ''} // input value
-            label={field.name}
+            label={label}
             sx={{margin: 5}}
         />
     )
@@ -32,10 +33,11 @@ export function InputController({ control, name }: InputControllerProps) {
 interface SelectControllerProps {
     control: Control<any, any, any>,
     name: string,
-    options?: Array<string>
+    options?: Array<string>,
+    label: string
 }
 
-export function SelectController({ control, name, options}: SelectControllerProps) {
+export function SelectController({ label, control, name, options}: SelectControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -54,7 +56,7 @@ export function SelectController({ control, name, options}: SelectControllerProp
                 onBlur={field.onBlur} // notify when input is touched/blur
                 value={field.value || ''} // input value
                 labelId={"select-label"}
-                label={field.name}
+                label={label}
             >
                 {options?.map((option) => (
                     <MenuItem value={option}>
@@ -69,10 +71,11 @@ export function SelectController({ control, name, options}: SelectControllerProp
 interface AutocompleteControllerProps {
     control: Control<any, any, any>,
     name: string,
-    options: Array<string | unknown>
+    options: Array<string | unknown>,
+    label: string
 }
 
-export function AutocompleteController({ control, name, options}: AutocompleteControllerProps) {
+export function AutocompleteController({ label, control, name, options}: AutocompleteControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -92,7 +95,7 @@ export function AutocompleteController({ control, name, options}: AutocompleteCo
             }}
             onBlur={field.onBlur}
             options={options}
-            renderInput={(params) => <TextField {...params} label={field.name}/>}
+            renderInput={(params) => <TextField {...params} label={label}/>}
             sx={{margin: 5}}
         >
         </Autocomplete>

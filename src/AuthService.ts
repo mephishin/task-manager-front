@@ -6,6 +6,8 @@ const client = new Keycloak({
     clientId: "task-manager-front",
 });
 
+const PARTICIPANT_ROLE = 'task-manager_participant'
+const LEADER_ROlE = 'task-manager_leader'
 
 const initKeycloak = (onAuthenticatedCallback:any) => {
     client
@@ -28,6 +30,12 @@ const doLogout = client.logout;
 
 const getToken = () => client.token;
 
+const realmAccess = () => client.realmAccess
+
+const getRoles = () => client.realmAccess?.roles
+    .filter(str => str.startsWith(client.realm!))
+    .map(str => str.slice(client.realm!.length + 1))
+
 const getTokenParsed = () => client.tokenParsed;
 
 const isLoggedIn = () => !!client.token;
@@ -39,7 +47,7 @@ const updateToken = (successCallback:any) =>
 
 const getUsername = () => client.tokenParsed?.preferred_username;
 
-const hasRole = (roles:any) => roles.some((role:any) => client.hasRealmRole(role));
+const hasRole = (role:string) => client.hasRealmRole(role);
 
 const AuthService = {
     initKeycloak,
@@ -51,6 +59,10 @@ const AuthService = {
     updateToken,
     getUsername,
     hasRole,
+    realmAccess,
+    getRoles,
+    PARTICIPANT_ROLE,
+    LEADER_ROlE,
 }
 
 export default AuthService;

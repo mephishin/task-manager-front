@@ -38,7 +38,7 @@ export const CreateTaskButton = ({taskTypes, participants, projects} : CreateTas
 
     return(
         <Box>
-            <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Create task</Button>
+            <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Создать задачу</Button>
             <Modal
                 open={open}
                 onClose={handleClose}

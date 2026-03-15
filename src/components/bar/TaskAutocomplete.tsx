@@ -21,7 +21,7 @@ export const TaskAutocomplete = () => {
                     loading={searchTasks.isLoading}
                     onChange={(event, newValue) => onChangeSearchTaskHandler(newValue)}
                     getOptionLabel={(option: SearchTask) => option.name}
-                    renderInput={(params) => <TextField {...params} label="task"/>}
+                    renderInput={(params) => <TextField {...params} label="Поиск задачи"/>}
                     filterOptions={(options: Array<SearchTask>, state: any) => {
                         return options.filter((option: SearchTask) =>
                             option.key.includes(state.inputValue) || option.name.includes(state.inputValue) || option.description.includes(state.inputValue))

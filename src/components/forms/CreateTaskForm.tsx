@@ -27,11 +27,11 @@ export const CreateTaskForm = ({ onSubmit, types, projects, participants }: Crea
         <Box sx={{ borderRadius: 20 }}>
             <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5 }}>
                 <Typography>Создание новой задачи</Typography>
-                <InputController control={control} name={"name"} />
-                <InputController control={control} name={"description"} />
-                <SelectController control={control} name={"type"} options={types?.map((type) => type)} />
-                <AutocompleteController control={control} name={"project"} options={projects!.map((project) => project.name)} />
-                <AutocompleteController control={control} name={"assignee"} options={participants!.map((project) => project.username)} />
+                <InputController label="Название" control={control} name={"name"} />
+                <InputController label="Описание" control={control} name={"description"} />
+                <SelectController label='Тип' control={control} name={"type"} options={types?.map((type) => type)} />
+                <AutocompleteController label={'Проект'}  control={control} name={"project"} options={projects!.map((project) => project.name)} />
+                <AutocompleteController label={'Исполнитель'}  control={control} name={"assignee"} options={participants!.map((project) => project.username)} />
                 <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
             </Stack>
         </Box>

@@ -13,6 +13,7 @@ import {ProjectAutocomplete} from "./ProjectAutocomplete";
 import {TaskAutocomplete} from "./TaskAutocomplete";
 import {CreateTaskButton} from "./CreateTaskButton";
 import {ProfileButton} from "./ProfileButton";
+import AuthService from '../../AuthService';
 
 export const NavigationAppBar = () => {
     const participants = useParticipantsGet();
@@ -21,6 +22,8 @@ export const NavigationAppBar = () => {
     const authParticipantProject = useAuthParticipantProjectGet();
 
     const [project, setProject] = useState<Project | null>(null);
+
+    const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
     if (
         !taskTypes.isPending
@@ -36,7 +39,7 @@ export const NavigationAppBar = () => {
             <AppBar>
                 <Toolbar sx={{justifyContent: "space-between"}}>
                     <NavigationButton setProject={(project: Project) => setProject(project)}/>
-                    <ProjectAutocomplete projects={projects.data} project={project} setProject={(project: Project) => setProject(project)}/>
+                    <ProjectAutocomplete visible={isLeader} projects={projects.data} project={project} setProject={(project: Project) => setProject(project)}/>
                     <TaskAutocomplete/>
                     <CreateTaskButton taskTypes={taskTypes.data} participants={participants.data} projects={projects.data}/>
                     <ProfileButton/>
