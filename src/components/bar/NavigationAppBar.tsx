@@ -14,6 +14,7 @@ import {TaskAutocomplete} from "./TaskAutocomplete";
 import {CreateTaskButton} from "./CreateTaskButton";
 import {ProfileButton} from "./ProfileButton";
 import AuthService from '../../AuthService';
+import { CreateProjectButton } from './CreateProjectButton';
 
 export const NavigationAppBar = () => {
     const participants = useParticipantsGet();
@@ -42,6 +43,7 @@ export const NavigationAppBar = () => {
                     <ProjectAutocomplete visible={isLeader} projects={projects.data} project={project} setProject={(project: Project) => setProject(project)}/>
                     <TaskAutocomplete/>
                     <CreateTaskButton taskTypes={taskTypes.data} participants={participants.data} projects={projects.data}/>
+                    <CreateProjectButton visible={isLeader} participants={participants.data}/>
                     <ProfileButton/>
                 </Toolbar>
                 <Outlet context={project}/>

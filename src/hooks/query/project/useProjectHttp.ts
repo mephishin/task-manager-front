@@ -1,5 +1,6 @@
 import {AxiosInstance, AxiosResponse} from "axios";
 import {Project} from "../../../model/project/Project";
+import { CreateProject } from "../../../model/project/CreateProject";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>
@@ -18,8 +19,21 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
+    const createProject = (project: CreateProject): Promise<Project> =>
+        axiosInstance.post("/project", project, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+            .then((response: AxiosResponse) => {
+                console.log("Got created project: ")
+                console.log(response.data)
+                return response.data
+            })
+
     return {
         getProjects,
-        getProjectByAuth
+        getProjectByAuth,
+        createProject
     }
 }

@@ -1,4 +1,4 @@
-import {Control, useController} from "react-hook-form";
+import {Control, FieldErrors, useController, UseFormRegister, UseFormRegisterReturn} from "react-hook-form";
 import {Autocomplete, FormControl, InputLabel, Select, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -6,9 +6,12 @@ interface InputControllerProps {
     control: Control<any, any, any>,
     name: string,
     label: string
+    register?: UseFormRegisterReturn<string>
+    errors?: FieldErrors<any>
+
 }
 
-export function InputController({ label, control, name }: InputControllerProps) {
+export function InputController({ label, control, name, register, errors}: InputControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -26,6 +29,9 @@ export function InputController({ label, control, name }: InputControllerProps) 
             value={field.value || ''} // input value
             label={label}
             sx={{margin: 5}}
+            {...register}
+            error={!!errors?.[name]}
+            helperText={errors?.[name]?.message?.toString()}
         />
     )
 }
@@ -89,6 +95,41 @@ export function AutocompleteController({ label, control, name, options}: Autocom
 
     return (
         <Autocomplete
+            value={field.value}
+            onChange={(event, newValue) => {
+                field.onChange(newValue)
+            }}
+            onBlur={field.onBlur}
+            options={options}
+            renderInput={(params) => <TextField {...params} label={label}/>}
+            sx={{margin: 5}}
+        >
+        </Autocomplete>
+    )
+}
+
+interface MultipleAutocompleteControllerProps {
+    control: Control<any, any, any>,
+    name: string,
+    options: Array<string | unknown>,
+    label: string
+}
+
+export function MultipleAutocompleteController({ label, control, name, options}: MultipleAutocompleteControllerProps) {
+    const {
+        field,
+        // fieldState: { invalid, isTouched, isDirty },
+        // formState: { touchedFields, dirtyFields },
+    } = useController({
+        name,
+        control
+        // rules: { required: true },
+    })
+
+
+    return (
+        <Autocomplete
+            multiple
             value={field.value}
             onChange={(event, newValue) => {
                 field.onChange(newValue)

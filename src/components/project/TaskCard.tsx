@@ -42,7 +42,7 @@ export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
                         participant ? (
                             <Box>
                                 <Typography sx={{color: '#5E6C84'}}>
-                                    Закреплена: {participant.username}
+                                    Исполнитель: {participant.username}
                                 </Typography>
                                 <Box>
                                     <Button sx={{color: '#5E6C84'}}
@@ -72,7 +72,7 @@ export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
                             </Box>
                         ) : (
                             <Typography sx={{color: '#5E6C84'}}>
-                                Не закреплена
+                                Без исполнителя
                             </Typography>
                         )
                     }

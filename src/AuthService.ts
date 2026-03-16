@@ -32,9 +32,11 @@ const getToken = () => client.token;
 
 const realmAccess = () => client.realmAccess
 
-const getRoles = () => client.realmAccess?.roles
-    .filter(str => str.startsWith(client.realm!))
-    .map(str => str.slice(client.realm!.length + 1))
+const getRoles = () => {
+    return client.realmAccess?.roles
+        .filter(str => str.startsWith(client.realm!))
+        .map(str => str.slice(client.realm!.length + 1))
+    }
 
 const getTokenParsed = () => client.tokenParsed;
 

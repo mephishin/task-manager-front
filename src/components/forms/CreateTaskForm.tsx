@@ -17,7 +17,7 @@ interface CreateTaskFormProps {
 }
 
 export const CreateTaskForm = ({ onSubmit, types, projects, participants }: CreateTaskFormProps) => {
-    const { control, handleSubmit } = useForm<CreateTask>({
+    const { control, handleSubmit} = useForm<CreateTask>({
         defaultValues: {
             assignee: AuthService.getUsername()
         }
@@ -31,8 +31,8 @@ export const CreateTaskForm = ({ onSubmit, types, projects, participants }: Crea
                 <InputController label="Описание" control={control} name={"description"} />
                 <SelectController label='Тип' control={control} name={"type"} options={types?.map((type) => type)} />
                 <AutocompleteController label={'Проект'}  control={control} name={"project"} options={projects!.map((project) => project.name)} />
-                <AutocompleteController label={'Исполнитель'}  control={control} name={"assignee"} options={participants!.map((project) => project.username)} />
-                <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+                <AutocompleteController label={'Исполнитель'}  control={control} name={"assignee"} options={participants!.map((participant) => participant.username)} />
+                <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>
             </Stack>
         </Box>
     )
