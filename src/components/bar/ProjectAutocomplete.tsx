@@ -4,7 +4,7 @@ import {Autocomplete, Box, FormControl, TextField} from "@mui/material";
 
 interface ProjectAutocompleteProps {
     projects: Array<Project>;
-    project: Project | null;
+    project?: Project;
     setProject: (project: Project) => void;
     visible: boolean;
 }

@@ -56,7 +56,7 @@ export function SelectController({ label, control, name, options}: SelectControl
 
     return (
         <FormControl sx={{margin: 5}}>
-            <InputLabel id={"select-label"}>{field.name}</InputLabel>
+            <InputLabel id={"select-label"}>{label}</InputLabel>
             <Select
                 onChange={field.onChange} // send value to hook form
                 onBlur={field.onBlur} // notify when input is touched/blur

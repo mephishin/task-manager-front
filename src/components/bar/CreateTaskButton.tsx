@@ -23,9 +23,10 @@ interface CreateTaskButtonProps {
     taskTypes: Array<string>;
     participants: Array<Participant>;
     projects: Array<Project>;
+    authParticipantProject?: Project;
 }
 
-export const CreateTaskButton = ({taskTypes, participants, projects} : CreateTaskButtonProps) => {
+export const CreateTaskButton = ({taskTypes, participants, projects, authParticipantProject} : CreateTaskButtonProps) => {
     const onSubmitCreateTask = (data: CreateTask) => {
         createTask.mutate(data)
         handleClose()
@@ -51,6 +52,7 @@ export const CreateTaskButton = ({taskTypes, participants, projects} : CreateTas
                         types={taskTypes}
                         participants={participants}
                         projects={projects}
+                        authParticipantProject={authParticipantProject}
                     />
                 </Box>
             </Modal>

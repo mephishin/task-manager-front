@@ -14,12 +14,14 @@ interface CreateTaskFormProps {
     types?: Array<string>,
     projects?: Array<Project>,
     participants?: Array<Participant>
+    authParticipantProject?: Project
 }
 
-export const CreateTaskForm = ({ onSubmit, types, projects, participants }: CreateTaskFormProps) => {
+export const CreateTaskForm = ({ onSubmit, types, projects, participants, authParticipantProject }: CreateTaskFormProps) => {
     const { control, handleSubmit} = useForm<CreateTask>({
         defaultValues: {
-            assignee: AuthService.getUsername()
+            assignee: AuthService.getUsername(),
+            project: authParticipantProject?.name
         }
     })
 

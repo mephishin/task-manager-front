@@ -22,7 +22,7 @@ export const NavigationAppBar = () => {
     const projects = useProjectsGet();
     const authParticipantProject = useAuthParticipantProjectGet();
 
-    const [project, setProject] = useState<Project | null>(null);
+    const [project, setProject] = useState<Project>();
 
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
@@ -32,7 +32,7 @@ export const NavigationAppBar = () => {
         && !projects.isPending
         && !authParticipantProject.isPending
     ) {
-        if (project === null) {
+        if (project === undefined) {
             setProject(authParticipantProject.data!)
         }
 
@@ -42,7 +42,11 @@ export const NavigationAppBar = () => {
                     <NavigationButton setProject={(project: Project) => setProject(project)}/>
                     <ProjectAutocomplete visible={isLeader} projects={projects.data} project={project} setProject={(project: Project) => setProject(project)}/>
                     <TaskAutocomplete/>
-                    <CreateTaskButton taskTypes={taskTypes.data} participants={participants.data} projects={projects.data}/>
+                    <CreateTaskButton
+                        taskTypes={taskTypes.data}
+                        participants={participants.data}
+                        projects={projects.data}
+                        authParticipantProject={project}/>
                     <CreateProjectButton visible={isLeader} participants={participants.data}/>
                     <ProfileButton/>
                 </Toolbar>
