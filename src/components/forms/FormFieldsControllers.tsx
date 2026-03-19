@@ -1,17 +1,15 @@
-import {Control, FieldErrors, useController, UseFormRegister, UseFormRegisterReturn} from "react-hook-form";
-import {Autocomplete, FormControl, InputLabel, Select, TextField} from "@mui/material";
+import { Control, FieldErrors, useController } from "react-hook-form";
+import { Autocomplete, FormControl, FormHelperText, InputLabel, Select, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 
 interface InputControllerProps {
     control: Control<any, any, any>,
     name: string,
     label: string
-    register?: UseFormRegisterReturn<string>
     errors?: FieldErrors<any>
-
 }
 
-export function InputController({ label, control, name, register, errors}: InputControllerProps) {
+export function InputController({ label, control, name, errors }: InputControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -28,8 +26,7 @@ export function InputController({ label, control, name, register, errors}: Input
             onBlur={field.onBlur} // notify when input is touched/blur
             value={field.value || ''} // input value
             label={label}
-            sx={{margin: 5}}
-            {...register}
+            sx={{ margin: 5 }}
             error={!!errors?.[name]}
             helperText={errors?.[name]?.message?.toString()}
         />
@@ -37,25 +34,26 @@ export function InputController({ label, control, name, register, errors}: Input
 }
 
 interface SelectControllerProps {
-    control: Control<any, any, any>,
-    name: string,
-    options?: Array<string>,
+    control: Control<any, any, any>
+    name: string
+    options?: Array<string>
     label: string
+    errors?: FieldErrors<any>
 }
 
-export function SelectController({ label, control, name, options}: SelectControllerProps) {
+export function SelectController({ label, control, name, options, errors }: SelectControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
         // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
-        control,
+        control
         // rules: { required: true },
     })
 
     return (
-        <FormControl sx={{margin: 5}}>
+        <FormControl sx={{ margin: 5 }} error={!!errors?.[name]}>
             <InputLabel id={"select-label"}>{label}</InputLabel>
             <Select
                 onChange={field.onChange} // send value to hook form
@@ -70,18 +68,20 @@ export function SelectController({ label, control, name, options}: SelectControl
                     </MenuItem>
                 ))}
             </Select>
+            <FormHelperText>{errors?.[name]?.message?.toString()}</FormHelperText>
         </FormControl>
     )
 }
 
 interface AutocompleteControllerProps {
-    control: Control<any, any, any>,
-    name: string,
-    options: Array<string | unknown>,
+    control: Control<any, any, any>
+    name: string
+    options: Array<string | unknown>
     label: string
+    errors?: FieldErrors<any>
 }
 
-export function AutocompleteController({ label, control, name, options}: AutocompleteControllerProps) {
+export function AutocompleteController({ label, control, name, options, errors }: AutocompleteControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -101,8 +101,12 @@ export function AutocompleteController({ label, control, name, options}: Autocom
             }}
             onBlur={field.onBlur}
             options={options}
-            renderInput={(params) => <TextField {...params} label={label}/>}
-            sx={{margin: 5}}
+            renderInput={(params) => <TextField
+                {...params}
+                label={label}
+                error={!!errors?.[name]}
+                helperText={errors?.[name]?.message?.toString()}/>}
+            sx={{ margin: 5 }}
         >
         </Autocomplete>
     )
@@ -112,10 +116,11 @@ interface MultipleAutocompleteControllerProps {
     control: Control<any, any, any>,
     name: string,
     options: Array<string | unknown>,
-    label: string
+    label: string,
+    errors?: FieldErrors<any>
 }
 
-export function MultipleAutocompleteController({ label, control, name, options}: MultipleAutocompleteControllerProps) {
+export function MultipleAutocompleteController({ label, control, name, options, errors }: MultipleAutocompleteControllerProps) {
     const {
         field,
         // fieldState: { invalid, isTouched, isDirty },
@@ -136,8 +141,12 @@ export function MultipleAutocompleteController({ label, control, name, options}:
             }}
             onBlur={field.onBlur}
             options={options}
-            renderInput={(params) => <TextField {...params} label={label}/>}
-            sx={{margin: 5}}
+            renderInput={(params) => <TextField
+                {...params}
+                label={label}
+                error={!!errors?.[name]}
+                helperText={errors?.[name]?.message?.toString()} />}
+            sx={{ margin: 5 }}
         >
         </Autocomplete>
     )

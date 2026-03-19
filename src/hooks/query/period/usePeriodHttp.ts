@@ -5,7 +5,7 @@ import {Period} from "../../../model/period/Period";
 export function usePeriodHttp(axiosInstance: AxiosInstance) {
 
     const getPeriod = (project: Project): Promise<Period> =>
-        axiosInstance.get(`/period?project=${project.name}&active=true`)
+        axiosInstance.get(`/period?project=${project.key}&active=true`)
             .then((response: AxiosResponse) => {
                 console.log("Got period: ")
                 console.log(response.data)

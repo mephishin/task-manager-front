@@ -1,7 +1,8 @@
-import {Task, UpdateTask} from "../../../model/task/Task";
-import axios, {AxiosInstance, AxiosResponse} from "axios";
-import {CreateTask} from "../../../model/task/CreateTask";
+import {Task} from "../../../model/task/Task";
+import {AxiosInstance, AxiosResponse} from "axios";
 import {SearchTask} from "../../../model/task/SearchTask";
+import { CreateTask } from "../../../model/task/CreateTask";
+import { UpdateTask } from "../../../model/task/UpdateTask";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<Array<SearchTask>> =>

@@ -3,11 +3,13 @@ import {getKey} from "../QueryUtility";
 import {Project} from "../../../model/project/Project";
 import {useProjectHttp} from "./useProjectHttp";
 import {useCreateAxiosInstance} from "../HttpUtils";
+import { ProjectFile } from "../../../model/project/ProjectFile";
 
 const KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE','QUERY'),
     get: getKey('GET', 'PROJECT', 'SINGLE','QUERY'),
-    create: getKey('POST', 'PROJECT', 'SINGLE','MUTATION')
+    create: getKey('POST', 'PROJECT', 'SINGLE','MUTATION'),
+    getAllFiles: getKey('GET', 'PROJECT-FILE', 'MULTIPLE','QUERY')
 }
 
 export function useProjectsGet() {
@@ -17,6 +19,16 @@ export function useProjectsGet() {
         queryKey: [KEYS.getAll],
         queryFn: getProjects,
         initialData: new Array<Project>()
+    });
+}
+
+export function useProjectsFilesGet(project: Project) {
+    const { getProjectsFiles } = useProjectHttp(useCreateAxiosInstance());
+
+    return useQuery({
+        queryKey: [KEYS.getAllFiles],
+        queryFn: () => getProjectsFiles(project),
+        initialData: new Array<ProjectFile>()
     });
 }
 

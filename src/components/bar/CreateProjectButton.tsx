@@ -1,10 +1,10 @@
 import * as React from "react";
-import {Box, Button, Modal} from "@mui/material";
+import {Box, Button, Modal, Typography} from "@mui/material";
 import {useState} from "react";
 import { CreateProjectForm } from "../forms/CreateProjectForm";
-import { Participant } from "../../model/participant/Participant";
-import { CreateProject } from "../../model/project/CreateProject";
+import { Users } from "../../model/participant/Participant";
 import { useProjectCreate } from "../../hooks/query/project/useProject";
+import { CreateProject } from "../../model/project/CreateProject";
 
 const style = {
     position: 'absolute',
@@ -19,7 +19,7 @@ const style = {
 };
 
 interface CreateProjectButtonProps {
-    participants: Array<Participant>;
+    participants: Array<Users>;
     visible: boolean;
 }
 
@@ -44,6 +44,7 @@ export const CreateProjectButton = ({participants, visible} : CreateProjectButto
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style}>
+                            <Typography>Создание нового проекта</Typography>
                             <CreateProjectForm
                                 onSubmit={onSubmitCreateProject}
                                 participants={participants}

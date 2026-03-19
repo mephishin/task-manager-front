@@ -6,6 +6,7 @@ import {useTaskStatusesGet} from "../hooks/query/task/useTask";
 import {Project} from "../model/project/Project";
 import {useTasksChartGet} from "../hooks/query/tasksChart/useTasksChart";
 import {PeriodBar} from "../components/period/PeriodBar";
+import { ProjectInfoBar } from '../components/projectInfo/ProjectInfoBar';
 
 export const ProjectPage = () => {
     const project: Project = useOutletContext();
@@ -15,6 +16,7 @@ export const ProjectPage = () => {
     if (!taskStatusesQuery.isPending && !tasksQuery.isPending) {
         return(
             <Box sx={{backgroundColor: 'white'}}>
+                <ProjectInfoBar project={project}/>
                 <PeriodBar project={project}/>
                 <TasksChart
                     participants={tasksQuery?.data?.participants}

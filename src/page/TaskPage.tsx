@@ -2,21 +2,21 @@ import React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {UpdateTaskForm} from "../components/forms/UpdateTaskForm";
 import {CircularProgress, Grid2, IconButton, Stack} from "@mui/material";
-import {UpdateTask} from "../model/task/Task";
-import {useCloseTask, useTaskGet, useTaskStatusesGet, useTaskTypesGet, useTaskUpdate} from "../hooks/query/task/useTask";
-import {useParticipantsGet} from "../hooks/query/participant/useParticipant";
+import {useCloseTask, useTaskGet, useTaskTypesGet, useTaskUpdate} from "../hooks/query/task/useTask";
+import {useUsersGet} from "../hooks/query/users/useUsers";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { formatISORus } from "../util/LocalInterval";
+import { UpdateTask } from "../model/task/UpdateTask";
 
 export const TaskPage = () => {
     const {key} = useParams();
     const navigate = useNavigate();
 
     const taskTypesQuery = useTaskTypesGet();
-    const participantsQuery = useParticipantsGet();
+    const participantsQuery = useUsersGet();
     const taskQuery = useTaskGet(key);
     const updateTaskMutation = useTaskUpdate(key);
     const closeTask = useCloseTask();
@@ -34,6 +34,7 @@ export const TaskPage = () => {
         !taskTypesQuery.isPending
         && !participantsQuery.isPending
         && !taskQuery.isPending
+        && key !== undefined
     ) {
         return (
             <Box sx={{backgroundColor: '#F4F5F7', borderRadius: 2}}>

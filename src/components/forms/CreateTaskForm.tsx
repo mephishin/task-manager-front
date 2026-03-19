@@ -1,39 +1,64 @@
 import React from "react";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { AutocompleteController, InputController, SelectController } from "./FormFieldsControllers";
 import { Project } from "../../model/project/Project";
-import { Participant } from "../../model/participant/Participant";
-import { CreateTask } from "../../model/task/CreateTask";
+import { Users } from "../../model/participant/Participant";
 import AuthService from "../../AuthService";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CreateTask, createTaskFormValidationSchema } from "../../model/task/CreateTask";
 
 interface CreateTaskFormProps {
     onSubmit: SubmitHandler<CreateTask>,
     types?: Array<string>,
     projects?: Array<Project>,
-    participants?: Array<Participant>
-    authParticipantProject?: Project
+    users?: Array<Users>
+    authUsersProject?: Project
 }
 
-export const CreateTaskForm = ({ onSubmit, types, projects, participants, authParticipantProject }: CreateTaskFormProps) => {
-    const { control, handleSubmit} = useForm<CreateTask>({
+export const CreateTaskForm = ({ onSubmit, types, projects, users, authUsersProject }: CreateTaskFormProps) => {
+    const { control, handleSubmit, formState: { errors } } = useForm<CreateTask>({
         defaultValues: {
+            type: "Задача",
             assignee: AuthService.getUsername(),
-            project: authParticipantProject?.name
-        }
+            project: authUsersProject?.name
+        },
+        resolver: yupResolver(createTaskFormValidationSchema),
     })
 
     return (
         <Box sx={{ borderRadius: 20 }}>
             <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5 }}>
-                <Typography>Создание новой задачи</Typography>
-                <InputController label="Название" control={control} name={"name"} />
-                <InputController label="Описание" control={control} name={"description"} />
-                <SelectController label='Тип' control={control} name={"type"} options={types?.map((type) => type)} />
-                <AutocompleteController label={'Проект'}  control={control} name={"project"} options={projects!.map((project) => project.name)} />
-                <AutocompleteController label={'Исполнитель'}  control={control} name={"assignee"} options={participants!.map((participant) => participant.username)} />
+                <InputController
+                    label="Название"
+                    control={control}
+                    name={"name"}
+                    errors={errors} />
+                <InputController
+                    label="Описание"
+                    control={control}
+                    name={"description"}
+                    errors={errors} />
+                <SelectController
+                    label='Тип'
+                    control={control}
+                    name={"type"}
+                    options={types}
+                    errors={errors} />
+                <AutocompleteController
+                    label={'Проект'}
+                    control={control}
+                    name={"project"}
+                    options={projects!.map((project) => project.name)}
+                    errors={errors} />
+                <AutocompleteController
+                    label={'Исполнитель'}
+                    control={control}
+                    name={"assignee"}
+                    options={users!.map((user) => user.username)}
+                    errors={errors} />
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>
             </Stack>
         </Box>

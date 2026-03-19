@@ -1,18 +1,19 @@
-import {CreateTaskForm} from "../forms/CreateTaskForm";
 import * as React from "react";
-import {Box, Button, Modal} from "@mui/material";
-import {CreateTask} from "../../model/task/CreateTask";
-import {useState} from "react";
-import {useTaskCreate} from "../../hooks/query/task/useTask";
-import {Project} from "../../model/project/Project";
-import {Participant} from "../../model/participant/Participant";
+import { Box, Button, Modal, Typography } from "@mui/material";
+import { useState } from "react";
+import { useTaskCreate } from "../../hooks/query/task/useTask";
+import { Project } from "../../model/project/Project";
+import { Users } from "../../model/participant/Participant";
+import { CreateTask } from "../../model/task/CreateTask";
+import { CreateTaskForm } from "../forms/CreateTaskForm";
+import AuthService from "../../AuthService";
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 500,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -21,12 +22,12 @@ const style = {
 
 interface CreateTaskButtonProps {
     taskTypes: Array<string>;
-    participants: Array<Participant>;
+    users: Array<Users>;
     projects: Array<Project>;
-    authParticipantProject?: Project;
+    authUsersProject: Project;
 }
 
-export const CreateTaskButton = ({taskTypes, participants, projects, authParticipantProject} : CreateTaskButtonProps) => {
+export const CreateTaskButton = ({ taskTypes, users, projects, authUsersProject }: CreateTaskButtonProps) => {
     const onSubmitCreateTask = (data: CreateTask) => {
         createTask.mutate(data)
         handleClose()
@@ -36,10 +37,15 @@ export const CreateTaskButton = ({taskTypes, participants, projects, authPartici
     const handleClose = () => setOpen(false);
     const createTask = useTaskCreate();
 
+    const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
-    return(
+    if (!isLeader) {
+        projects = projects.filter(p => p.key == authUsersProject.key)
+    }
+
+    return (
         <Box>
-            <Button sx={{backgroundColor: "white"}} onClick={handleOpen}>Создать задачу</Button>
+            <Button sx={{ backgroundColor: "white" }} onClick={handleOpen}>Создать задачу</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -47,12 +53,13 @@ export const CreateTaskButton = ({taskTypes, participants, projects, authPartici
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <Typography>Создание новой задачи</Typography>
                     <CreateTaskForm
                         onSubmit={onSubmitCreateTask}
                         types={taskTypes}
-                        participants={participants}
+                        users={users}
                         projects={projects}
-                        authParticipantProject={authParticipantProject}
+                        authUsersProject={authUsersProject}
                     />
                 </Box>
             </Modal>
