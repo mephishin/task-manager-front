@@ -24,7 +24,7 @@ export const ProjectAutocomplete = ({projects, project, setProject, visible = tr
                         onChange={(event, newValue) => onChangeProjectHandler(newValue)}
                         options={projects}
                         getOptionLabel={(option: Project) => option.name}
-                        renderInput={(params) => <TextField {...params} label="project"/>}
+                        renderInput={(params) => <TextField {...params} label="Проект"/>}
                     >
                     </Autocomplete>
                 </FormControl>

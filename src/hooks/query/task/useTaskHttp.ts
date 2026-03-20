@@ -8,24 +8,18 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<Array<SearchTask>> =>
         axiosInstance.get("/searchTasks")
             .then((response: AxiosResponse) => {
-                console.log("Got searchTasks: ")
-                console.log(response.data)
                 return response.data
             })
 
     const getTaskStatuses = (projectKey: string | undefined): Promise<Array<string>> =>
         axiosInstance.get(`/statuses/${projectKey}`)
             .then((response: AxiosResponse) => {
-                console.log("Got taskStatuses: ")
-                console.log(response.data)
                 return response.data
             })
 
     const getTaskTypes = (): Promise<Array<string>> =>
         axiosInstance.get("/types")
             .then((response: AxiosResponse) => {
-                console.log("Got taskTypes: ")
-                console.log(response.data)
                 return response.data
             })
 
@@ -36,16 +30,12 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
             }
         })
             .then((response: AxiosResponse) => {
-                console.log("Got updatedTask: ")
-                console.log(response.data)
                 return response.data
             })
 
     const getTask = (key: string | undefined): Promise<Task> =>
         axiosInstance.get(`/task/${key}`)
             .then((response: AxiosResponse) => {
-                console.log("Got task by key: ")
-                console.log(response.data)
                 return response.data
             })
 
@@ -56,8 +46,6 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
             }
         })
             .then((response: AxiosResponse) => {
-                console.log("Got created task: ")
-                console.log(response.data)
                 return response.data
             })
 
@@ -77,7 +65,6 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
     }): Promise<Array<string>> =>
         axiosInstance.get(`task/${variables.taskKey}/statuses?allowed=true`)
             .then((response: AxiosResponse) => {
-                console.log("Got allowed task statuses: [" + response.data + "] for task with key: " + variables.taskKey)
                 return response.data
             })
 
