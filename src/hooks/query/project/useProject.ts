@@ -3,7 +3,6 @@ import { getKey } from "../QueryUtility";
 import { Project } from "../../../model/project/Project";
 import { useProjectHttp } from "./useProjectHttp";
 import { useCreateAxiosInstance } from "../HttpUtils";
-import { ProjectFile } from "../../../model/project/ProjectFile";
 
 const KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE', 'QUERY'),
@@ -66,6 +65,25 @@ export function useProjectFileSave() {
             saveProjectFile(
                 variables.file,
                 variables.projectId
+            ),
+        onSuccess: () =>
+                    queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] })
+    });
+}
+
+export function useProjectFileDelete() {
+    const { deleteProjectFile } = useProjectHttp(useCreateAxiosInstance());
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [KEYS.saveProjectFile],
+        mutationFn: (variables: {
+            projectId: string,
+            filename: string
+        }) =>
+            deleteProjectFile(
+                variables.projectId,
+                variables.filename
             ),
         onSuccess: () =>
                     queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] })

@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { Project } from "../../../model/project/Project";
 import { CreateProject } from "../../../model/project/CreateProject";
 import { ProjectFile } from "../../../model/project/ProjectFile";
@@ -19,9 +19,9 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
 
     const getProjectsFiles = (project: Project): Promise<File[]> =>
         axiosInstance.get(`/projects/${project.key}/file`, {
-                responseType: 'arraybuffer'
-            })
-            .then( async (response: AxiosResponse) => {
+            responseType: 'arraybuffer'
+        })
+            .then(async (response: AxiosResponse) => {
                 var files = await transformZipToFiles(response.data)
                 return files
             })
@@ -41,11 +41,22 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         projectId: string
     ): Promise<void> =>
         axiosInstance.post(`/projects/${projectId}/file`, {
-          'file': file
+            'file': file
         }, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+    const deleteProjectFile = (
+        projectId: string,
+        filename: string
+    ): Promise<void> =>
+        axiosInstance.delete(`/projects/${projectId}/file`, {
+            data: axios.toFormData({"filename": filename}),
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         })
 
     return {
@@ -53,6 +64,7 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         getProjectByAuth,
         createProject,
         getProjectsFiles,
-        saveProjectFile
+        saveProjectFile,
+        deleteProjectFile
     }
 }

@@ -1,14 +1,12 @@
-import { Avatar, Button, CircularProgress, Grid2, IconButton, Link, List, ListItem, ListItemAvatar, ListItemIcon, Stack, styled, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {Button, CircularProgress, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography } from "@mui/material";
+import React from "react";
 import { Project } from "../../model/project/Project";
-import { useProjectFileSave, useProjectsFilesGet } from "../../hooks/query/project/useProject";
-import { ProjectFile } from "../../model/project/ProjectFile";
+import { useProjectFileDelete, useProjectFileSave, useProjectsFilesGet } from "../../hooks/query/project/useProject";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import mime from "mime";
-
+import AuthService from "../../AuthService";
 
 interface ProjectInfoBarProps {
     project: Project
@@ -26,22 +24,25 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
+const Demo = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+}));
+
 export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
-    const projectFiles = useProjectsFilesGet(project);
-    const projectFile = useProjectFileSave();
+    const getProjectFiles = useProjectsFilesGet(project);
+    const saveProjectFile = useProjectFileSave();
+    const deleteProjectFile = useProjectFileDelete();
+
+    const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
     const handleUpload = (event: any) => {
-        projectFile.mutate({
+        saveProjectFile.mutate({
             file: event.target.files[0],
             projectId: project.key
         });
     }
 
-    const Demo = styled('div')(({ theme }) => ({
-        backgroundColor: theme.palette.background.paper,
-    }));
-
-    const downloadFile = (file: File) => {
+    const handleDownloadFile = (file: File) => {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(file);
         link.download = file.name;
@@ -50,50 +51,67 @@ export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
         document.body.removeChild(link);
     };
 
-    if (!projectFiles.isPending) {
+    const handleDeleteFile = (file: File) => {
+        deleteProjectFile.mutate({
+            filename: file.name,
+            projectId: project.key
+        })
+    };
+
+    if (!getProjectFiles.isPending && getProjectFiles.data) {
         return (
             <Stack sx={{ backgroundColor: '#F4F5F7', display: 'flex', p: 1, m: 1, borderRadius: 2 }}>
                 <Typography variant="h6" component="div" color="primary">
                     Устав проекта
                 </Typography>
-                <Demo>
-                    <List>
-                        {projectFiles.data?.map(file => (
-                            <ListItem secondaryAction={
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            }>
-                                <ListItemIcon>
-                                    <InsertDriveFileIcon />
-                                </ListItemIcon>
-                                <ListItemText>
-                                    <Link component="button"
-                                        variant="body2"
-                                        onClick={() => downloadFile(file)}>
-                                        <Typography color="primary">
-                                            {file.name}
-                                        </Typography>
-                                    </Link>
-                                </ListItemText>
-                            </ListItem>
-                        ))}
-                    </List>
+                <Demo sx={{ borderRadius: 2 }}>
+                    {getProjectFiles.data?.length ? (
+                        <List>
+                            {getProjectFiles.data?.map(file => (
+                                <ListItem secondaryAction={
+                                    isLeader && (
+                                        <IconButton edge="end" aria-label="delete" onClick={() => { handleDeleteFile(file) }} >
+                                            <DeleteIcon />
+                                        </IconButton>)
+                                }>
+                                    <ListItemIcon>
+                                        <InsertDriveFileIcon />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        <Link component="button"
+                                            variant="body2"
+                                            onClick={() => handleDownloadFile(file)}>
+                                            <Typography color="primary">
+                                                {file.name}
+                                            </Typography>
+                                        </Link>
+                                    </ListItemText>
+                                </ListItem>
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography sx={{ p: 1 }} color="text.secondary" align="center">
+                            Файлы отсутствуют
+                        </Typography>
+                    )}
                 </Demo>
-                <Button
-                    component="label"
-                    role={undefined}
-                    variant="contained"
-                    tabIndex={-1}
-                    startIcon={<CloudUploadIcon />}
-                >
-                    Upload files
-                    <VisuallyHiddenInput
-                        type="file"
-                        onChange={(event) => handleUpload(event)}
-                        multiple
-                    />
-                </Button>
+                {isLeader && (
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudUploadIcon />}
+                        sx={{my:1}}
+                    >
+                        Загрузить файл
+                        <VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => handleUpload(event)}
+                            multiple
+                        />
+                    </Button>
+                )}
             </Stack>
         )
     } else return <CircularProgress color={"warning"} />
