@@ -1,15 +1,15 @@
 import {Button, CircularProgress, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography } from "@mui/material";
 import React from "react";
-import { Project } from "../../model/project/Project";
-import { useProjectFileDelete, useProjectFileSave, useProjectsFilesGet } from "../../hooks/query/project/useProject";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AuthService from "../../AuthService";
+import { Project } from "../../../model/project/Project";
+import { useProjectFileSave, useProjectFileDelete, useProjectsFilesGet } from "../../../hooks/query/project/useProject";
+import AuthService from "../../../AuthService";
 
 interface ProjectInfoBarProps {
-    project: Project
+    projectId: string
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -28,8 +28,8 @@ const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
-    const getProjectFiles = useProjectsFilesGet(project);
+export const ProjectInfoBar = ({ projectId }: ProjectInfoBarProps) => {
+    const getProjectFiles = useProjectsFilesGet(projectId);
     const saveProjectFile = useProjectFileSave();
     const deleteProjectFile = useProjectFileDelete();
 
@@ -38,7 +38,7 @@ export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
     const handleUpload = (event: any) => {
         saveProjectFile.mutate({
             file: event.target.files[0],
-            projectId: project.key
+            projectId: projectId
         });
     }
 
@@ -54,7 +54,7 @@ export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
     const handleDeleteFile = (file: File) => {
         deleteProjectFile.mutate({
             filename: file.name,
-            projectId: project.key
+            projectId: projectId
         })
     };
 
@@ -68,7 +68,7 @@ export const ProjectInfoBar = ({ project }: ProjectInfoBarProps) => {
                     {getProjectFiles.data?.length ? (
                         <List>
                             {getProjectFiles.data?.map(file => (
-                                <ListItem secondaryAction={
+                                <ListItem key={file.name} secondaryAction={
                                     isLeader && (
                                         <IconButton edge="end" aria-label="delete" onClick={() => { handleDeleteFile(file) }} >
                                             <DeleteIcon />

@@ -15,8 +15,8 @@ export function useTasksChartHttp() {
         }
     })
 
-    const getTasksChart = (projectName?: string): Promise<TasksChart> =>
-        api.get<TasksChart>(projectName ? `/tasksChart?project=${projectName}` : `/tasksChart`)
+    const getTasksChart = (projectId?: string): Promise<TasksChart> =>
+        api.get<TasksChart>(projectId ? `/tasksChart?projectId=${projectId}` : `/tasksChart`)
             .then((response: AxiosResponse) => {
                 return response.data
             })

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import { useTaskCreate } from "../../hooks/query/task/useTask";
-import { Project } from "../../model/project/Project";
-import { Users } from "../../model/participant/Participant";
-import { CreateTask } from "../../model/task/CreateTask";
-import { CreateTaskForm } from "../forms/CreateTaskForm";
-import AuthService from "../../AuthService";
+import { Users } from "../../../model/participant/Participant";
+import { Project } from "../../../model/project/Project";
+import { CreateTask } from "../../../model/task/CreateTask";
+import { useTaskCreate } from "../../../hooks/query/task/useTask";
+import AuthService from "../../../AuthService";
+import { CreateTaskForm } from "../../../components/forms/CreateTaskForm";
 
 const style = {
     position: 'absolute',

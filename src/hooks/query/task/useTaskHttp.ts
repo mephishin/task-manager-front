@@ -1,24 +1,25 @@
-import {Task} from "../../../model/task/Task";
-import {AxiosInstance, AxiosResponse} from "axios";
-import {SearchTask} from "../../../model/task/SearchTask";
+import { Task } from "../../../model/task/Task";
+import { AxiosInstance, AxiosResponse } from "axios";
+import { SearchTask } from "../../../model/task/SearchTask";
 import { CreateTask } from "../../../model/task/CreateTask";
 import { UpdateTask } from "../../../model/task/UpdateTask";
+import { TaskComment } from "../../../model/task/TaskComment";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<Array<SearchTask>> =>
-        axiosInstance.get("/searchTasks")
+        axiosInstance.get("/task/search")
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
     const getTaskStatuses = (projectKey: string | undefined): Promise<Array<string>> =>
-        axiosInstance.get(`/statuses/${projectKey}`)
+        axiosInstance.get(`/status/${projectKey}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
     const getTaskTypes = (): Promise<Array<string>> =>
-        axiosInstance.get("/types")
+        axiosInstance.get("/type")
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -68,6 +69,24 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
+    const getTaskComments = (variables: {
+        taskKey?: string
+    }): Promise<Array<TaskComment>> =>
+        axiosInstance.get(`task/${variables.taskKey}/comment`)
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
+    const saveTaskComment = (variables: {
+        taskKey?: string,
+        commentText?: string
+    }): Promise<Array<string>> =>
+        axiosInstance.post(`task/${variables.taskKey}/comment`, {
+            text : variables.commentText})
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
     return {
         getTaskStatuses,
         getTaskTypes,
@@ -77,6 +96,8 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         changeTaskStatus,
         closeTask,
         getAllowedTaskStatuses,
-        getTasksToSearch
+        getTasksToSearch,
+        getTaskComments,
+        saveTaskComment
     }
 }

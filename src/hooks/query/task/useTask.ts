@@ -9,6 +9,8 @@ const KEYS = {
     getTask: getKey('GET', 'TASK', 'SINGLE','QUERY'),
     getTaskStatuses: getKey('GET', 'TASK-STATUS', 'MULTIPLE','QUERY'),
     getTaskTypes: getKey('GET', 'TASK-TYPE', 'MULTIPLE','QUERY'),
+    getTaskComments: getKey('GET', 'TASK-COMMENT', 'MULTIPLE', 'QUERY'),
+    saveTaskComment: getKey("POST", 'TASK-COMMENT', 'SINGLE','MUTATION'),
     create: getKey('POST', 'TASK', 'SINGLE', 'MUTATION'),
     update: getKey('UPDATE', 'TASK', 'SINGLE', 'MUTATION'),
     changeTaskStatus: getKey('UPDATE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
@@ -65,6 +67,15 @@ export function useAllowedTaskStatusesGet(key?: string) {
     });
 }
 
+export function useTaskCommentsGet(key?: string) {
+    const { getTaskComments } = useTaskHttp(useCreateAxiosInstance());
+
+    return useQuery({
+        queryKey: [KEYS.getTaskComments, key],
+        queryFn: () => getTaskComments({taskKey: key})
+    });
+}
+
 export function useTaskCreate() {
     const { postTask } = useTaskHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
@@ -74,6 +85,18 @@ export function useTaskCreate() {
         mutationFn: postTask,
         onSuccess: () =>
             queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
+    });
+}
+
+export function useTaskCommentSave() {
+    const { saveTaskComment } = useTaskHttp(useCreateAxiosInstance());
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [KEYS.saveTaskComment],
+        mutationFn: saveTaskComment,
+        onSuccess: () =>
+            queryClient.invalidateQueries({queryKey: [KEYS.getTaskComments]})
     });
 }
 

@@ -1,8 +1,8 @@
-import {SearchTask} from "../../model/task/SearchTask";
 import * as React from "react";
 import {Autocomplete, Box, FormControl, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {useSearchTaskGet} from "../../hooks/query/task/useTask";
+import { useSearchTaskGet } from "../../../hooks/query/task/useTask";
+import { SearchTask } from "../../../model/task/SearchTask";
 
 export const TaskAutocomplete = () => {
     const searchTasks = useSearchTaskGet();

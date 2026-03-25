@@ -8,11 +8,11 @@ const KEYS = {
     getPeriod: getKey('GET', 'PERIOD', 'SINGLE','QUERY')
 }
 
-export function usePeriodGet(project: Project) {
+export function usePeriodGet(projectId: string) {
     const { getPeriod } = usePeriodHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getPeriod, project.key],
-        queryFn: () => getPeriod(project)
+        queryKey: [KEYS.getPeriod, projectId],
+        queryFn: () => getPeriod(projectId)
     });
 }

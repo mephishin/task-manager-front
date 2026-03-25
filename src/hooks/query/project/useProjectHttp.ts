@@ -6,7 +6,7 @@ import { transformZipToFiles } from "../../../util/ZIp";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>
-        axiosInstance.get("/projects")
+        axiosInstance.get("/project")
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -17,8 +17,8 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const getProjectsFiles = (project: Project): Promise<File[]> =>
-        axiosInstance.get(`/projects/${project.key}/file`, {
+    const getProjectsFiles = (projectId: string): Promise<File[]> =>
+        axiosInstance.get(`/project/${projectId}/file`, {
             responseType: 'arraybuffer'
         })
             .then(async (response: AxiosResponse) => {
@@ -40,7 +40,7 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         file: File,
         projectId: string
     ): Promise<void> =>
-        axiosInstance.post(`/projects/${projectId}/file`, {
+        axiosInstance.post(`/project/${projectId}/file`, {
             'file': file
         }, {
             headers: {
@@ -52,7 +52,7 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         projectId: string,
         filename: string
     ): Promise<void> =>
-        axiosInstance.delete(`/projects/${projectId}/file`, {
+        axiosInstance.delete(`/project/${projectId}/file`, {
             data: axios.toFormData({"filename": filename}),
             headers: {
                 'Content-Type': 'multipart/form-data'

@@ -1,26 +1,28 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { Outlet } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Project } from "../../model/project/Project";
 import { useTaskTypesGet } from "../../hooks/query/task/useTask";
 import { useAuthParticipantProjectGet, useProjectsGet } from "../../hooks/query/project/useProject";
-import { NavigationButton } from "./NavigationButton";
-import { ProjectAutocomplete } from "./ProjectAutocomplete";
-import { TaskAutocomplete } from "./TaskAutocomplete";
-import { CreateTaskButton } from "./CreateTaskButton";
-import { ProfileButton } from "./ProfileButton";
-import AuthService from '../../AuthService';
-import { CreateProjectButton } from './CreateProjectButton';
 import { useUsersGet } from '../../hooks/query/users/useUsers';
+import { NavigationButton } from './components/NavigationButton';
+import { ProjectAutocomplete } from './components/ProjectAutocomplete';
+import { CreateTaskButton } from './components/CreateTaskButton';
+import { CreateProjectButton } from './components/CreateProjectButton';
+import { ProfileButton } from './components/ProfileButton';
+import { TaskAutocomplete } from './components/TaskAutocomplete';
+import AuthService from '../../AuthService';
 
 export const NavigationAppBar = () => {
     const users = useUsersGet();
     const taskTypes = useTaskTypesGet();
     const projects = useProjectsGet();
     const authUsersProject = useAuthParticipantProjectGet();
+
+    const navigate = useNavigate();
 
     const [project, setProject] = useState<Project>();
 
@@ -34,12 +36,13 @@ export const NavigationAppBar = () => {
     ) {
         if (!project) {
             setProject(authUsersProject.data!)
+            navigate(`/project/${authUsersProject.data!.key}`)
         }
 
         return (
-            <AppBar>
-                <Toolbar sx={{ justifyContent: "space-between" }}>
-                    <NavigationButton setProject={(project: Project) => setProject(project)} />
+            <AppBar sx={{ height: "100vh" }}>
+                <Toolbar sx={{ justifyContent: "space-between", height: "8vh"}}>
+                    <NavigationButton authUserProject={authUsersProject.data!} />
                     <ProjectAutocomplete visible={isLeader} projects={projects.data} project={project} setProject={(project: Project) => setProject(project)} />
                     <TaskAutocomplete />
                     <CreateTaskButton
@@ -52,7 +55,7 @@ export const NavigationAppBar = () => {
                         participants={users.data} />
                     <ProfileButton />
                 </Toolbar>
-                <Outlet context={project} />
+                <Outlet />
             </AppBar>
         );
     } else return <CircularProgress />

@@ -55,7 +55,7 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
                     name={"assignee"}
                     errors={errors}
                     options={participants!.map((participant) => participant.username)} />
-                <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+                <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
             </Stack>
         </Box>
     )

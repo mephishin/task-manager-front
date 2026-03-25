@@ -1,6 +1,6 @@
-import AuthService from "../../AuthService";
 import * as React from "react";
 import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
+import AuthService from "../../../AuthService";
 
 export const ProfileButton = () => {
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();

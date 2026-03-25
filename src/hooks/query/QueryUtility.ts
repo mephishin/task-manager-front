@@ -3,6 +3,7 @@ export const getKey = (
     entity: 'TASK'
         | 'TASK-STATUS'
         | 'TASK-TYPE'
+        | 'TASK-COMMENT'
         | 'PROJECT'
         | 'PARTICIPANT'
         | 'ALLOWED-TASK-STATUS'

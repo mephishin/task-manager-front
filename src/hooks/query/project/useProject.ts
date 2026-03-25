@@ -22,12 +22,12 @@ export function useProjectsGet() {
     });
 }
 
-export function useProjectsFilesGet(project: Project) {
+export function useProjectsFilesGet(projectId: string) {
     const { getProjectsFiles } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
         queryKey: [KEYS.getAllProjectFiles],
-        queryFn: () => getProjectsFiles(project),
+        queryFn: () => getProjectsFiles(projectId),
     });
 }
 

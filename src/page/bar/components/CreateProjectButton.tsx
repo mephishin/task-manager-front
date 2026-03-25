@@ -1,10 +1,11 @@
 import * as React from "react";
 import {Box, Button, Modal, Typography} from "@mui/material";
 import {useState} from "react";
-import { CreateProjectForm } from "../forms/CreateProjectForm";
-import { Users } from "../../model/participant/Participant";
-import { useProjectCreate } from "../../hooks/query/project/useProject";
-import { CreateProject } from "../../model/project/CreateProject";
+import { Users } from "../../../model/participant/Participant";
+import { useProjectCreate } from "../../../hooks/query/project/useProject";
+import { CreateProject } from "../../../model/project/CreateProject";
+import { CreateProjectForm } from "../../../components/forms/CreateProjectForm";
+
 
 const style = {
     position: 'absolute',

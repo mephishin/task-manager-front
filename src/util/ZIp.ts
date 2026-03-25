@@ -19,8 +19,6 @@ export async function transformZipToFiles(arrayBuffer: ArrayBuffer): Promise<Fil
             const data = await entry.getData(writer);
             const file = new File([data], entry.filename, {type:type ?? ''});
 
-            console.log(file)
-
             result.push(file);
         }
     }

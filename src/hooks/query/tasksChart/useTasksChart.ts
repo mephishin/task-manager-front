@@ -7,11 +7,11 @@ const KEYS = {
     getTasksChart: getKey('GET', 'TASK', 'MULTIPLE','QUERY'),
 }
 
-export function useTasksChartGet(project?: Project) {
+export function useTasksChartGet(projectId?: string) {
     const { getTasksChart } = useTasksChartHttp();
 
     return useQuery({
-        queryKey: [KEYS.getTasksChart, project?.name],
-        queryFn: () => getTasksChart(project?.name)
+        queryKey: [KEYS.getTasksChart, projectId],
+        queryFn: () => getTasksChart(projectId)
     })
 }
