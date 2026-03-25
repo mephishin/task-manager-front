@@ -1,22 +1,23 @@
-import {useTaskHttp} from "./useTaskHttp";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getKey} from "../QueryUtility";
-import {SearchTask} from "../../../model/task/SearchTask";
-import {useCreateAxiosInstance} from "../HttpUtils";
+import { useTaskHttp } from "./useTaskHttp";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getKey } from "../QueryUtility";
+import { SearchTask } from "../../../model/task/SearchTask";
+import { useCreateAxiosInstance } from "../HttpUtils";
 
 const KEYS = {
-    getTasksChart: getKey('GET', 'TASK', 'MULTIPLE','QUERY'),
-    getTask: getKey('GET', 'TASK', 'SINGLE','QUERY'),
-    getTaskStatuses: getKey('GET', 'TASK-STATUS', 'MULTIPLE','QUERY'),
-    getTaskTypes: getKey('GET', 'TASK-TYPE', 'MULTIPLE','QUERY'),
+    getTasksChart: getKey('GET', 'TASK', 'MULTIPLE', 'QUERY'),
+    getTask: getKey('GET', 'TASK', 'SINGLE', 'QUERY'),
+    getTaskStatuses: getKey('GET', 'TASK-STATUS', 'MULTIPLE', 'QUERY'),
+    getTaskTypes: getKey('GET', 'TASK-TYPE', 'MULTIPLE', 'QUERY'),
     getTaskComments: getKey('GET', 'TASK-COMMENT', 'MULTIPLE', 'QUERY'),
-    saveTaskComment: getKey("POST", 'TASK-COMMENT', 'SINGLE','MUTATION'),
+    saveTaskComment: getKey("POST", 'TASK-COMMENT', 'SINGLE', 'MUTATION'),
     create: getKey('POST', 'TASK', 'SINGLE', 'MUTATION'),
     update: getKey('UPDATE', 'TASK', 'SINGLE', 'MUTATION'),
     changeTaskStatus: getKey('UPDATE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
     closeTask: getKey('DELETE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
     getAllowedTaskStatuses: getKey('GET', 'ALLOWED-TASK-STATUS', 'MULTIPLE', 'QUERY'),
-    getSearchTasks: getKey('GET', 'SEARCH-TASKS', 'MULTIPLE','QUERY'),
+    getSearchTasks: getKey('GET', 'SEARCH-TASKS', 'MULTIPLE', 'QUERY'),
+    getTaskCommentFiles: getKey('GET', 'COMMENT-FILE', 'MULTIPLE', 'QUERY')
 }
 
 export function useTaskGet(key?: string) {
@@ -63,7 +64,7 @@ export function useAllowedTaskStatusesGet(key?: string) {
 
     return useQuery({
         queryKey: [KEYS.getAllowedTaskStatuses, key],
-        queryFn: () => getAllowedTaskStatuses({taskKey: key})
+        queryFn: () => getAllowedTaskStatuses({ taskKey: key })
     });
 }
 
@@ -72,7 +73,7 @@ export function useTaskCommentsGet(key?: string) {
 
     return useQuery({
         queryKey: [KEYS.getTaskComments, key],
-        queryFn: () => getTaskComments({taskKey: key})
+        queryFn: () => getTaskComments({ taskKey: key })
     });
 }
 
@@ -84,7 +85,7 @@ export function useTaskCreate() {
         mutationKey: [KEYS.create],
         mutationFn: postTask,
         onSuccess: () =>
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTasksChart] })
     });
 }
 
@@ -96,7 +97,17 @@ export function useTaskCommentSave() {
         mutationKey: [KEYS.saveTaskComment],
         mutationFn: saveTaskComment,
         onSuccess: () =>
-            queryClient.invalidateQueries({queryKey: [KEYS.getTaskComments]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments] })
+    });
+}
+
+export function useTaskCommentsFilesGet(commentIds?: string[]) {
+    const { getTaskCommentsFiles } = useTaskHttp(useCreateAxiosInstance());
+
+    return useQuery({
+        queryKey: [KEYS.getTaskCommentFiles, commentIds],
+        queryFn: () => getTaskCommentsFiles({ commentIds: commentIds }),
+        enabled: !!commentIds,
     });
 }
 
@@ -109,7 +120,7 @@ export function useChangeTaskStatus(key?: string) {
         mutationKey: [KEYS.changeTaskStatus],
         mutationFn: changeTaskStatus,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTasksChart] })
             queryClient.invalidateQueries({
                 predicate: (query) =>
                     query.queryKey[0] === KEYS.getAllowedTaskStatuses && query.queryKey[1] === key,
@@ -127,8 +138,8 @@ export function useCloseTask(key?: string) {
         mutationKey: [KEYS.closeTask],
         mutationFn: closeTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [KEYS.getTasksChart]})
-            queryClient.invalidateQueries({queryKey: [KEYS.getTask, key]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTasksChart] })
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTask, key] })
         }
 
     });

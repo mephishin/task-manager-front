@@ -4,6 +4,7 @@ export const getKey = (
         | 'TASK-STATUS'
         | 'TASK-TYPE'
         | 'TASK-COMMENT'
+        | 'COMMENT-FILE'
         | 'PROJECT'
         | 'PARTICIPANT'
         | 'ALLOWED-TASK-STATUS'

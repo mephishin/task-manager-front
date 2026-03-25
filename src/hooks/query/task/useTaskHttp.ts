@@ -4,21 +4,22 @@ import { SearchTask } from "../../../model/task/SearchTask";
 import { CreateTask } from "../../../model/task/CreateTask";
 import { UpdateTask } from "../../../model/task/UpdateTask";
 import { TaskComment } from "../../../model/task/TaskComment";
+import { FileDictionary, transformZipToListOfCommentFiles } from "../../../util/ZIp";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
-    const getTasksToSearch = (): Promise<Array<SearchTask>> =>
+    const getTasksToSearch = (): Promise<SearchTask[]> =>
         axiosInstance.get("/task/search")
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
-    const getTaskStatuses = (projectKey: string | undefined): Promise<Array<string>> =>
+    const getTaskStatuses = (projectKey: string | undefined): Promise<string[]> =>
         axiosInstance.get(`/status/${projectKey}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
-    const getTaskTypes = (): Promise<Array<string>> =>
+    const getTaskTypes = (): Promise<string[]> =>
         axiosInstance.get("/type")
             .then((response: AxiosResponse) => {
                 return response.data
@@ -63,7 +64,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
 
     const getAllowedTaskStatuses = (variables: {
         taskKey?: string
-    }): Promise<Array<string>> =>
+    }): Promise<string[]> =>
         axiosInstance.get(`task/${variables.taskKey}/statuses?allowed=true`)
             .then((response: AxiosResponse) => {
                 return response.data
@@ -71,18 +72,34 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
 
     const getTaskComments = (variables: {
         taskKey?: string
-    }): Promise<Array<TaskComment>> =>
+    }): Promise<TaskComment[]> =>
         axiosInstance.get(`task/${variables.taskKey}/comment`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
+    const getTaskCommentsFiles = (variables: {
+        commentIds?: string[]
+    }): Promise<FileDictionary> =>
+        axiosInstance.get(`/comment/file`, {
+            params: {
+                commentIds: variables.commentIds
+            },
+            responseType: 'arraybuffer'
+        })
+            .then(async (response: AxiosResponse) => {
+                var files = await transformZipToListOfCommentFiles(response.data)
+                return files
+            })
+
+
     const saveTaskComment = (variables: {
         taskKey?: string,
         commentText?: string
-    }): Promise<Array<string>> =>
+    }): Promise<string[]> =>
         axiosInstance.post(`task/${variables.taskKey}/comment`, {
-            text : variables.commentText})
+            text: variables.commentText
+        })
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -98,6 +115,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         getAllowedTaskStatuses,
         getTasksToSearch,
         getTaskComments,
-        saveTaskComment
+        saveTaskComment,
+        getTaskCommentsFiles
     }
 }

@@ -5,12 +5,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import { useCloseTask, useTaskCommentsGet, useTaskGet, useTaskTypesGet, useTaskUpdate } from "../../hooks/query/task/useTask";
+import { useCloseTask, useTaskCommentsFilesGet, useTaskCommentsGet, useTaskGet, useTaskTypesGet, useTaskUpdate } from "../../hooks/query/task/useTask";
 import { useUsersGet } from "../../hooks/query/users/useUsers";
 import { UpdateTask } from "../../model/task/UpdateTask";
 import { UpdateTaskForm } from "../../components/forms/UpdateTaskForm";
 import { formatISORus } from "../../util/LocalInterval";
 import { Comments } from "./components/Comments";
+import { TaskComment } from "../../model/task/TaskComment";
+import { FileDictionary } from "../../util/ZIp";
 
 
 export const TaskPage = () => {
@@ -23,6 +25,7 @@ export const TaskPage = () => {
     const updateTaskMutation = useTaskUpdate(key);
     const closeTask = useCloseTask();
     const taskComments = useTaskCommentsGet(key)
+    const taskCommentsFiles = useTaskCommentsFilesGet(taskComments?.data?.map(taskComment => taskComment.id))
 
     const updateTask = (data: UpdateTask) => {
         updateTaskMutation.mutate(data)
@@ -33,16 +36,24 @@ export const TaskPage = () => {
         closeTask.mutate({ taskKey: key })
     }
 
+    const enrichCommentsWithFiles = (fileDictionary: FileDictionary, taskComments: TaskComment[]): TaskComment[] => {
+        return taskComments.map(comment => {
+            return {
+                ...comment,
+                files: fileDictionary[comment.id] || []}})
+    }
+
     return (
         <Box sx={{ backgroundColor: 'white', display: 'flex', justifyContent: 'center', height: '92vh', overflow: 'auto' }}>
             {(
-                !taskTypesQuery.isPending && taskTypesQuery.data
-                && !taskComments.isPending && taskComments.data
-                && !participantsQuery.isPending && participantsQuery.data
-                && !taskQuery.isPending && taskQuery.data
+                taskTypesQuery.isFetched && taskTypesQuery.data
+                && taskComments.isFetched && taskComments.data
+                && participantsQuery.isFetched && participantsQuery.data
+                && taskQuery.isFetched && taskQuery.data
+                && taskCommentsFiles.isFetched && taskCommentsFiles.data
                 && key !== undefined
             ) ? (
-                <Box sx={{ backgroundColor: '#F4F5F7', borderRadius: 2, maxWidth: '80%', minWidth: '50%', my: 1}}>
+                <Box sx={{ backgroundColor: '#F4F5F7', borderRadius: 2, maxWidth: '80%', minWidth: '50%', my: 1 }}>
                     <IconButton onClick={() => navigate(-1)} sx={{ margin: 1 }}>
                         <ArrowBackIosNewOutlinedIcon />
                     </IconButton>
@@ -81,8 +92,8 @@ export const TaskPage = () => {
                             </Stack>
                         </Grid2>
                     </Grid2>
-                    <Grid2 sx={{pb: '5vh'}}>
-                        <Comments comments={taskComments.data} />
+                    <Grid2 sx={{ pb: '5vh' }}>
+                        <Comments comments={enrichCommentsWithFiles(taskCommentsFiles.data, taskComments.data)} />
                     </Grid2>
                 </Box>
             ) : <CircularProgress color={"secondary"} />}

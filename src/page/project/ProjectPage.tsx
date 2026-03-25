@@ -7,8 +7,6 @@ import { ProjectInfoBar } from './components/ProjectInfoBar';
 import { PeriodBar } from './components/PeriodBar';
 import { TasksChart } from './components/taskChart/TasksChart';
 
-
-
 export const ProjectPage = () => {
     const { projectId } = useParams();
 

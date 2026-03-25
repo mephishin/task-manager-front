@@ -1,10 +1,9 @@
-import { Button, CircularProgress, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography } from "@mui/material";
 import React from "react";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AuthService from "../../../AuthService";
+import AddCommentIcon from '@mui/icons-material/AddComment';
 import { TaskComment } from "../../../model/task/TaskComment";
 
 interface CommentsProps {
@@ -23,26 +22,23 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-const Demo = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-}));
+const deleteButtonStyle = {
+    '&:hover': {
+        '& .MuiSvgIcon-root': {
+            color: '#ef5350'
+        }
+    }
+}
 
 export const Comments = ({ comments }: CommentsProps) => {
-    //     const handleUpload = (event: any) => {
-    //         saveProjectFile.mutate({
-    //             file: event.target.files[0],
-    //             projectId: project.key
-    //         });
-    //     }
-    //
-    //     const handleDownloadFile = (file: File) => {
-    //         const link = document.createElement('a');
-    //         link.href = URL.createObjectURL(file);
-    //         link.download = file.name;
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         document.body.removeChild(link);
-    //     };
+        const handleDownloadFile = (file: File) => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(file);
+            link.download = file.name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
     //
     //     const handleDeleteFile = (file: File) => {
     //         deleteProjectFile.mutate({
@@ -50,47 +46,73 @@ export const Comments = ({ comments }: CommentsProps) => {
     //             projectId: project.key
     //         })
     //     };
+
     return (
-        <Stack sx={{ backgroundColor: '#F4F5F7', p: 1, borderRadius: 2 }}>
+        <Stack sx={{ display: 'flex', backgroundColor: '#F4F5F7', p: 2, borderRadius: 2 }}>
             <Typography variant="h6" component="div" color="primary">
                 Комментарии
             </Typography>
-            <Demo>
-                {comments.length > 0 ? (
-                    <List sx={{ p: 1 }} >
-                        {comments.map(comment => (
-                            <ListItem key={comment.id} sx={{ backgroundColor: '#F4F5F7', my: 1 }} secondaryAction={
-                                <IconButton edge="end" aria-label="delete" >
+            <List sx={{ width: '100%' }}>
+                {comments.map(comment =>
+                    <ListItem sx={{ backgroundColor: "white", my: 2, borderRadius: 2 }} alignItems="flex-start" >
+                        <Stack>
+                            <ListItem secondaryAction={
+                                <IconButton edge="end" aria-label="delete" sx={deleteButtonStyle}>
                                     <DeleteIcon />
                                 </IconButton>
                             }>
-                                <ListItemIcon>
-                                    <InsertDriveFileIcon />
-                                </ListItemIcon>
-                                <ListItemText>
-                                    <Typography color="primary">
-                                        {comment.text}
-                                    </Typography>
-                                </ListItemText>
+                                <ListItemText sx={{ color: "black" }}
+                                    primary={comment.author.username}
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                component="span"
+                                                variant="body2"
+                                                color="primary"
+                                                sx={{ color: 'text.primary', display: 'inline' }}
+                                            >
+                                                {comment.text}
+                                            </Typography>
+                                        </React.Fragment>
+                                    }
+                                />
                             </ListItem>
-                        ))}
-                    </List>
-                ) : (
-                    <Typography sx={{ p: 1 }} color="text.secondary" align="center">
-                        Файлы отсутствуют
-                    </Typography>
-                )}
-            </Demo>
-            <Button
+                            {comment.files.length > 0 &&
+                                <ListItem>
+                                    <List>
+                                        {comment.files.map(file =>
+                                            <ListItem secondaryAction={
+                                                <IconButton edge="end" aria-label="delete" sx={deleteButtonStyle}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            }>
+                                                <ListItemText>
+                                                    <Link component="button"
+                                                        variant="body2"
+                                                        onClick={() => handleDownloadFile(file)}>
+                                                        <Typography color="primary">
+                                                            {file.name}
+                                                        </Typography>
+                                                    </Link>
+                                                </ListItemText>
+                                            </ListItem>)}
+                                    </List>
+                                </ListItem>
+                            }
+                        </Stack>
 
+                    </ListItem>
+                )}
+            </List>
+            <Button
                 component="label"
                 role={undefined}
                 variant="contained"
                 tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
+                startIcon={<AddCommentIcon />}
                 sx={{ my: 1 }}
             >
-                Загрузить файл
+                Добавить комментарий
                 <VisuallyHiddenInput
                     type="file"
                     multiple
