@@ -3,12 +3,12 @@ import React from "react";
 
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddCommentIcon from '@mui/icons-material/AddComment';
 import { TaskComment } from "../../../model/task/TaskComment";
+import { PostCommentForm } from "./PostCommentForm";
+import { useTaskCommentSave } from "../../../hooks/query/task/useTask";
+import { PostComment } from "../../../model/task/PostComment";
+import { formatISORus } from "../../../util/LocalInterval";
 
-interface CommentsProps {
-    comments: TaskComment[]
-}
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -30,22 +30,24 @@ const deleteButtonStyle = {
     }
 }
 
-export const Comments = ({ comments }: CommentsProps) => {
-        const handleDownloadFile = (file: File) => {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(file);
-            link.download = file.name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-    //
-    //     const handleDeleteFile = (file: File) => {
-    //         deleteProjectFile.mutate({
-    //             filename: file.name,
-    //             projectId: project.key
-    //         })
-    //     };
+interface CommentsProps {
+    comments: TaskComment[]
+    handlePostComment: (comment: PostComment) => void
+}
+
+
+export const Comments = ({ comments, handlePostComment }: CommentsProps) => {
+    const handleDownloadFile = (file: File) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(file);
+        link.download = file.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    console.log(comments);
+    comments.forEach(c=> console.log(c.created?.toString()));
 
     return (
         <Stack sx={{ display: 'flex', backgroundColor: '#F4F5F7', p: 2, borderRadius: 2 }}>
@@ -103,21 +105,8 @@ export const Comments = ({ comments }: CommentsProps) => {
 
                     </ListItem>
                 )}
+                <PostCommentForm postCommentHandler={handlePostComment}/>
             </List>
-            <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<AddCommentIcon />}
-                sx={{ my: 1 }}
-            >
-                Добавить комментарий
-                <VisuallyHiddenInput
-                    type="file"
-                    multiple
-                />
-            </Button>
         </Stack>
     )
 }

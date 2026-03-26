@@ -4,7 +4,7 @@ import {useState} from "react";
 import { Users } from "../../../model/participant/Participant";
 import { useProjectCreate } from "../../../hooks/query/project/useProject";
 import { CreateProject } from "../../../model/project/CreateProject";
-import { CreateProjectForm } from "../../../components/forms/CreateProjectForm";
+import { CreateProjectForm } from "./CreateProjectForm";
 
 
 const style = {

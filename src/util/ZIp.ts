@@ -3,6 +3,10 @@ import { ZipReader } from "@zip.js/zip.js";
 import mime from "mime";
 import { CommentFiles } from "../model/task/CommentFiles";
 
+export type FileDictionary = {
+    [key: string]: File[];
+};
+
 export async function transformZipToFiles(arrayBuffer: ArrayBuffer): Promise<File[]> {
     const reader = new zip.BlobReader(new Blob([arrayBuffer]));
 
@@ -27,14 +31,6 @@ export async function transformZipToFiles(arrayBuffer: ArrayBuffer): Promise<Fil
     zipReader.close();
 
     return result;
-}
-
-export type FileDictionary = {
-  [key: string]: File[];
-};
-
-function addFileToDictionary(dict: FileDictionary, key: string, file: File): void {
-  (dict[key] || (dict[key] = [])).push(file);
 }
 
 export async function transformZipToListOfCommentFiles(arrayBuffer: ArrayBuffer): Promise<FileDictionary> {
@@ -62,4 +58,25 @@ export async function transformZipToListOfCommentFiles(arrayBuffer: ArrayBuffer)
 
     return result;
 }
+
+export async function transformCommentFilesToZip(commentFiles: File[]): Promise<ArrayBuffer> {
+    const zipFileWriter = new zip.BlobWriter();
+    const zipWriter = new zip.ZipWriter(zipFileWriter);
+    for (let file of commentFiles) {
+        const reader = new zip.BlobReader(file);
+
+        await zipWriter.add(file.name, reader);
+
+    }
+    await zipWriter.close();
+    const zipFileBlob = await zipFileWriter.getData();
+
+    return zipFileBlob.arrayBuffer()
+}
+
+function addFileToDictionary(dict: FileDictionary, key: string, file: File): void {
+    (dict[key] || (dict[key] = [])).push(file);
+}
+
+
 

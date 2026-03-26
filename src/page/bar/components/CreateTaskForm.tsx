@@ -3,12 +3,12 @@ import { Stack } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { AutocompleteController, InputController, SelectController } from "./FormFieldsControllers";
-import { Project } from "../../model/project/Project";
-import { Users } from "../../model/participant/Participant";
-import AuthService from "../../AuthService";
+import { CreateTask, createTaskFormValidationSchema } from "../../../model/task/CreateTask";
+import { Project } from "../../../model/project/Project";
+import { Users } from "../../../model/participant/Participant";
+import AuthService from "../../../AuthService";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateTask, createTaskFormValidationSchema } from "../../model/task/CreateTask";
+import { AutocompleteController, InputController, SelectController } from "../../../components/forms/FormFieldsControllers";
 
 interface CreateTaskFormProps {
     onSubmit: SubmitHandler<CreateTask>,
@@ -35,12 +35,14 @@ export const CreateTaskForm = ({ onSubmit, types, projects, users, authUsersProj
                     label="Название"
                     control={control}
                     name={"name"}
-                    errors={errors} />
+                    errors={errors}
+                    sx={{m: 5}} />
                 <InputController
                     label="Описание"
                     control={control}
                     name={"description"}
-                    errors={errors} />
+                    errors={errors}
+                    sx={{m: 5}} />
                 <SelectController
                     label='Тип'
                     control={control}

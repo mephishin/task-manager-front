@@ -5,14 +5,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import { useCloseTask, useTaskCommentsFilesGet, useTaskCommentsGet, useTaskGet, useTaskTypesGet, useTaskUpdate } from "../../hooks/query/task/useTask";
+import { useCloseTask, useTaskCommentSave, useTaskCommentsFilesGet, useTaskCommentsGet, useTaskGet, useTaskTypesGet, useTaskUpdate } from "../../hooks/query/task/useTask";
 import { useUsersGet } from "../../hooks/query/users/useUsers";
 import { UpdateTask } from "../../model/task/UpdateTask";
-import { UpdateTaskForm } from "../../components/forms/UpdateTaskForm";
 import { formatISORus } from "../../util/LocalInterval";
 import { Comments } from "./components/Comments";
 import { TaskComment } from "../../model/task/TaskComment";
-import { FileDictionary } from "../../util/ZIp";
+import { FileDictionary, transformCommentFilesToZip } from "../../util/ZIp";
+import { UpdateTaskForm } from "./components/UpdateTaskForm";
+import { PostCommentForm } from "./components/PostCommentForm";
+import { PostComment } from "../../model/task/PostComment";
 
 
 export const TaskPage = () => {
@@ -26,6 +28,7 @@ export const TaskPage = () => {
     const closeTask = useCloseTask();
     const taskComments = useTaskCommentsGet(key)
     const taskCommentsFiles = useTaskCommentsFilesGet(taskComments?.data?.map(taskComment => taskComment.id))
+    const postTaskComment = useTaskCommentSave();
 
     const updateTask = (data: UpdateTask) => {
         updateTaskMutation.mutate(data)
@@ -36,11 +39,22 @@ export const TaskPage = () => {
         closeTask.mutate({ taskKey: key })
     }
 
+    const postComment = (comment: PostComment) => {
+        comment.files
+            ? transformCommentFilesToZip(comment.files).then(zipped => postTaskComment.mutate({
+                taskKey: key!,
+                zippedFiles: zipped,
+                text: comment.text
+            })) : postTaskComment.mutate({taskKey: key!, text: comment.text})
+    }
+
     const enrichCommentsWithFiles = (fileDictionary: FileDictionary, taskComments: TaskComment[]): TaskComment[] => {
         return taskComments.map(comment => {
             return {
                 ...comment,
-                files: fileDictionary[comment.id] || []}})
+                files: fileDictionary[comment.id] || []
+            }
+        })
     }
 
     return (
@@ -93,7 +107,10 @@ export const TaskPage = () => {
                         </Grid2>
                     </Grid2>
                     <Grid2 sx={{ pb: '5vh' }}>
-                        <Comments comments={enrichCommentsWithFiles(taskCommentsFiles.data, taskComments.data)} />
+                        <Comments
+                            comments={enrichCommentsWithFiles(taskCommentsFiles.data, taskComments.data)}
+                            handlePostComment={postComment}
+                        />
                     </Grid2>
                 </Box>
             ) : <CircularProgress color={"secondary"} />}

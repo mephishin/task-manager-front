@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
 import { SearchTask } from "../../../model/task/SearchTask";
 import { useCreateAxiosInstance } from "../HttpUtils";
+import { TaskComment } from "../../../model/task/TaskComment";
 
 const KEYS = {
     getTasksChart: getKey('GET', 'TASK', 'MULTIPLE', 'QUERY'),
@@ -95,7 +96,11 @@ export function useTaskCommentSave() {
 
     return useMutation({
         mutationKey: [KEYS.saveTaskComment],
-        mutationFn: saveTaskComment,
+        mutationFn: (variables: {
+            taskKey: string,
+            zippedFiles?: ArrayBuffer,
+            text: string,
+        }) => saveTaskComment(variables.taskKey, variables.text, variables.zippedFiles),
         onSuccess: () =>
             queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments] })
     });

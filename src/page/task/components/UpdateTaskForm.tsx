@@ -3,11 +3,11 @@ import { Stack } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { AutocompleteController, InputController } from "./FormFieldsControllers";
-import { Task } from "../../model/task/Task";
-import { Users } from "../../model/participant/Participant";
+import { Task } from "../../../model/task/Task";
+import { Users } from "../../../model/participant/Participant";
+import { UpdateTask, UpdateTaskFormValidationSchema } from "../../../model/task/UpdateTask";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { UpdateTask, UpdateTaskFormValidationSchema } from "../../model/task/UpdateTask";
+import { AutocompleteController, InputController } from "../../../components/forms/FormFieldsControllers";
 
 interface UpdateTaskFormProps {
     taskKey: string,
@@ -43,12 +43,14 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
                     label="Название"
                     control={control}
                     errors={errors}
-                    name={"name"} />
+                    name={"name"}
+                    sx={{m: 5}} />
                 <InputController
                     label="Описание"
                     control={control}
                     errors={errors}
-                    name={"description"} />
+                    name={"description"}
+                    sx={{m: 5}} />
                 <AutocompleteController
                     label="Исоплнитель задачи"
                     control={control}

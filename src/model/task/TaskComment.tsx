@@ -11,4 +11,3 @@ export interface TaskComment {
 export interface Author {
     username: string
 }
-

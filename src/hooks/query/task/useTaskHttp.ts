@@ -4,7 +4,7 @@ import { SearchTask } from "../../../model/task/SearchTask";
 import { CreateTask } from "../../../model/task/CreateTask";
 import { UpdateTask } from "../../../model/task/UpdateTask";
 import { TaskComment } from "../../../model/task/TaskComment";
-import { FileDictionary, transformZipToListOfCommentFiles } from "../../../util/ZIp";
+import { FileDictionary, transformCommentFilesToZip, transformZipToListOfCommentFiles } from "../../../util/ZIp";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<SearchTask[]> =>
@@ -92,17 +92,25 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return files
             })
 
-
-    const saveTaskComment = (variables: {
-        taskKey?: string,
-        commentText?: string
-    }): Promise<string[]> =>
-        axiosInstance.post(`task/${variables.taskKey}/comment`, {
-            text: variables.commentText
+    const saveTaskComment = (
+        taskKey: string,
+        text: string,
+        zippedFiles?: ArrayBuffer
+    ): Promise<void> =>
+        zippedFiles ? axiosInstance.post(`/task/${taskKey}/comment`, {
+            zippedFiles: new Blob([zippedFiles]),
+            text: text,
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }) : axiosInstance.post(`/task/${taskKey}/comment`, {
+            text: text,
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         })
-            .then((response: AxiosResponse) => {
-                return response.data
-            })
 
     return {
         getTaskStatuses,

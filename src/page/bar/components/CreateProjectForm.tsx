@@ -3,10 +3,10 @@ import { Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { MultipleAutocompleteController, InputController } from "./FormFieldsControllers";
-import { Users } from "../../model/participant/Participant";
+import { CreateProject, createProjectFormValidationSchema } from "../../../model/project/CreateProject";
+import { Users } from "../../../model/participant/Participant";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateProject, createProjectFormValidationSchema } from "../../model/project/CreateProject";
+import { InputController, MultipleAutocompleteController } from "../../../components/forms/FormFieldsControllers";
 
 interface CreateProjectFormProps {
     onSubmit: SubmitHandler<CreateProject>,
@@ -25,12 +25,14 @@ export const CreateProjectForm = ({ onSubmit, participants }: CreateProjectFormP
                     label="Название"
                     control={control}
                     name={"name"}
-                    errors={errors} />
+                    errors={errors}
+                    sx={{m: 5}} />
                 <InputController
                     label="Префикс для ключа задачи"
                     control={control}
                     name={"taskPrefix"}
-                    errors={errors} />
+                    errors={errors}
+                    sx={{m: 5}} />
                 <MultipleAutocompleteController
                     label={"Участники"}
                     control={control}

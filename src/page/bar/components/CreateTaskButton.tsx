@@ -6,7 +6,7 @@ import { Project } from "../../../model/project/Project";
 import { CreateTask } from "../../../model/task/CreateTask";
 import { useTaskCreate } from "../../../hooks/query/task/useTask";
 import AuthService from "../../../AuthService";
-import { CreateTaskForm } from "../../../components/forms/CreateTaskForm";
+import { CreateTaskForm } from "./CreateTaskForm";
 
 const style = {
     position: 'absolute',
