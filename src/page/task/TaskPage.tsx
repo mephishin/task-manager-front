@@ -11,9 +11,8 @@ import { UpdateTask } from "../../model/task/UpdateTask";
 import { formatISORus } from "../../util/LocalInterval";
 import { Comments } from "./components/Comments";
 import { TaskComment } from "../../model/task/TaskComment";
-import { FileDictionary, transformCommentFilesToZip } from "../../util/ZIp";
+import { FileDictionary, transformFilesToZip } from "../../util/ZIp";
 import { UpdateTaskForm } from "./components/UpdateTaskForm";
-import { PostCommentForm } from "./components/PostCommentForm";
 import { PostComment } from "../../model/task/PostComment";
 
 
@@ -26,8 +25,8 @@ export const TaskPage = () => {
     const taskQuery = useTaskGet(key);
     const updateTaskMutation = useTaskUpdate(key);
     const closeTask = useCloseTask();
-    const taskComments = useTaskCommentsGet(key)
-    const taskCommentsFiles = useTaskCommentsFilesGet(taskComments?.data?.map(taskComment => taskComment.id))
+    const taskComments = useTaskCommentsGet(key!)
+    const taskCommentsFiles = useTaskCommentsFilesGet(key!, taskComments?.data?.map(taskComment => taskComment.id))
     const postTaskComment = useTaskCommentSave();
 
     const updateTask = (data: UpdateTask) => {
@@ -41,11 +40,11 @@ export const TaskPage = () => {
 
     const postComment = (comment: PostComment) => {
         comment.files
-            ? transformCommentFilesToZip(comment.files).then(zipped => postTaskComment.mutate({
+            ? transformFilesToZip(comment.files).then(zipped => postTaskComment.mutate({
                 taskKey: key!,
                 zippedFiles: zipped,
                 text: comment.text
-            })) : postTaskComment.mutate({taskKey: key!, text: comment.text})
+            })) : postTaskComment.mutate({ taskKey: key!, text: comment.text })
     }
 
     const enrichCommentsWithFiles = (fileDictionary: FileDictionary, taskComments: TaskComment[]): TaskComment[] => {
@@ -58,7 +57,7 @@ export const TaskPage = () => {
     }
 
     return (
-        <Box sx={{ backgroundColor: 'white', display: 'flex', justifyContent: 'center', height: '92vh', overflow: 'auto' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', height: '100%', overflow: 'auto' }}>
             {(
                 taskTypesQuery.isFetched && taskTypesQuery.data
                 && taskComments.isFetched && taskComments.data
@@ -81,39 +80,36 @@ export const TaskPage = () => {
                                 updateTask={updateTask}
                             />
                         </Grid2>
-                        <Grid2 size={3}>
-                            <Stack>
-                                <Box sx={{ borderRadius: 20 }}>
-                                    <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5 }}>
-                                        <Typography sx={{ margin: 5, color: "black" }}>
-                                            Создана: {taskQuery.data.created}
-                                        </Typography>
-                                        <Typography sx={{ margin: 5, color: "black" }} >
-                                            Отредактирована: {taskQuery.data.edited}
-                                        </Typography>
-                                        <Typography sx={{ margin: 5, color: "black" }} >
-                                            Общее время работы над задачей: {formatISORus(taskQuery.data.total!)}
-                                        </Typography>
-                                    </Stack>
-                                </Box>
-                                <Box sx={{ borderRadius: 20 }}>
-                                    <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5 }}>
-                                        <Button onClick={cancelTask}>
-                                            Закрыть задачу
-                                        </Button>
-                                    </Stack>
-                                </Box>
-                            </Stack>
+                        <Grid2 container size={3} >
+                            <Grid2>
+                                <Stack sx={{ backgroundColor: "white", margin: 5, borderRadius: 5, height: '75%' }}>
+                                    <Typography sx={{ margin: 5, color: "black" }}>
+                                        Создана: {taskQuery.data.created}
+                                    </Typography>
+                                    <Typography sx={{ margin: 5, color: "black" }} >
+                                        Отредактирована: {taskQuery.data.edited}
+                                    </Typography>
+                                    <Typography sx={{ margin: 5, color: "black" }} >
+                                        Общее время работы над задачей: {formatISORus(taskQuery.data.total!)}
+                                    </Typography >
+                                </Stack>
+                            </Grid2>
+                            <Grid2>
+                                <Button sx={{ backgroundColor: "white", margin: 5, borderRadius: 5, height: '25%' }} onClick={cancelTask}>
+                                    Закрыть задачу
+                                </Button >
+                            </Grid2>
                         </Grid2>
                     </Grid2>
-                    <Grid2 sx={{ pb: '5vh' }}>
+                    <Grid2>
                         <Comments
                             comments={enrichCommentsWithFiles(taskCommentsFiles.data, taskComments.data)}
                             handlePostComment={postComment}
                         />
                     </Grid2>
                 </Box>
-            ) : <CircularProgress color={"secondary"} />}
-        </Box>)
+            ) : <CircularProgress color={"secondary"} />
+            }
+        </Box >)
 }
 

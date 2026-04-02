@@ -4,11 +4,10 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Project } from "../../../model/project/Project";
-import { useProjectFileSave, useProjectFileDelete, useProjectsFilesGet } from "../../../hooks/query/project/useProject";
-import AuthService from "../../../AuthService";
+import { useProjectFileDelete, useProjectFilesSave, useProjectsFilesGet } from "../../hooks/query/project/useProject";
+import AuthService from "../../AuthService";
 
-interface ProjectInfoBarProps {
+interface ProjectInfoPageProps {
     projectId: string
 }
 
@@ -28,16 +27,16 @@ const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-export const ProjectInfoBar = ({ projectId }: ProjectInfoBarProps) => {
+export const ProjectInfoPage = ({ projectId }: ProjectInfoPageProps) => {
     const getProjectFiles = useProjectsFilesGet(projectId);
-    const saveProjectFile = useProjectFileSave();
+    const saveProjectFile = useProjectFilesSave();
     const deleteProjectFile = useProjectFileDelete();
 
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
     const handleUpload = (event: any) => {
         saveProjectFile.mutate({
-            file: event.target.files[0],
+            files: event.target.files,
             projectId: projectId
         });
     }
@@ -61,13 +60,13 @@ export const ProjectInfoBar = ({ projectId }: ProjectInfoBarProps) => {
     if (!getProjectFiles.isPending && getProjectFiles.data) {
         return (
             <Stack sx={{ backgroundColor: '#F4F5F7', display: 'flex', p: 1, m: 1, borderRadius: 2 }}>
-                <Typography variant="h6" component="div" color="primary">
+                <Typography variant="h6" color="primary" sx={{p: 1}}>
                     Устав проекта
                 </Typography>
-                <Demo sx={{ borderRadius: 2 }}>
+                <Demo sx={{ borderRadius: 2,}}>
                     {getProjectFiles.data?.length ? (
                         <List>
-                            {getProjectFiles.data?.map(file => (
+                            {getProjectFiles.data?.map((file) => (
                                 <ListItem key={file.name} secondaryAction={
                                     isLeader && (
                                         <IconButton edge="end" aria-label="delete" onClick={() => { handleDeleteFile(file) }} >
@@ -102,7 +101,7 @@ export const ProjectInfoBar = ({ projectId }: ProjectInfoBarProps) => {
                         variant="contained"
                         tabIndex={-1}
                         startIcon={<CloudUploadIcon />}
-                        sx={{my:1}}
+                        sx={{my:2}}
                     >
                         Загрузить файл
                         <VisuallyHiddenInput

@@ -1,32 +1,25 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
-import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
-import { Project } from "../../../model/project/Project";
-
-const pages = [
-    {
-        name: 'Мой проект',
-        link: '/'
-    }
-];
+import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { CreateTaskMenuItem } from "./CreateTaskMenuItem";
+import { CreateProjectMenuItem } from "./CreateProjectMenuItem";
 
 interface NavigationButtonProps {
-    authUserProject: Project
 }
 
-export const NavigationButton = ({authUserProject} : NavigationButtonProps) => {
+export const NavigationButton = ({ }: NavigationButtonProps) => {
     const navigate = useNavigate();
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
-    const handleCloseNavMenu1 = () => {
-        navigate(`project/${authUserProject.key}`)
+    const handleCloseNavMenu = (path?: string) => {
+        path && navigate(path)
         setAnchorElNav(null);
     };
 
-    return(
+    return (
         <Box>
             <IconButton
                 size="large"
@@ -36,20 +29,26 @@ export const NavigationButton = ({authUserProject} : NavigationButtonProps) => {
                 onClick={handleOpenNavMenu}
                 color="inherit"
             >
-                <MenuIcon/>
+                <MenuIcon />
             </IconButton>
             <Menu
-                id={authUserProject.key}
+                id='nav-menu'
                 anchorEl={anchorElNav}
                 keepMounted
                 open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu1}
+                onClose={() => handleCloseNavMenu(undefined)}
             >
-                {pages.map((page) => (
-                    <MenuItem key={page.name} onClick={handleCloseNavMenu1}>
-                        <Typography sx={{textAlign: 'center'}}>{page.name}</Typography>
-                    </MenuItem>
-                ))}
+                <MenuItem onClick={() => handleCloseNavMenu("/")}>
+                    <Typography sx={{ textAlign: 'center' }}>Мой проект</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => handleCloseNavMenu("projectSearch")}>
+                    <Typography sx={{ textAlign: 'center' }}>Найти проект</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => handleCloseNavMenu("taskSearch")}>
+                    <Typography sx={{ textAlign: 'center' }}>Поиск задачи</Typography>
+                </MenuItem>
+                <CreateProjectMenuItem onClose={() => handleCloseNavMenu(undefined)} />
+                <CreateTaskMenuItem onClose={() => handleCloseNavMenu(undefined)} />
             </Menu>
         </Box>
     )

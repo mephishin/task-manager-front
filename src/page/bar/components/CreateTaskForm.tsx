@@ -15,15 +15,15 @@ interface CreateTaskFormProps {
     types?: Array<string>,
     projects?: Array<Project>,
     users?: Array<Users>
-    authUsersProject?: Project
+    project?: Project
 }
 
-export const CreateTaskForm = ({ onSubmit, types, projects, users, authUsersProject }: CreateTaskFormProps) => {
+export const CreateTaskForm = ({ onSubmit, types, projects, users, project }: CreateTaskFormProps) => {
     const { control, handleSubmit, formState: { errors } } = useForm<CreateTask>({
         defaultValues: {
             type: "Задача",
             assignee: AuthService.getUsername(),
-            project: authUsersProject?.name
+            project: project?.name
         },
         resolver: yupResolver(createTaskFormValidationSchema),
     })

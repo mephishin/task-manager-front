@@ -1,12 +1,13 @@
 import * as React from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, MenuItem, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import { Users } from "../../../model/participant/Participant";
-import { Project } from "../../../model/project/Project";
 import { CreateTask } from "../../../model/task/CreateTask";
-import { useTaskCreate } from "../../../hooks/query/task/useTask";
+import { useTaskCreate, useTaskTypesGet } from "../../../hooks/query/task/useTask";
 import AuthService from "../../../AuthService";
 import { CreateTaskForm } from "./CreateTaskForm";
+import { useUsersGet } from "../../../hooks/query/users/useUsers";
+import { useProjectsGet } from "../../../hooks/query/project/useProject";
+import { useParams } from "react-router-dom";
 
 const style = {
     position: 'absolute',
@@ -20,17 +21,21 @@ const style = {
     p: 4,
 };
 
-interface CreateTaskButtonProps {
-    taskTypes: Array<string>;
-    users: Array<Users>;
-    projects: Array<Project>;
-    authUsersProject: Project;
+interface CreateTaskMenuItemProps {
+    onClose: () => void
 }
 
-export const CreateTaskButton = ({ taskTypes, users, projects, authUsersProject }: CreateTaskButtonProps) => {
+export const CreateTaskMenuItem = ({onClose}: CreateTaskMenuItemProps) => {
+    const { projectId, projectName } = useParams();
+
+    const users = useUsersGet();
+    const taskTypes = useTaskTypesGet();
+    const projects = useProjectsGet();
+
     const onSubmitCreateTask = (data: CreateTask) => {
         createTask.mutate(data)
         handleClose()
+        onClose()
     }
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -39,13 +44,15 @@ export const CreateTaskButton = ({ taskTypes, users, projects, authUsersProject 
 
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
 
-    if (!isLeader) {
-        projects = projects.filter(p => p.key == authUsersProject.key)
-    }
+    //     if (!isLeader) {
+    //         projects = projects.data.filter(p => p.key == projectId)
+    //     }
 
-    return (
+    return (users.data && taskTypes.data && projects.data && (
         <Box>
-            <Button sx={{ backgroundColor: "white" }} onClick={handleOpen}>Создать задачу</Button>
+            <MenuItem onClick={handleOpen}>
+                <Typography sx={{ textAlign: 'center' }}>Создать задачу</Typography>
+            </MenuItem>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -56,13 +63,13 @@ export const CreateTaskButton = ({ taskTypes, users, projects, authUsersProject 
                     <Typography>Создание новой задачи</Typography>
                     <CreateTaskForm
                         onSubmit={onSubmitCreateTask}
-                        types={taskTypes}
-                        users={users}
-                        projects={projects}
-                        authUsersProject={authUsersProject}
+                        types={taskTypes.data}
+                        users={users.data}
+                        projects={projects.data}
+                        project={{ key: projectId!, name: projectName! }}
                     />
                 </Box>
             </Modal>
         </Box>
-    )
+    ))
 }

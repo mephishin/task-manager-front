@@ -52,18 +52,18 @@ export function useProjectCreate() {
     });
 }
 
-export function useProjectFileSave() {
-    const { saveProjectFile } = useProjectHttp(useCreateAxiosInstance());
+export function useProjectFilesSave() {
+    const { saveProjectFiles } = useProjectHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationKey: [KEYS.saveProjectFile],
         mutationFn: (variables: {
-            file: File,
+            files: File[],
             projectId: string,
         }) =>
-            saveProjectFile(
-                variables.file,
+            saveProjectFiles(
+                variables.files,
                 variables.projectId
             ),
         onSuccess: () =>

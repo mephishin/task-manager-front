@@ -4,7 +4,7 @@ import { SearchTask } from "../../../model/task/SearchTask";
 import { CreateTask } from "../../../model/task/CreateTask";
 import { UpdateTask } from "../../../model/task/UpdateTask";
 import { TaskComment } from "../../../model/task/TaskComment";
-import { FileDictionary, transformCommentFilesToZip, transformZipToListOfCommentFiles } from "../../../util/ZIp";
+import { FileDictionary, transformZipToListOfCommentFiles } from "../../../util/ZIp";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<SearchTask[]> =>
@@ -112,6 +112,17 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
             }
         })
 
+    const deleteCommentFile = (
+        commentId: string,
+        filename: string
+    ): Promise<void> =>
+        axiosInstance.delete(`/comment/${commentId}/file/${filename}`)
+
+    const deleteComment = (
+        commentId: string
+    ): Promise<void> =>
+        axiosInstance.delete(`/comment/${commentId}`)
+
     return {
         getTaskStatuses,
         getTaskTypes,
@@ -124,6 +135,8 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         getTasksToSearch,
         getTaskComments,
         saveTaskComment,
-        getTaskCommentsFiles
+        getTaskCommentsFiles,
+        deleteCommentFile,
+        deleteComment
     }
 }

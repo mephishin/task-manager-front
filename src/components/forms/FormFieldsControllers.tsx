@@ -179,6 +179,49 @@ export function AutocompleteController({ label, control, name, options, errors }
     )
 }
 
+
+type Options = {
+    label: string,
+    id: string
+}
+
+interface SearchProjectAutocompleteControllerProps {
+    control: Control<any, any, any>
+    name: string
+    options: Options[]
+    label: string
+    errors?: FieldErrors<any>
+}
+
+export function SearchProjectAutocompleteController({ label, control, name, options, errors }: SearchProjectAutocompleteControllerProps) {
+    const {
+        field,
+    } = useController({
+        name,
+        control
+    })
+
+    return (
+        <Autocomplete
+            value={field.value}
+            onChange={(_, newValue) => {
+                field.onChange(newValue.id)
+            }}
+            onBlur={field.onBlur}
+            options={options}
+            getOptionLabel={(option) => option.label ?? ''}
+            isOptionEqualToValue={(option, value) => option.id === value?.id}
+            renderInput={(params) => <TextField
+                {...params}
+                label={label}
+                error={!!errors?.[name]}
+                helperText={errors?.[name]?.message?.toString()} />}
+            sx={{ margin: 5 }}
+        >
+        </Autocomplete>
+    )
+}
+
 interface MultipleAutocompleteControllerProps {
     control: Control<any, any, any>,
     name: string,

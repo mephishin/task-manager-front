@@ -18,7 +18,8 @@ const KEYS = {
     closeTask: getKey('DELETE', 'TASK-STATUS', 'SINGLE', 'MUTATION'),
     getAllowedTaskStatuses: getKey('GET', 'ALLOWED-TASK-STATUS', 'MULTIPLE', 'QUERY'),
     getSearchTasks: getKey('GET', 'SEARCH-TASKS', 'MULTIPLE', 'QUERY'),
-    getTaskCommentFiles: getKey('GET', 'COMMENT-FILE', 'MULTIPLE', 'QUERY')
+    getTaskCommentFiles: getKey('GET', 'COMMENT-FILE', 'MULTIPLE', 'QUERY'),
+    deleteCommentFile: getKey('DELETE', 'COMMENT-FILE', 'SINGLE', 'MUTATION')
 }
 
 export function useTaskGet(key?: string) {
@@ -69,7 +70,7 @@ export function useAllowedTaskStatusesGet(key?: string) {
     });
 }
 
-export function useTaskCommentsGet(key?: string) {
+export function useTaskCommentsGet(key: string) {
     const { getTaskComments } = useTaskHttp(useCreateAxiosInstance());
 
     return useQuery({
@@ -106,11 +107,11 @@ export function useTaskCommentSave() {
     });
 }
 
-export function useTaskCommentsFilesGet(commentIds?: string[]) {
+export function useTaskCommentsFilesGet(taskKey: string, commentIds?: string[]) {
     const { getTaskCommentsFiles } = useTaskHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getTaskCommentFiles, commentIds],
+        queryKey: [KEYS.getTaskCommentFiles, taskKey],
         queryFn: () => getTaskCommentsFiles({ commentIds: commentIds }),
         enabled: !!commentIds,
     });
@@ -163,5 +164,41 @@ export function useTaskUpdate(key?: string) {
                 updatedTask
             );
         },
+    });
+}
+
+export function useCommentFileDelete(taskKey: string) {
+    const { deleteCommentFile } = useTaskHttp(useCreateAxiosInstance());
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [KEYS.deleteCommentFile],
+        mutationFn: (variables: {
+            commentId: string,
+            filename: string
+        }) =>
+            deleteCommentFile(
+                variables.commentId,
+                variables.filename
+            ),
+        onSuccess: () =>
+                    queryClient.invalidateQueries({ queryKey: [KEYS.getTaskCommentFiles, taskKey]})
+    });
+}
+
+export function useCommentDelete(taskKey: string) {
+    const { deleteComment } = useTaskHttp(useCreateAxiosInstance());
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [KEYS.deleteCommentFile],
+        mutationFn: (variables: {
+            commentId: string
+        }) =>
+            deleteComment(
+                variables.commentId
+            ),
+        onSuccess: () =>
+                    queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, taskKey]})
     });
 }

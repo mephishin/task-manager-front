@@ -1,9 +1,11 @@
-import { Grid2, Stack } from "@mui/material";
+import { CircularProgress, Grid2, Stack } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { TaskCard } from "./TaskCard";
-import { Participant, Task } from "../../../../model/task/TasksChart";
+import { Task } from "../../../../model/task/TasksChart";
 import { StatusCard } from "./StatusCard";
+import { useTaskStatusesGet } from "../../../../hooks/query/task/useTask";
+import { useTasksChartGet } from "../../../../hooks/query/tasksChart/useTasksChart";
 
 const styleGrid = {
     marginY: 2,
@@ -12,20 +14,21 @@ const styleGrid = {
 }
 
 const sgrid = {
-    height: '63vh',
-    ml: '1vw',
+    height: '86vh',
+    mx: '1vw',
     pb: '2vh',
     overflow: 'auto',
-    '&::-webkit-scrollbar': { width: '1vw' },
+    '&::-webkit-scrollbar': { width: '0vw' },
 }
 
 interface TaskTableProps {
-    notAssignedTasks: Task[]
-    participants: Participant[]
-    statuses: string[]
+    projectId: string
 }
 
-export const TasksChart = ({ notAssignedTasks, participants, statuses }: TaskTableProps) => {
+export const TasksChart = ({projectId}: TaskTableProps) => {
+    const taskStatusesQuery = useTaskStatusesGet(projectId);
+    const taskChartQuery = useTasksChartGet(projectId);
+
     const navigate = useNavigate();
 
     const handleLink = (task: Task) => {
@@ -51,22 +54,25 @@ export const TasksChart = ({ notAssignedTasks, participants, statuses }: TaskTab
         }
     }
 
-    return (
-        <Grid2>
-            <Grid2 direction={"column"} columns={statuses.length * 2} sx={{ mx: '1vw' }}>
+    if (
+        taskStatusesQuery.data
+        && taskChartQuery.data
+    ) {
+        return <Grid2>
+            <Grid2 direction={"column"} columns={taskStatusesQuery.data.length * 2} sx={{ mx: '1vw', height: '6vh'}}>
                 <Grid2 container spacing={3} >
-                    {statuses.map((_status) =>
-                        <Grid2 size={12 / statuses.length} sx={styleGrid}>
+                    {taskStatusesQuery.data.map((_status) =>
+                        <Grid2 size={12 / taskStatusesQuery.data.length} sx={styleGrid}>
                             <StatusCard status={_status} />
                         </Grid2>)}
                 </Grid2>
             </Grid2>
-            <Grid2 direction={"column"} columns={statuses.length * 2} sx={sgrid}>
+            <Grid2 direction={"column"} columns={taskStatusesQuery.data.length * 2} sx={sgrid}>
                 <Grid2>
-                    {participants.map((participant) =>
+                    {taskChartQuery.data.participants.map((participant) =>
                         <Grid2 container spacing={3}>
-                            {statuses.map((_status) =>
-                                <Grid2 size={12 / statuses.length} sx={styleGrid}>
+                            {taskStatusesQuery.data.map((_status) =>
+                                <Grid2 size={12 / taskStatusesQuery.data.length} sx={styleGrid}>
                                     <Stack spacing={2}>
                                         {participant.tasks.filter((task) => task.status === _status).map((task) =>
                                             <TaskCard
@@ -79,9 +85,16 @@ export const TasksChart = ({ notAssignedTasks, participants, statuses }: TaskTab
                                 </Grid2>
                             )}
                         </Grid2>)}
-                    {renderNotAssignedTasks(statuses, notAssignedTasks)}
+                    {renderNotAssignedTasks(taskStatusesQuery.data, taskChartQuery.data.notAssignedTasks)}
                 </Grid2>
             </Grid2>
         </Grid2>
-    )
-}
+
+    } else if (
+        taskStatusesQuery.isPending
+        && taskChartQuery.isPending
+    ) {
+        return <CircularProgress color={"warning"} />
+    }
+};
+

@@ -4,8 +4,8 @@ export interface TaskComment {
     files: File[],
     author: Author,
     text: string,
-    edited: string,
-    created: string,
+    edited: Date,
+    created: Date,
 }
 
 export interface Author {

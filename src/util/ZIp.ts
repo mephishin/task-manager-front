@@ -1,7 +1,6 @@
 import * as zip from "@zip.js/zip.js";
 import { ZipReader } from "@zip.js/zip.js";
 import mime from "mime";
-import { CommentFiles } from "../model/task/CommentFiles";
 
 export type FileDictionary = {
     [key: string]: File[];
@@ -59,10 +58,10 @@ export async function transformZipToListOfCommentFiles(arrayBuffer: ArrayBuffer)
     return result;
 }
 
-export async function transformCommentFilesToZip(commentFiles: File[]): Promise<ArrayBuffer> {
+export async function transformFilesToZip(Files: File[]): Promise<ArrayBuffer> {
     const zipFileWriter = new zip.BlobWriter();
     const zipWriter = new zip.ZipWriter(zipFileWriter);
-    for (let file of commentFiles) {
+    for (let file of Files) {
         const reader = new zip.BlobReader(file);
 
         await zipWriter.add(file.name, reader);

@@ -1,26 +1,13 @@
-import { Box, Button, CircularProgress, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography } from "@mui/material";
+import { IconButton, Link, List, ListItem, Stack, Typography } from "@mui/material";
 import React from "react";
-
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TaskComment } from "../../../model/task/TaskComment";
 import { PostCommentForm } from "./PostCommentForm";
-import { useTaskCommentSave } from "../../../hooks/query/task/useTask";
 import { PostComment } from "../../../model/task/PostComment";
-import { formatISORus } from "../../../util/LocalInterval";
-
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
+import { useCommentDelete, useCommentFileDelete } from "../../../hooks/query/task/useTask";
+import { useParams } from "react-router-dom";
+import AuthService from "../../../AuthService";
 
 const deleteButtonStyle = {
     '&:hover': {
@@ -35,9 +22,13 @@ interface CommentsProps {
     handlePostComment: (comment: PostComment) => void
 }
 
-
 export const Comments = ({ comments, handlePostComment }: CommentsProps) => {
-    const handleDownloadFile = (file: File) => {
+    const { key } = useParams();
+
+    const deleteCommentFile = useCommentFileDelete(key!)
+    const deleteComment = useCommentDelete(key!)
+
+    const downloadCommentFile = (file: File) => {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(file);
         link.download = file.name;
@@ -46,66 +37,85 @@ export const Comments = ({ comments, handlePostComment }: CommentsProps) => {
         document.body.removeChild(link);
     };
 
-    console.log(comments);
-    comments.forEach(c=> console.log(c.created?.toString()));
+    const isAuthUserComment = (comment: TaskComment): boolean => {
+        return AuthService.getUsername() == comment.author.username
+    }
 
     return (
-        <Stack sx={{ display: 'flex', backgroundColor: '#F4F5F7', p: 2, borderRadius: 2 }}>
-            <Typography variant="h6" component="div" color="primary">
+        <Stack sx={{ display: 'flex', backgroundColor: '#F4F5F7', px: 2, py: 1, borderRadius: 2 }}>
+            <Typography variant="h6" color="primary">
                 Комментарии
             </Typography>
-            <List sx={{ width: '100%' }}>
+            <List>
                 {comments.map(comment =>
                     <ListItem sx={{ backgroundColor: "white", my: 2, borderRadius: 2 }} alignItems="flex-start" >
-                        <Stack>
-                            <ListItem secondaryAction={
-                                <IconButton edge="end" aria-label="delete" sx={deleteButtonStyle}>
+                        <Stack sx={{ width: '100%' }}>
+                            <ListItem sx={{ py: 1 }} secondaryAction={
+                                isAuthUserComment(comment) && <IconButton
+                                    onClick={() => deleteComment.mutate({ commentId: comment.id })}
+                                    edge="end"
+                                    aria-label="delete"
+                                    sx={deleteButtonStyle}>
                                     <DeleteIcon />
                                 </IconButton>
                             }>
                                 <ListItemText sx={{ color: "black" }}
-                                    primary={comment.author.username}
                                     secondary={
                                         <React.Fragment>
                                             <Typography
-                                                component="span"
                                                 variant="body2"
-                                                color="primary"
                                                 sx={{ color: 'text.primary', display: 'inline' }}
                                             >
                                                 {comment.text}
                                             </Typography>
                                         </React.Fragment>
                                     }
-                                />
+                                >
+                                    <ListItem disableGutters secondaryAction={<Typography
+                                        variant="body1"
+                                        sx={{ color: 'text.primary', display: 'inline' }}
+                                    >
+                                        {comment.created.toString()}
+                                    </Typography>}>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{ color: 'text.primary', display: 'inline', }}
+                                        >
+                                            {comment.author.username}
+                                        </Typography>
+                                    </ListItem>
+
+                                </ListItemText>
                             </ListItem>
                             {comment.files.length > 0 &&
                                 <ListItem>
-                                    <List>
+                                    <Stack>
                                         {comment.files.map(file =>
-                                            <ListItem secondaryAction={
-                                                <IconButton edge="end" aria-label="delete" sx={deleteButtonStyle}>
+                                            <ListItem sx={{ maxWidth: 300 }} secondaryAction={
+                                                isAuthUserComment(comment) && <IconButton
+                                                    edge="end"
+                                                    onClick={() => deleteCommentFile.mutate(
+                                                        { commentId: comment.id, filename: file.name })}
+                                                    aria-label="delete"
+                                                    sx={deleteButtonStyle}
+                                                >
                                                     <DeleteIcon />
                                                 </IconButton>
                                             }>
                                                 <ListItemText>
-                                                    <Link component="button"
-                                                        variant="body2"
-                                                        onClick={() => handleDownloadFile(file)}>
-                                                        <Typography color="primary">
+                                                    <Link align="left" component="button" sx={{ lineHeight: '10px' }}
+                                                        onClick={() => downloadCommentFile(file)}>
+                                                        <Typography color="primary" variant="caption">
                                                             {file.name}
                                                         </Typography>
                                                     </Link>
                                                 </ListItemText>
                                             </ListItem>)}
-                                    </List>
-                                </ListItem>
-                            }
+                                    </Stack>
+                                </ListItem>}
                         </Stack>
-
-                    </ListItem>
-                )}
-                <PostCommentForm postCommentHandler={handlePostComment}/>
+                    </ListItem>)}
+                <PostCommentForm postCommentHandler={handlePostComment} />
             </List>
         </Stack>
     )
