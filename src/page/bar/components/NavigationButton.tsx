@@ -4,6 +4,7 @@ import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { CreateTaskMenuItem } from "./CreateTaskMenuItem";
 import { CreateProjectMenuItem } from "./CreateProjectMenuItem";
+import AuthService from "../../../AuthService";
 
 interface NavigationButtonProps {
 }
@@ -41,9 +42,9 @@ export const NavigationButton = ({ }: NavigationButtonProps) => {
                 <MenuItem onClick={() => handleCloseNavMenu("/")}>
                     <Typography sx={{ textAlign: 'center' }}>Мой проект</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => handleCloseNavMenu("projectSearch")}>
+                {AuthService.hasRole(AuthService.LEADER_ROlE) && <MenuItem onClick={() => handleCloseNavMenu("projectSearch")}>
                     <Typography sx={{ textAlign: 'center' }}>Найти проект</Typography>
-                </MenuItem>
+                </MenuItem>}
                 <MenuItem onClick={() => handleCloseNavMenu("taskSearch")}>
                     <Typography sx={{ textAlign: 'center' }}>Поиск задачи</Typography>
                 </MenuItem>

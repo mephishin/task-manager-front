@@ -39,7 +39,7 @@ export const TaskCard = ({ handleLink, task, participant }: TaskCardProps) => {
                     {participant ?
                         <Box>
                             <Typography sx={{ color: '#5E6C84' }}>
-                                Исполнитель: {participant.username}
+                                Исполнитель: {participant.lastName + " " + participant.firstName + " " + participant.group}
                             </Typography>
                             <Box>
                                 <Button sx={{ color: '#5E6C84' }}

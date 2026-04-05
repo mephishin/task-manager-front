@@ -39,7 +39,7 @@ export const CreateProjectMenuItem = ({ onClose }: CreateProjectMenuItemProps) =
     const handleClose = () => setOpen(false);
     const createProject = useProjectCreate();
 
-    if (isLeader && projectName) {
+    if (isLeader && projectName && users.data) {
         return (
             <Box>
                 <MenuItem sx={{ backgroundColor: "white" }} onClick={handleOpen}>Создать проект</MenuItem>
@@ -53,7 +53,7 @@ export const CreateProjectMenuItem = ({ onClose }: CreateProjectMenuItemProps) =
                         <Typography>Создание нового проекта</Typography>
                         <CreateProjectForm
                             onSubmit={onSubmitCreateProject}
-                            participants={users.data.filter(user => user.project == projectName!)}
+                            participants={users.data}
                         />
                     </Box>
                 </Modal>

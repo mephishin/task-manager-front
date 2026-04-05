@@ -64,7 +64,7 @@ export const CreateTaskMenuItem = ({onClose}: CreateTaskMenuItemProps) => {
                     <CreateTaskForm
                         onSubmit={onSubmitCreateTask}
                         types={taskTypes.data}
-                        users={users.data}
+                        users={users.data.filter(user => user.project == projectName!)}
                         projects={projects.data}
                         project={{ key: projectId!, name: projectName! }}
                     />

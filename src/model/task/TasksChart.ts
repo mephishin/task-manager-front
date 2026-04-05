@@ -5,6 +5,10 @@ export interface TasksChart {
 
 export interface Participant {
     username: string,
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    group: string,
     tasks: Array<Task>
 }
 

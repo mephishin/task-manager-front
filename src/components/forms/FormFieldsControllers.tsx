@@ -37,19 +37,16 @@ type ComposedInputControllerProps = InputControllerProps & ComponentPropsWithout
 export function InputController({ label, control, name, errors, ...textFieldProps }: ComposedInputControllerProps) {
     const {
         field,
-        // fieldState: { invalid, isTouched, isDirty },
-        // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
         control,
-        // rules: { required: true },
     })
 
     return (
         <TextField
-            onChange={field.onChange} // send value to hook form
-            onBlur={field.onBlur} // notify when input is touched/blur
-            value={field.value || ''} // input value
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            value={field.value || ''}
             label={label}
             error={!!errors?.[name]}
             helperText={errors?.[name]?.message?.toString()}
@@ -111,21 +108,18 @@ interface SelectControllerProps {
 export function SelectController({ label, control, name, options, errors }: SelectControllerProps) {
     const {
         field,
-        // fieldState: { invalid, isTouched, isDirty },
-        // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
         control
-        // rules: { required: true },
     })
 
     return (
         <FormControl sx={{ margin: 5 }} error={!!errors?.[name]}>
             <InputLabel id={"select-label"}>{label}</InputLabel>
             <Select
-                onChange={field.onChange} // send value to hook form
-                onBlur={field.onBlur} // notify when input is touched/blur
-                value={field.value || ''} // input value
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                value={field.value || ''}
                 labelId={"select-label"}
                 label={label}
             >
@@ -143,7 +137,7 @@ export function SelectController({ label, control, name, options, errors }: Sele
 interface AutocompleteControllerProps {
     control: Control<any, any, any>
     name: string
-    options: Array<string | unknown>
+    options: Options[]
     label: string
     errors?: FieldErrors<any>
 }
@@ -151,12 +145,9 @@ interface AutocompleteControllerProps {
 export function AutocompleteController({ label, control, name, options, errors }: AutocompleteControllerProps) {
     const {
         field,
-        // fieldState: { invalid, isTouched, isDirty },
-        // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
         control
-        // rules: { required: true },
     })
 
 
@@ -167,6 +158,8 @@ export function AutocompleteController({ label, control, name, options, errors }
                 field.onChange(newValue)
             }}
             onBlur={field.onBlur}
+            getOptionLabel={(option) => option.label ?? ''}
+            isOptionEqualToValue={(option, value) => option.id === value?.id}
             options={options}
             renderInput={(params) => <TextField
                 {...params}
@@ -225,7 +218,7 @@ export function SearchProjectAutocompleteController({ label, control, name, opti
 interface MultipleAutocompleteControllerProps {
     control: Control<any, any, any>,
     name: string,
-    options: Array<string | unknown>,
+    options: Options[],
     label: string,
     errors?: FieldErrors<any>
 }
@@ -233,12 +226,9 @@ interface MultipleAutocompleteControllerProps {
 export function MultipleAutocompleteController({ label, control, name, options, errors }: MultipleAutocompleteControllerProps) {
     const {
         field,
-        // fieldState: { invalid, isTouched, isDirty },
-        // formState: { touchedFields, dirtyFields },
     } = useController({
         name,
         control
-        // rules: { required: true },
     })
 
 
@@ -250,6 +240,8 @@ export function MultipleAutocompleteController({ label, control, name, options, 
                 field.onChange(newValue)
             }}
             onBlur={field.onBlur}
+            getOptionLabel={(option) => option.label ?? ''}
+            isOptionEqualToValue={(option, value) => option.id === value?.id}
             options={options}
             renderInput={(params) => <TextField
                 {...params}

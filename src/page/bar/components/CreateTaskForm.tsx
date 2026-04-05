@@ -5,17 +5,17 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { CreateTask, createTaskFormValidationSchema } from "../../../model/task/CreateTask";
 import { Project } from "../../../model/project/Project";
-import { Users } from "../../../model/participant/Participant";
+import { getLabel, Users } from "../../../model/participant/Participant";
 import AuthService from "../../../AuthService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AutocompleteController, InputController, SelectController } from "../../../components/forms/FormFieldsControllers";
 
 interface CreateTaskFormProps {
     onSubmit: SubmitHandler<CreateTask>,
-    types?: Array<string>,
-    projects?: Array<Project>,
-    users?: Array<Users>
-    project?: Project
+    types: Array<string>,
+    projects: Array<Project>,
+    users: Array<Users>
+    project: Project
 }
 
 export const CreateTaskForm = ({ onSubmit, types, projects, users, project }: CreateTaskFormProps) => {
@@ -53,13 +53,14 @@ export const CreateTaskForm = ({ onSubmit, types, projects, users, project }: Cr
                     label={'Проект'}
                     control={control}
                     name={"project"}
-                    options={projects!.map((project) => project.name)}
+                    options={projects.map(project => {return {id: project.key, label: project.name}})}
                     errors={errors} />
                 <AutocompleteController
                     label={'Исполнитель'}
                     control={control}
                     name={"assignee"}
-                    options={users!.map((user) => user.username)}
+                    options={users.map(user =>
+                        {return {id: user.id, label: getLabel(user)}})}
                     errors={errors} />
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>
             </Stack>

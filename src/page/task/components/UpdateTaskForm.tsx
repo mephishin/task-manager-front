@@ -4,17 +4,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Task } from "../../../model/task/Task";
-import { Users } from "../../../model/participant/Participant";
+import { getLabel, Users } from "../../../model/participant/Participant";
 import { UpdateTask, UpdateTaskFormValidationSchema } from "../../../model/task/UpdateTask";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AutocompleteController, InputController } from "../../../components/forms/FormFieldsControllers";
 
 interface UpdateTaskFormProps {
     taskKey: string,
-    task?: Task,
-    statuses?: Array<string>,
-    participants?: Array<Users>,
-    types?: Array<string>,
+    task: Task,
+    participants: Array<Users>,
+    types: Array<string>,
     updateTask: SubmitHandler<UpdateTask>
 }
 
@@ -44,19 +43,19 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
                     control={control}
                     errors={errors}
                     name={"name"}
-                    sx={{m: 5}} />
+                    sx={{ m: 5 }} />
                 <InputController
                     label="Описание"
                     control={control}
                     errors={errors}
                     name={"description"}
-                    sx={{m: 5}} />
+                    sx={{ m: 5 }} />
                 <AutocompleteController
                     label="Исоплнитель задачи"
                     control={control}
                     name={"assignee"}
                     errors={errors}
-                    options={participants!.map((participant) => participant.username)} />
+                    options={participants.map(user => { return { id: user.id, label: getLabel(user) } })} />
                 <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
             </Stack>
         </Box>

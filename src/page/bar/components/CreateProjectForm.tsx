@@ -10,7 +10,7 @@ import { InputController, MultipleAutocompleteController } from "../../../compon
 
 interface CreateProjectFormProps {
     onSubmit: SubmitHandler<CreateProject>,
-    participants?: Array<Users>
+    participants: Array<Users>
 }
 
 export const CreateProjectForm = ({ onSubmit, participants }: CreateProjectFormProps) => {
@@ -38,9 +38,16 @@ export const CreateProjectForm = ({ onSubmit, participants }: CreateProjectFormP
                     control={control}
                     name={"participants"}
                     errors={errors}
-                    options={participants!.map((participant) => participant.username)} />
+                    options={participants.map(participant =>
+                        {return {id: participant.id, label: getLabel(participant)}})} />
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>
             </Stack>
         </Box>
     )
+}
+
+function getLabel(participant: Users): string {
+    return participant.group
+    ? participant.lastName + " " + participant.firstName + " " + participant.group
+    : participant.lastName + " " + participant.firstName;
 }
