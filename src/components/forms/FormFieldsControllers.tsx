@@ -134,32 +134,33 @@ export function SelectController({ label, control, name, options, errors }: Sele
     )
 }
 
-interface AutocompleteControllerProps {
+interface AutocompleteControllerProps<T> {
     control: Control<any, any, any>
     name: string
-    options: Options[]
+    options: T[]
+    getLabel: (option: T) => string,
+    getId: (option: T) => string,
     label: string
     errors?: FieldErrors<any>
 }
 
-export function AutocompleteController({ label, control, name, options, errors }: AutocompleteControllerProps) {
+export function AutocompleteController<T,>({ label, control, name, options, errors, getLabel, getId }: AutocompleteControllerProps<T>) {
     const {
         field,
     } = useController({
         name,
-        control
+        control,
     })
-
 
     return (
         <Autocomplete
             value={field.value}
-            onChange={(event, newValue) => {
+            onChange={(_, newValue) => {
                 field.onChange(newValue)
             }}
             onBlur={field.onBlur}
-            getOptionLabel={(option) => option.label ?? ''}
-            isOptionEqualToValue={(option, value) => option.id === value?.id}
+            getOptionLabel={getLabel}
+            isOptionEqualToValue={(option: T, value: T) => getId(option) === getId(value)}
             options={options}
             renderInput={(params) => <TextField
                 {...params}
@@ -215,15 +216,17 @@ export function SearchProjectAutocompleteController({ label, control, name, opti
     )
 }
 
-interface MultipleAutocompleteControllerProps {
+interface MultipleAutocompleteControllerProps<T> {
     control: Control<any, any, any>,
     name: string,
-    options: Options[],
+    options: T[],
+    getLabel: (option: T) => string,
+    getId: (option: T) => string,
     label: string,
     errors?: FieldErrors<any>
 }
 
-export function MultipleAutocompleteController({ label, control, name, options, errors }: MultipleAutocompleteControllerProps) {
+export function MultipleAutocompleteController<T,>({ label, control, name, options, errors, getId, getLabel }: MultipleAutocompleteControllerProps<T>) {
     const {
         field,
     } = useController({
@@ -236,12 +239,12 @@ export function MultipleAutocompleteController({ label, control, name, options, 
         <Autocomplete
             multiple
             value={field.value}
-            onChange={(event, newValue) => {
-                field.onChange(newValue)
+            onChange={(_, newValue) => {
+                field.onChange(newValue);
             }}
             onBlur={field.onBlur}
-            getOptionLabel={(option) => option.label ?? ''}
-            isOptionEqualToValue={(option, value) => option.id === value?.id}
+            getOptionLabel={getLabel}
+            isOptionEqualToValue={(option: T, value: T) => getId(option) === getId(value)}
             options={options}
             renderInput={(params) => <TextField
                 {...params}

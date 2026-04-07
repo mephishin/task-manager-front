@@ -1,8 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { Project } from "../../../model/project/Project";
-import { CreateProject } from "../../../model/project/CreateProject";
-import { ProjectFile } from "../../../model/project/ProjectFile";
 import { transformFilesToZip, transformZipToFiles } from "../../../util/ZIp";
+import { CreateProjectRq } from "./useProjectHttpDto";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>
@@ -26,7 +25,7 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
                 return files
             })
 
-    const createProject = (project: CreateProject): Promise<Project> =>
+    const createProject = (project: CreateProjectRq): Promise<Project> =>
         axiosInstance.post("/project", project, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

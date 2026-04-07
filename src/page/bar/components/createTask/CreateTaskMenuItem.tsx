@@ -1,13 +1,14 @@
 import * as React from "react";
 import { Box, MenuItem, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import { CreateTask } from "../../../model/task/CreateTask";
-import { useTaskCreate, useTaskTypesGet } from "../../../hooks/query/task/useTask";
-import AuthService from "../../../AuthService";
 import { CreateTaskForm } from "./CreateTaskForm";
-import { useUsersGet } from "../../../hooks/query/users/useUsers";
-import { useProjectsGet } from "../../../hooks/query/project/useProject";
 import { useParams } from "react-router-dom";
+import { useUsersGet } from "../../../../hooks/query/users/useUsers";
+import { useTaskCreate, useTaskTypesGet } from "../../../../hooks/query/task/useTask";
+import { useProjectsGet } from "../../../../hooks/query/project/useProject";
+import { CreateTask } from "./CreateTaskFormSchema";
+import AuthService from "../../../../AuthService";
+
 
 const style = {
     position: 'absolute',
@@ -25,7 +26,7 @@ interface CreateTaskMenuItemProps {
     onClose: () => void
 }
 
-export const CreateTaskMenuItem = ({onClose}: CreateTaskMenuItemProps) => {
+export const CreateTaskMenuItem = ({ onClose }: CreateTaskMenuItemProps) => {
     const { projectId, projectName } = useParams();
 
     const users = useUsersGet();
@@ -33,7 +34,13 @@ export const CreateTaskMenuItem = ({onClose}: CreateTaskMenuItemProps) => {
     const projects = useProjectsGet();
 
     const onSubmitCreateTask = (data: CreateTask) => {
-        createTask.mutate(data)
+        createTask.mutate({
+            name: data.name,
+            description: data.description,
+            type: data.type,
+            project: data.project.id,
+            assignee: data.assignee.id,
+        })
         handleClose()
         onClose()
     }
@@ -66,7 +73,7 @@ export const CreateTaskMenuItem = ({onClose}: CreateTaskMenuItemProps) => {
                         types={taskTypes.data}
                         users={users.data.filter(user => user.project == projectName!)}
                         projects={projects.data}
-                        project={{ key: projectId!, name: projectName! }}
+                        project={(projectId && projectName) ? { key: projectId!, name: projectName! } : undefined}
                     />
                 </Box>
             </Modal>

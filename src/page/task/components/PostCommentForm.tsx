@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ interface PostCommentFormProps {
     postCommentHandler: (postComment: PostComment) => void
 }
 
-export const PostCommentForm = ({postCommentHandler} : PostCommentFormProps) => {
+export const PostCommentForm = ({ postCommentHandler }: PostCommentFormProps) => {
     const { control, handleSubmit, formState: { errors } } = useForm<PostComment>({
         resolver: zodResolver(postCommentFormValidationSchema)
     })
@@ -29,14 +29,14 @@ export const PostCommentForm = ({postCommentHandler} : PostCommentFormProps) => 
                     control={control}
                     errors={errors}
                     name={"text"}
-                    sx={{m: 1}}
+                    sx={{ m: 1 }}
                     multiline />
                 <InputFileController
                     label='Прикрепить файлы'
                     control={control}
                     name='files'
                     errors={errors}
-                    sx={{m: 1}} />
+                    sx={{ m: 1 }} />
                 <Button
                     variant="contained"
                     startIcon={<AddCommentIcon />}

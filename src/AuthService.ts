@@ -47,7 +47,18 @@ const updateToken = (successCallback:any) =>
         .then(successCallback)
         .catch(doLogin);
 
-const getUsername = () => client.tokenParsed?.preferred_username;
+const getUsername = () => client.tokenParsed?.preferred_username!;
+
+const getFirstName = () => client.tokenParsed?.first_name!;
+const getMiddleName = () => client.tokenParsed?.middle_name;
+const getLastName = () => client.tokenParsed?.last_name!;
+const getGroup = () => client.tokenParsed?.group;
+
+const getFullName = () => getGroup()
+    ? getLastName() + " " + getFirstName() + " " + getGroup()
+    : getLastName() + " " + getFirstName();
+
+const getId = () => client.tokenParsed?.sub!;
 
 const hasRole = (role:string) => client.hasRealmRole(role);
 
@@ -63,6 +74,8 @@ const AuthService = {
     hasRole,
     realmAccess,
     getRoles,
+    getId,
+    getFullName,
     PARTICIPANT_ROLE,
     LEADER_ROlE,
 }

@@ -91,7 +91,7 @@ export function useTaskCreate() {
     });
 }
 
-export function useTaskCommentSave() {
+export function useTaskCommentSave(key: string) {
     const { saveTaskComment } = useTaskHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
 
@@ -103,17 +103,7 @@ export function useTaskCommentSave() {
             text: string,
         }) => saveTaskComment(variables.taskKey, variables.text, variables.zippedFiles),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments] })
-    });
-}
-
-export function useTaskCommentsFilesGet(taskKey: string, commentIds?: string[]) {
-    const { getTaskCommentsFiles } = useTaskHttp(useCreateAxiosInstance());
-
-    return useQuery({
-        queryKey: [KEYS.getTaskCommentFiles, taskKey],
-        queryFn: () => getTaskCommentsFiles({ commentIds: commentIds }),
-        enabled: !!commentIds,
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, key] })
     });
 }
 
@@ -182,7 +172,7 @@ export function useCommentFileDelete(taskKey: string) {
                 variables.filename
             ),
         onSuccess: () =>
-                    queryClient.invalidateQueries({ queryKey: [KEYS.getTaskCommentFiles, taskKey]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskCommentFiles, taskKey] })
     });
 }
 
@@ -199,6 +189,6 @@ export function useCommentDelete(taskKey: string) {
                 variables.commentId
             ),
         onSuccess: () =>
-                    queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, taskKey]})
+            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, taskKey] })
     });
 }

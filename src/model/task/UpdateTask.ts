@@ -1,13 +1,19 @@
-import * as yup from 'yup';
+import { z } from "zod";
 
-export const UpdateTaskFormValidationSchema = yup
-    .object({
-        key: yup.string().required('Обязательное поле'),
-        name: yup.string().required('Обязательное поле'),
-        description: yup.string().required('Обязательное поле'),
-        status: yup.string().required('Обязательное поле'),
-        type: yup.string().required('Обязательное поле'),
-        assignee: yup.string().required('Обязательное поле'),
-    });
+export const UpdateTaskFormAssigneeValidationSchema = z.object({
+    name: z.string({ error: 'Обязательное поле' }),
+    id: z.string({ error: 'Обязательное поле' }),
+});
 
-export type UpdateTask = yup.InferType<typeof UpdateTaskFormValidationSchema>;
+export type UpdateTaskAssignee = z.infer<typeof UpdateTaskFormAssigneeValidationSchema>;
+
+export const UpdateTaskFormValidationSchema = z.object({
+    key: z.string({ error: 'Обязательное поле' }),
+    name: z.string({ error: 'Обязательное поле' }),
+    description: z.string({ error: 'Обязательное поле' }),
+    status: z.string({ error: 'Обязательное поле' }),
+    type: z.string({ error: 'Обязательное поле' }),
+    assignee: UpdateTaskFormAssigneeValidationSchema,
+});
+
+export type UpdateTask = z.infer<typeof UpdateTaskFormValidationSchema>;

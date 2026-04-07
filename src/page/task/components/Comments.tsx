@@ -2,6 +2,7 @@ import { IconButton, Link, List, ListItem, Stack, Typography } from "@mui/materi
 import React from "react";
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { TaskComment } from "../../../model/task/TaskComment";
 import { PostCommentForm } from "./PostCommentForm";
 import { PostComment } from "../../../model/task/PostComment";
@@ -51,20 +52,29 @@ export const Comments = ({ comments, handlePostComment }: CommentsProps) => {
                     <ListItem sx={{ backgroundColor: "white", my: 2, borderRadius: 2 }} alignItems="flex-start" >
                         <Stack sx={{ width: '100%' }}>
                             <ListItem sx={{ py: 1 }} secondaryAction={
-                                isAuthUserComment(comment) && <IconButton
-                                    onClick={() => deleteComment.mutate({ commentId: comment.id })}
-                                    edge="end"
-                                    aria-label="delete"
-                                    sx={deleteButtonStyle}>
-                                    <DeleteIcon />
-                                </IconButton>
+                                isAuthUserComment(comment) && <Stack>
+                                    <IconButton
+                                        onClick={() => deleteComment.mutate({ commentId: comment.id })}
+                                        edge="end"
+                                        aria-label="delete"
+                                        sx={{mx: 0.2}}>
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => deleteComment.mutate({ commentId: comment.id })}
+                                        edge="end"
+                                        aria-label="delete"
+                                        sx={deleteButtonStyle}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Stack>
                             }>
-                                <ListItemText sx={{ color: "black" }}
+                                <ListItemText sx={{ color: "black"}}
                                     secondary={
                                         <React.Fragment>
                                             <Typography
                                                 variant="body2"
-                                                sx={{ color: 'text.primary', display: 'inline' }}
+                                                sx={{ color: 'text.primary', width: '95%'}}
                                             >
                                                 {comment.text}
                                             </Typography>

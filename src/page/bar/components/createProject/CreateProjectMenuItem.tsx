@@ -1,13 +1,11 @@
 import * as React from "react";
 import { Box, MenuItem, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import { useProjectCreate } from "../../../hooks/query/project/useProject";
-import { CreateProject } from "../../../model/project/CreateProject";
 import { CreateProjectForm } from "./CreateProjectForm";
-import { useUsersGet } from "../../../hooks/query/users/useUsers";
-import AuthService from "../../../AuthService";
-import { useParams } from "react-router-dom";
-
+import AuthService from "../../../../AuthService";
+import { useUsersGet } from "../../../../hooks/query/users/useUsers";
+import { CreateProject } from "./CreateProjectFormSchema";
+import { useProjectCreate } from "../../../../hooks/query/project/useProject";
 
 const style = {
     position: 'absolute',
@@ -26,11 +24,15 @@ interface CreateProjectMenuItemProps {
 }
 
 export const CreateProjectMenuItem = ({ onClose }: CreateProjectMenuItemProps) => {
-    const { projectName } = useParams();
     const users = useUsersGet();
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
     const onSubmitCreateProject = (data: CreateProject) => {
-        createProject.mutate(data)
+        createProject.mutate({
+            name: data.name,
+            description: data.description,
+            participants: data.participants.map(p => p.id),
+            taskPrefix: data.taskPrefix,
+        })
         handleClose()
         onClose()
     }
@@ -39,7 +41,7 @@ export const CreateProjectMenuItem = ({ onClose }: CreateProjectMenuItemProps) =
     const handleClose = () => setOpen(false);
     const createProject = useProjectCreate();
 
-    if (isLeader && projectName && users.data) {
+    if (isLeader && users.data) {
         return (
             <Box>
                 <MenuItem sx={{ backgroundColor: "white" }} onClick={handleOpen}>Создать проект</MenuItem>

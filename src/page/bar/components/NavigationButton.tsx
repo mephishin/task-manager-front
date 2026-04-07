@@ -2,9 +2,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { CreateTaskMenuItem } from "./CreateTaskMenuItem";
-import { CreateProjectMenuItem } from "./CreateProjectMenuItem";
 import AuthService from "../../../AuthService";
+import { CreateProjectMenuItem } from "./createProject/CreateProjectMenuItem";
+import { CreateTaskMenuItem } from "./createTask/CreateTaskMenuItem";
 
 interface NavigationButtonProps {
 }

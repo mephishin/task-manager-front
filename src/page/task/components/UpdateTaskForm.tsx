@@ -5,9 +5,10 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Task } from "../../../model/task/Task";
 import { getLabel, Users } from "../../../model/participant/Participant";
-import { UpdateTask, UpdateTaskFormValidationSchema } from "../../../model/task/UpdateTask";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UpdateTask, UpdateTaskAssignee, UpdateTaskFormValidationSchema } from "../../../model/task/UpdateTask";
 import { AutocompleteController, InputController } from "../../../components/forms/FormFieldsControllers";
+import AuthService from "../../../AuthService";
 
 interface UpdateTaskFormProps {
     taskKey: string,
@@ -24,9 +25,9 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
             description: task?.description,
             status: task?.status,
             type: task?.type,
-            assignee: task?.assignee
+            assignee: {id: AuthService.getId(), name: AuthService.getFullName()}
         },
-        resolver: yupResolver(UpdateTaskFormValidationSchema)
+        resolver: zodResolver(UpdateTaskFormValidationSchema)
     })
 
     const onSubmit = (data: UpdateTask) => {
@@ -50,12 +51,14 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
                     errors={errors}
                     name={"description"}
                     sx={{ m: 5 }} />
-                <AutocompleteController
+                <AutocompleteController<UpdateTaskAssignee>
                     label="Исоплнитель задачи"
                     control={control}
                     name={"assignee"}
                     errors={errors}
-                    options={participants.map(user => { return { id: user.id, label: getLabel(user) } })} />
+                    options={participants.map(user => { return { id: user.id, name: getLabel(user) } })}
+                    getLabel={(assignee: UpdateTaskAssignee) => assignee.name}
+                    getId={(assignee: UpdateTaskAssignee) => assignee.id}/>
                 <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
             </Stack>
         </Box>

@@ -1,10 +1,10 @@
 import { Task } from "../../../model/task/Task";
 import { AxiosInstance, AxiosResponse } from "axios";
 import { SearchTask } from "../../../model/task/SearchTask";
-import { CreateTask } from "../../../model/task/CreateTask";
 import { UpdateTask } from "../../../model/task/UpdateTask";
 import { TaskComment } from "../../../model/task/TaskComment";
 import { FileDictionary, transformZipToListOfCommentFiles } from "../../../util/ZIp";
+import { CreateTaskRq } from "./useTaskHttpDto";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<SearchTask[]> =>
@@ -41,7 +41,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const postTask = (task: CreateTask): Promise<Task> =>
+    const postTask = (task: CreateTaskRq): Promise<Task> =>
         axiosInstance.post("/task", task, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -74,12 +74,22 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         taskKey?: string
     }): Promise<TaskComment[]> =>
         axiosInstance.get(`task/${variables.taskKey}/comment`)
-            .then((response: AxiosResponse) => {
-                return response.data
+            .then(async (response: AxiosResponse) => {
+                if (response.data.length > 0) {
+                    const fileDictionary = await getTaskCommentsFiles({ commentIds: response.data.map((taskComment: TaskComment) => taskComment.id) })
+                    return response.data.map((comment: TaskComment) => {
+                        return {
+                            ...comment,
+                            files: fileDictionary[comment.id] || []
+                        }
+                    })
+                } else {
+                    return []
+                }
             })
 
     const getTaskCommentsFiles = (variables: {
-        commentIds?: string[]
+        commentIds: string[]
     }): Promise<FileDictionary> =>
         axiosInstance.get(`/comment/file`, {
             params: {
