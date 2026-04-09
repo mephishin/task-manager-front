@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, Menu, MenuItem, Typography } from "@mui/material"
 import * as React from "react";
 import { useAllowedTaskStatusesGet, useChangeTaskStatus } from "../../../../hooks/query/task/useTask";
-import { Participant, Task } from "../../../../model/task/TasksChart";
+import {getLabel, Participant, Task} from "../../../../model/task/TasksChart";
 
 interface TaskCardProps {
     handleLink: (task: Task) => void,
@@ -39,7 +39,7 @@ export const TaskCard = ({ handleLink, task, participant }: TaskCardProps) => {
                     {participant ?
                         <Box>
                             <Typography sx={{ color: '#5E6C84' }}>
-                                Исполнитель: {participant.lastName + " " + participant.firstName + " " + participant.group}
+                                Исполнитель: {getLabel(participant)}
                             </Typography>
                             <Box>
                                 <Button sx={{ color: '#5E6C84' }}

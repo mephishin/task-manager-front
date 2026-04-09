@@ -1,32 +1,10 @@
-// import React from 'react'
-// import { useParams } from "react-router-dom";
-// import { Box, CircularProgress } from "@mui/material";
-// import { useTaskStatusesGet } from '../../hooks/query/task/useTask';
-// import { useTasksChartGet } from '../../hooks/query/tasksChart/useTasksChart';
-// import { PeriodBar } from './components/PeriodBar';
-// import { TasksChart } from './components/taskChart/TasksChart';
-//
-// export const ProjectPage = () => {
-//     const { projectId } = useParams();
-//
-//     return <Box>
-//         <PeriodBar projectId={projectId!} />
-//         <TasksChart projectId={projectId!} />
-//     </Box>
-//
-// };
-
-import { Box, Drawer, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { PeriodBar } from "./components/PeriodBar";
 import { TasksChart } from "./components/taskChart/TasksChart";
 import { ProjectInfoPage } from "../projectInfo/ProjectInfoPage";
 
-// Названия наших вкладок
-const tabLabels = ['Главная', 'Профиль', 'Настройки'];
 
-// Тип для описания вкладки
 interface TabPanelProps {
     children?: React.ReactNode;
     index: any;

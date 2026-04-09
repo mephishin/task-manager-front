@@ -5,3 +5,10 @@ export interface CreateTaskRq {
     project: string,
     assignee: string,
 }
+
+export interface UpdateTaskRq {
+    key: string
+    name: string,
+    description: string,
+    assignee: string,
+}

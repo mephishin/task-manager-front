@@ -11,7 +11,7 @@ export async function transformZipToFiles(arrayBuffer: ArrayBuffer): Promise<Fil
 
     const zipReader = new ZipReader(reader);
 
-    var result = Array<File>();
+    const result = Array<File>();
 
     const entries = await zipReader.getEntries();
 
@@ -27,7 +27,7 @@ export async function transformZipToFiles(arrayBuffer: ArrayBuffer): Promise<Fil
         }
     }
 
-    zipReader.close();
+    await zipReader.close();
 
     return result;
 }
@@ -44,16 +44,21 @@ export async function transformZipToListOfCommentFiles(arrayBuffer: ArrayBuffer)
     for (let entry of entries) {
         if (!entry.directory) {
             const writer = new zip.BlobWriter();
-            const filename = entry.filename;
+            const name = entry.filename;
+
+            const commendId = name.slice(0, 36);
+
+            const filename = name.slice(36);
+
             const type = mime.getType(filename)
             const data = await entry.getData(writer);
-            const file = new File([data], entry.filename.split('_')[1], { type: type ?? '' });
+            const file = new File([data], filename, { type: type ?? '' });
 
-            addFileToDictionary(result, filename.split('_')[0], file);
+            addFileToDictionary(result, commendId, file);
         }
     }
 
-    zipReader.close();
+    await zipReader.close();
 
     return result;
 }

@@ -1,40 +1,29 @@
-import { Control, FieldErrors, useController } from "react-hook-form";
-import { Autocomplete, Box as Stack, Button, FormControl, FormHelperText, InputLabel, Select, styled, TextField, SxProps, Box } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import {Control, FieldErrors, useController} from "react-hook-form";
+import {
+    Autocomplete,
+    Box as Stack,
+    Button,
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    Select,
+    TextField,
+    Typography, List
+} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import { Theme } from "@emotion/react";
-import { ComponentPropsWithoutRef } from "react";
-
-const VisuallyHiddenInput = styled('input')({
-    //     clip: 'rect(0 0 0 0)',
-    //     clipPath: 'inset(50%)',
-    //     height: 1,
-    //     overflow: 'hidden',
-    //     position: 'absolute',
-    //     bottom: 0,
-    //     left: 0,
-    //     whiteSpace: 'nowrap',
-    //     width: 1,
-    //     position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    opacity: 0, // Делаем невидимым
-    cursor: 'pointer', // Показываем курсор при наведении
-    zIndex: 1, // Кладем поверх кнопки
-});
+import React, {ComponentPropsWithoutRef} from "react";
+import ListItemText from "@mui/material/ListItemText";
 
 interface InputControllerProps {
     control: Control<any, any, any>,
     name: string,
-    label: string
+    label?: string
     errors?: FieldErrors<any>,
 }
 
 type ComposedInputControllerProps = InputControllerProps & ComponentPropsWithoutRef<typeof TextField>;
 
-export function InputController({ label, control, name, errors, ...textFieldProps }: ComposedInputControllerProps) {
+export function InputController({label, control, name, errors, ...textFieldProps}: ComposedInputControllerProps) {
     const {
         field,
     } = useController({
@@ -64,36 +53,41 @@ type InputFileControllerProps = {
 
 type ComposedInputFileControllerProps = InputFileControllerProps & ComponentPropsWithoutRef<typeof Button>;
 
-export function InputFileController({ label, control, name, errors, ...buttonProps }: ComposedInputFileControllerProps) {
-    const { field } = useController({ name, control, })
+export function InputFileController({label, control, name, errors, ...buttonProps}: ComposedInputFileControllerProps) {
+    const {field} = useController({name, control,})
+
+    const fileInput = React.useRef<HTMLInputElement>(null);
 
     return (
-        <Box sx={{ position: 'relative' }}>
-            <Button role={undefined}
+        <Stack>
+            <Button
                 variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
+                color="primary"
+                onClick={() => fileInput?.current?.click()}
                 {...buttonProps}
             >
-                {label}
+                {"Добавить файлы"}
             </Button>
-            <input
-                type="file"
-                multiple
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    opacity: 0, // Делаем невидимым
-                    cursor: 'pointer', // Показываем курсор при наведении
-                    zIndex: 1, // Кладем поверх кнопки
-                }}
-                onChange={(event) => event.target.files ? field.onChange(Array.from(event.target.files)) : field.onChange([])} // Передаем обработчик изменения
-            />
-        </Box>
 
+            <input
+                multiple
+                ref={fileInput}
+                type="file"
+                style={{display: 'none'}}
+                onChange={(event) => event.target.files ? field.onChange(Array.from(event.target.files)) : field.onChange([])}
+            />
+            {field.value &&
+                <List sx={{mx: 1}}>
+                    {field.value.map((file: File) =>
+                        <ListItemText>
+                            <Typography sx={{lineHeight: '10px'}} align={"center"} color="primary"
+                                        variant="caption">
+                                {file.name}
+                            </Typography>
+                        </ListItemText>
+                    )}
+                </List>}
+        </Stack>
     )
 }
 
@@ -105,7 +99,7 @@ interface SelectControllerProps {
     errors?: FieldErrors<any>
 }
 
-export function SelectController({ label, control, name, options, errors }: SelectControllerProps) {
+export function SelectController({label, control, name, options, errors}: SelectControllerProps) {
     const {
         field,
     } = useController({
@@ -114,7 +108,7 @@ export function SelectController({ label, control, name, options, errors }: Sele
     })
 
     return (
-        <FormControl sx={{ margin: 5 }} error={!!errors?.[name]}>
+        <FormControl sx={{margin: 5}} error={!!errors?.[name]}>
             <InputLabel id={"select-label"}>{label}</InputLabel>
             <Select
                 onChange={field.onChange}
@@ -144,7 +138,15 @@ interface AutocompleteControllerProps<T> {
     errors?: FieldErrors<any>
 }
 
-export function AutocompleteController<T,>({ label, control, name, options, errors, getLabel, getId }: AutocompleteControllerProps<T>) {
+export function AutocompleteController<T, >({
+                                                label,
+                                                control,
+                                                name,
+                                                options,
+                                                errors,
+                                                getLabel,
+                                                getId
+                                            }: AutocompleteControllerProps<T>) {
     const {
         field,
     } = useController({
@@ -166,8 +168,8 @@ export function AutocompleteController<T,>({ label, control, name, options, erro
                 {...params}
                 label={label}
                 error={!!errors?.[name]}
-                helperText={errors?.[name]?.message?.toString()} />}
-            sx={{ margin: 5 }}
+                helperText={errors?.[name]?.message?.toString()}/>}
+            sx={{margin: 5}}
         >
         </Autocomplete>
     )
@@ -187,7 +189,13 @@ interface SearchProjectAutocompleteControllerProps {
     errors?: FieldErrors<any>
 }
 
-export function SearchProjectAutocompleteController({ label, control, name, options, errors }: SearchProjectAutocompleteControllerProps) {
+export function SearchProjectAutocompleteController({
+                                                        label,
+                                                        control,
+                                                        name,
+                                                        options,
+                                                        errors
+                                                    }: SearchProjectAutocompleteControllerProps) {
     const {
         field,
     } = useController({
@@ -209,8 +217,8 @@ export function SearchProjectAutocompleteController({ label, control, name, opti
                 {...params}
                 label={label}
                 error={!!errors?.[name]}
-                helperText={errors?.[name]?.message?.toString()} />}
-            sx={{ margin: 5 }}
+                helperText={errors?.[name]?.message?.toString()}/>}
+            sx={{margin: 5}}
         >
         </Autocomplete>
     )
@@ -226,7 +234,15 @@ interface MultipleAutocompleteControllerProps<T> {
     errors?: FieldErrors<any>
 }
 
-export function MultipleAutocompleteController<T,>({ label, control, name, options, errors, getId, getLabel }: MultipleAutocompleteControllerProps<T>) {
+export function MultipleAutocompleteController<T, >({
+                                                        label,
+                                                        control,
+                                                        name,
+                                                        options,
+                                                        errors,
+                                                        getId,
+                                                        getLabel
+                                                    }: MultipleAutocompleteControllerProps<T>) {
     const {
         field,
     } = useController({
@@ -250,8 +266,8 @@ export function MultipleAutocompleteController<T,>({ label, control, name, optio
                 {...params}
                 label={label}
                 error={!!errors?.[name]}
-                helperText={errors?.[name]?.message?.toString()} />}
-            sx={{ margin: 5 }}
+                helperText={errors?.[name]?.message?.toString()}/>}
+            sx={{margin: 5}}
         >
         </Autocomplete>
     )

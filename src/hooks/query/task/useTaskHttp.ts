@@ -1,10 +1,7 @@
 import { Task } from "../../../model/task/Task";
 import { AxiosInstance, AxiosResponse } from "axios";
 import { SearchTask } from "../../../model/task/SearchTask";
-import { UpdateTask } from "../../../model/task/UpdateTask";
-import { TaskComment } from "../../../model/task/TaskComment";
-import { FileDictionary, transformZipToListOfCommentFiles } from "../../../util/ZIp";
-import { CreateTaskRq } from "./useTaskHttpDto";
+import { CreateTaskRq, UpdateTaskRq } from "./useTaskHttpDto";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<SearchTask[]> =>
@@ -25,10 +22,10 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const putTask = (task: UpdateTask): Promise<Task> =>
+    const putTask = (task: UpdateTaskRq): Promise<Task> =>
         axiosInstance.put("/task", task, {
             headers: {
-                'Content-Type': 'application/json;charset=utf-8'
+                'Content-Type': 'application/json'
             }
         })
             .then((response: AxiosResponse) => {
@@ -44,7 +41,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
     const postTask = (task: CreateTaskRq): Promise<Task> =>
         axiosInstance.post("/task", task, {
             headers: {
-                'Content-Type': 'application/json;charset=utf-8'
+                'Content-Type': 'application/json'
             }
         })
             .then((response: AxiosResponse) => {
@@ -70,69 +67,6 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const getTaskComments = (variables: {
-        taskKey?: string
-    }): Promise<TaskComment[]> =>
-        axiosInstance.get(`task/${variables.taskKey}/comment`)
-            .then(async (response: AxiosResponse) => {
-                if (response.data.length > 0) {
-                    const fileDictionary = await getTaskCommentsFiles({ commentIds: response.data.map((taskComment: TaskComment) => taskComment.id) })
-                    return response.data.map((comment: TaskComment) => {
-                        return {
-                            ...comment,
-                            files: fileDictionary[comment.id] || []
-                        }
-                    })
-                } else {
-                    return []
-                }
-            })
-
-    const getTaskCommentsFiles = (variables: {
-        commentIds: string[]
-    }): Promise<FileDictionary> =>
-        axiosInstance.get(`/comment/file`, {
-            params: {
-                commentIds: variables.commentIds
-            },
-            responseType: 'arraybuffer'
-        })
-            .then(async (response: AxiosResponse) => {
-                var files = await transformZipToListOfCommentFiles(response.data)
-                return files
-            })
-
-    const saveTaskComment = (
-        taskKey: string,
-        text: string,
-        zippedFiles?: ArrayBuffer
-    ): Promise<void> =>
-        zippedFiles ? axiosInstance.post(`/task/${taskKey}/comment`, {
-            zippedFiles: new Blob([zippedFiles]),
-            text: text,
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }) : axiosInstance.post(`/task/${taskKey}/comment`, {
-            text: text,
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-
-    const deleteCommentFile = (
-        commentId: string,
-        filename: string
-    ): Promise<void> =>
-        axiosInstance.delete(`/comment/${commentId}/file/${filename}`)
-
-    const deleteComment = (
-        commentId: string
-    ): Promise<void> =>
-        axiosInstance.delete(`/comment/${commentId}`)
-
     return {
         getTaskStatuses,
         getTaskTypes,
@@ -143,10 +77,5 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         closeTask,
         getAllowedTaskStatuses,
         getTasksToSearch,
-        getTaskComments,
-        saveTaskComment,
-        getTaskCommentsFiles,
-        deleteCommentFile,
-        deleteComment
     }
 }

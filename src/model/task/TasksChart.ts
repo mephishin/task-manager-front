@@ -18,3 +18,9 @@ export interface Task {
     type: string,
     status: string
 }
+
+export function getLabel(participant: Participant): string {
+    return participant.group
+        ? participant.lastName + " " + participant.firstName + " " + participant.group
+        : participant.lastName + " " + participant.firstName;
+}
