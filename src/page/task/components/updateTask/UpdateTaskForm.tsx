@@ -12,9 +12,7 @@ import {AutocompleteController, InputController} from "../../../../components/fo
 interface UpdateTaskFormProps {
     taskKey: string,
     task: Task,
-    participants: Users[],
-    types: string[],
-    updateTask: SubmitHandler<UpdateTask>
+    participants: Users[],updateTask: SubmitHandler<UpdateTask>
 }
 
 export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: UpdateTaskFormProps) => {
@@ -24,7 +22,6 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
             name: task.name,
             description: task.description,
             status: task.status,
-            type: task.type,
             assignee: {id: AuthService.getId(), name: AuthService.getFullName()}
         },
         resolver: zodResolver(UpdateTaskFormValidationSchema)

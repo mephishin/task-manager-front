@@ -8,6 +8,7 @@ const client = new Keycloak({
 
 const PARTICIPANT_ROLE = 'task-manager_participant'
 const LEADER_ROlE = 'task-manager_leader'
+const ADMIN_ROLE = 'task-manager_admin'
 
 const initKeycloak = (onAuthenticatedCallback:any) => {
     client
@@ -78,6 +79,7 @@ const AuthService = {
     getFullName,
     PARTICIPANT_ROLE,
     LEADER_ROlE,
+    ADMIN_ROLE
 }
 
 export default AuthService;

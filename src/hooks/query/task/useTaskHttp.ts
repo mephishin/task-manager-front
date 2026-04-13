@@ -5,7 +5,7 @@ import { CreateTaskRq, UpdateTaskRq } from "./useTaskHttpDto";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
     const getTasksToSearch = (): Promise<SearchTask[]> =>
-        axiosInstance.get("/task/search")
+        axiosInstance.get("/task/search?filter=userProject")
             .then((response: AxiosResponse) => {
                 return response.data
             })

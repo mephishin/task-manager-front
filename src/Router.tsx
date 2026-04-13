@@ -5,7 +5,7 @@ import { NavigationAppBar } from "./page/bar/NavigationAppBar";
 import { TaskPage } from "./page/task/TaskPage";
 import { SearchProjectPage } from "./page/searchProject/SearchProjectPage";
 import { useAuthParticipantProjectGet } from "./hooks/query/project/useProject";
-import { SearchTaskPage } from "./page/searchTask/SearchTaskPage";
+import { SearchTaskTab } from "./page/project/components/searchTask/SearchTaskTab";
 
 export const Router = () => {
     const authUsersProject = useAuthParticipantProjectGet();
@@ -20,7 +20,7 @@ export const Router = () => {
                             } />
                         <Route path="/project/:projectId/:projectName" element={<ProjectPage />} />
                         <Route path="/projectSearch" element={<SearchProjectPage />} />
-                        <Route path="/taskSearch" element={<SearchTaskPage />} />
+                        <Route path="/taskSearch" element={<SearchTaskTab />} />
                         <Route path="*" element={<NoPage />} />
                         <Route path="/task/:key" element={<TaskPage />} />
                     </Route>

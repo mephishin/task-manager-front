@@ -12,7 +12,6 @@ export const UpdateTaskFormValidationSchema = z.object({
     name: z.string({ error: 'Обязательное поле' }),
     description: z.string({ error: 'Обязательное поле' }),
     status: z.string({ error: 'Обязательное поле' }),
-    type: z.string({ error: 'Обязательное поле' }),
     assignee: UpdateTaskFormAssigneeValidationSchema,
 });
 

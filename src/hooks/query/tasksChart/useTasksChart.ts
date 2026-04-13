@@ -1,4 +1,3 @@
-import {Project} from "../../../model/project/Project";
 import {getKey} from "../QueryUtility";
 import {useTasksChartHttp} from "./useTasksChartHttp";
 import {useQuery} from "@tanstack/react-query";

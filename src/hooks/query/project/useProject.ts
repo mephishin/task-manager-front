@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
-import { Project } from "../../../model/project/Project";
 import { useProjectHttp } from "./useProjectHttp";
 import { useCreateAxiosInstance } from "../HttpUtils";
+import {Project} from "./useProjectHttpDto";
 
 const KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE', 'QUERY'),
@@ -22,7 +22,16 @@ export function useProjectsGet() {
     });
 }
 
-export function useProjectsFilesGet(projectId: string) {
+export function useProjectGetById(projectId: string) {
+    const { getProjectById } = useProjectHttp(useCreateAxiosInstance());
+
+    return useQuery({
+        queryKey: [KEYS.get, projectId],
+        queryFn: () => getProjectById(projectId),
+    });
+}
+
+export function useProjectFilesGet(projectId: string) {
     const { getProjectsFiles } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
@@ -35,7 +44,7 @@ export function useAuthParticipantProjectGet() {
     const { getProjectByAuth } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.get],
+        queryKey: [KEYS.get, "Auth"],
         queryFn: getProjectByAuth
     });
 }
@@ -52,22 +61,25 @@ export function useProjectCreate() {
     });
 }
 
-export function useProjectFilesSave() {
-    const { saveProjectFiles } = useProjectHttp(useCreateAxiosInstance());
+export function useProjectInfoSave(projectId: string) {
+    const { updateProject } = useProjectHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationKey: [KEYS.saveProjectFile],
         mutationFn: (variables: {
-            files: File[],
-            projectId: string,
+            files?: ArrayBuffer,
+            description: string
         }) =>
-            saveProjectFiles(
+            updateProject(
+                variables.description,
+                projectId,
                 variables.files,
-                variables.projectId
             ),
-        onSuccess: () =>
-                    queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] })
+        onSuccess: () => Promise.all([
+            queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] }),
+            queryClient.invalidateQueries({ queryKey: [KEYS.get, projectId] })
+        ])
     });
 }
 

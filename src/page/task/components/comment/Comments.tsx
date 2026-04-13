@@ -19,13 +19,18 @@ const deleteButtonStyle = {
 
 const commentStyle = {
     backgroundColor: "white",
-    borderRadius: 5,
+    borderRadius: 1,
     width: '100%',
 };
 
 interface CommentsProps {
     comments: TaskComment[]
 }
+
+const commentHeadStyle = {
+    color: 'text.primary',
+    display: 'inline'
+};
 
 export const Comments = ({comments}: CommentsProps) => {
     const {key} = useParams();
@@ -61,7 +66,7 @@ export const Comments = ({comments}: CommentsProps) => {
                     <ListItem secondaryAction={
                         <Typography
                             variant="body1"
-                            sx={{color: 'text.primary', display: 'inline'}}>
+                            sx={commentHeadStyle}>
                             {comment.created.toString()}
                         </Typography>}>
                         <Typography
@@ -100,7 +105,7 @@ export const Comments = ({comments}: CommentsProps) => {
                     {comment.files.length > 0 &&
                         <List>
                             {comment.files.map(file =>
-                                <ListItem sx={{minWidth: 200, maxWidth: 250}} secondaryAction={
+                                <ListItem sx={{minWidth: 200, maxWidth: 300}} secondaryAction={
                                     isAuthUserComment(comment)
                                     && comment.id === isEditing
                                     && <IconButton

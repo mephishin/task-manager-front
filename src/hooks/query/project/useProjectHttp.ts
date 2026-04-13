@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { Project } from "../../../model/project/Project";
-import { transformFilesToZip, transformZipToFiles } from "../../../util/ZIp";
-import { CreateProjectRq } from "./useProjectHttpDto";
+import { transformZipToFiles } from "../../../util/ZIp";
+import {CreateProjectRq, Project} from "./useProjectHttpDto";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>
@@ -12,6 +11,12 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
 
     const getProjectByAuth = (): Promise<Project> =>
         axiosInstance.get("/project?filter=auth")
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
+    const getProjectById = (projectId: string): Promise<Project> =>
+        axiosInstance.get(`/project/${projectId}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -35,17 +40,19 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const saveProjectFiles = (
-        files: File[],
-        projectId: string
+    const updateProject = (
+        description: string,
+        projectId: string,
+        files?: ArrayBuffer
     ): Promise<void> =>
-        transformFilesToZip(files).then(zippedFiles => axiosInstance.post(`/project/${projectId}/file`, {
-            zippedFiles: new Blob([zippedFiles])
+        axiosInstance.put(`/project/${projectId}`, {
+            zippedFiles: files ? new Blob([files]) : null,
+            description: description
         }, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }))
+        })
 
     const deleteProjectFile = (
         projectId: string,
@@ -63,7 +70,8 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         getProjectByAuth,
         createProject,
         getProjectsFiles,
-        saveProjectFiles,
-        deleteProjectFile
+        updateProject,
+        deleteProjectFile,
+        getProjectById
     }
 }

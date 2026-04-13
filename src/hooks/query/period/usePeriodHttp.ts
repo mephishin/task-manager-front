@@ -1,5 +1,4 @@
 import {AxiosInstance, AxiosResponse} from "axios";
-import {Project} from "../../../model/project/Project";
 import {Period} from "../../../model/period/Period";
 
 export function usePeriodHttp(axiosInstance: AxiosInstance) {

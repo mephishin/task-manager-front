@@ -1,8 +1,10 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import {Box, Tab, Tabs, Typography} from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { TasksChart } from "./components/taskChart/TasksChart";
-import { ProjectInfoPage } from "../projectInfo/ProjectInfoPage";
+import {useParams} from "react-router-dom";
+import {TasksChart} from "./components/taskChart/TasksChart";
+import {ProjectInfo} from "./components/projectInfo/ProjectInfo";
+import {SearchTaskTab} from "./components/searchTask/SearchTaskTab";
+import {CreateTaskTab} from "./components/createTask/CreateTaskTab";
 
 
 interface TabPanelProps {
@@ -12,7 +14,7 @@ interface TabPanelProps {
 }
 
 function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
     return (
         <div
@@ -23,8 +25,8 @@ function TabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box>
-                    <Typography>{children}</Typography>
+                <Box sx={{p: 1}}>
+                    {children}
                 </Box>
             )}
         </div>
@@ -34,10 +36,10 @@ function TabPanel(props: TabPanelProps) {
 export const ProjectPage = () => {
     const [value, setValue] = React.useState(0);
 
-    const { projectId } = useParams();
+    const {projectId} = useParams();
 
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
@@ -54,16 +56,24 @@ export const ProjectPage = () => {
                     width: 200
                 }}
             >
-                <Tab label="Задачи" />
-                <Tab label="О проекте" />
+                <Tab label="О проекте"/>
+                <Tab label="Доска"/>
+                <Tab label="Задачи"/>
+                <Tab label="Создание задачи"/>
             </Tabs>
 
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{width: '100%'}}>
                 <TabPanel value={value} index={0}>
-                    <TasksChart projectId={projectId!} />
+                    <ProjectInfo projectId={projectId!}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ProjectInfoPage projectId={projectId!} />
+                    <TasksChart projectId={projectId!}/>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <SearchTaskTab/>
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <CreateTaskTab/>
                 </TabPanel>
             </Box>
         </Box>

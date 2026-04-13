@@ -1,6 +1,5 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
-import { Project } from "../../../model/project/Project";
 import { usePeriodGet } from "../../../hooks/query/period/usePeriod";
 
 interface PeriodBarProps {

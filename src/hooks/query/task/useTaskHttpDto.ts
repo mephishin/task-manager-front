@@ -1,9 +1,8 @@
 export interface CreateTaskRq {
     name: string,
     description: string,
-    type: string,
+    assignee?: string,
     project: string,
-    assignee: string,
 }
 
 export interface UpdateTaskRq {

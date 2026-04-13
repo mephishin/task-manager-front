@@ -1,7 +1,19 @@
-import { Box, Button, Card, CardContent, Menu, MenuItem, Typography } from "@mui/material"
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Grid2,
+    Link,
+    Menu,
+    MenuItem,
+    Typography
+} from "@mui/material"
 import * as React from "react";
-import { useAllowedTaskStatusesGet, useChangeTaskStatus } from "../../../../hooks/query/task/useTask";
+import {useAllowedTaskStatusesGet, useChangeTaskStatus} from "../../../../hooks/query/task/useTask";
 import {getLabel, Participant, Task} from "../../../../model/task/TasksChart";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 interface TaskCardProps {
     handleLink: (task: Task) => void,
@@ -9,7 +21,7 @@ interface TaskCardProps {
     participant?: Participant,
 }
 
-export const TaskCard = ({ handleLink, task, participant }: TaskCardProps) => {
+export const TaskCard = ({handleLink, task, participant}: TaskCardProps) => {
     const getAllowedStatuses = useAllowedTaskStatusesGet(task.key);
     const changeTaskStatus = useChangeTaskStatus(task.key);
 
@@ -18,7 +30,7 @@ export const TaskCard = ({ handleLink, task, participant }: TaskCardProps) => {
     const handleCloseNavMenu = () => setAnchorElNav(null);
 
     const handleSelectNavMenu = (event: any) => {
-        changeTaskStatus.mutate({ key: task.key, status: event.currentTarget.innerText })
+        changeTaskStatus.mutate({key: task.key, status: event.currentTarget.innerText})
         handleCloseNavMenu()
     };
 
@@ -29,46 +41,46 @@ export const TaskCard = ({ handleLink, task, participant }: TaskCardProps) => {
     if (!getAllowedStatuses.isPending) {
         return (
             <Card>
-                <CardContent>
-                    <Button onClick={() => handleLink(task)} sx={{ padding: 0, minHeight: 0, minWidth: 0 }}>
-                        {task.key}
-                    </Button>
-                    <Typography sx={{ color: '#5E6C84' }}>
+                <CardHeader sx={{p: 1}} title={<Grid2 container>
+                    <Grid2 size={2}>
+                        <Link component="button" onClick={() => handleLink(task)}>
+                            <Typography color="primary">
+                                {task.key}
+                            </Typography>
+                        </Link>
+                    </Grid2>
+                    <Grid2 size={10} sx={{display: "flex", justifyContent: "right", alignItems: "center"}}>
+                        <Typography sx={{color: '#5E6C84'}}>
+                            {participant ? getLabel(participant) : "Без исполнителя"}
+                        </Typography>
+                    </Grid2>
+                </Grid2>}>
+                </CardHeader>
+                <CardContent sx={{p: 1}}>
+                    <Typography sx={{color: '#5E6C84'}}>
                         {task.name}
                     </Typography>
-                    {participant ?
-                        <Box>
-                            <Typography sx={{ color: '#5E6C84' }}>
-                                Исполнитель: {getLabel(participant)}
-                            </Typography>
-                            <Box>
-                                <Button sx={{ color: '#5E6C84' }}
-                                    id={task.key}
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleOpenNavMenu}
-                                    color="inherit" >
-                                    Поменять статус
-                                </Button>
-                                <Menu id={task.key}
-                                    anchorEl={anchorElNav}
-                                    keepMounted
-                                    open={Boolean(anchorElNav)}
-                                    onClose={handleCloseNavMenu} >
-
-                                    {getAllowedStatuses.data?.map((status) =>
-                                        <MenuItem id={status} key={status} onClick={handleSelectNavMenu}>
-                                            <Typography key={status} sx={{ textAlign: 'center' }}>{status}</Typography>
-                                        </MenuItem>)}
-                                </Menu>
-                            </Box>
-                        </Box>
-                        : <Typography sx={{ color: '#5E6C84' }}>
-                            Без исполнителя
-                        </Typography>}
                 </CardContent>
+                <CardActions sx={{display: "flex", justifyContent: "right"}}>
+                    <Button
+                        endIcon={<ArrowForwardIcon/>}
+                        id={task.key}
+                        onClick={handleOpenNavMenu}>
+                        <Typography color="primary">
+                            Статус
+                        </Typography>
+                    </Button>
+                    <Menu id={task.key}
+                          anchorEl={anchorElNav}
+                          keepMounted
+                          open={Boolean(anchorElNav)}
+                          onClose={handleCloseNavMenu}>
+                        {getAllowedStatuses.data?.map((status) =>
+                            <MenuItem id={status} key={status} onClick={handleSelectNavMenu}>
+                                <Typography key={status}>{status}</Typography>
+                            </MenuItem>)}
+                    </Menu>
+                </CardActions>
             </Card>
         )
     }
