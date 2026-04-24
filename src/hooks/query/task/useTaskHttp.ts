@@ -38,7 +38,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const postTask = (task: CreateTaskRq): Promise<Task> =>
+    const postTask = (task: CreateTaskRq): Promise<String> =>
         axiosInstance.post("/task", task, {
             headers: {
                 'Content-Type': 'application/json'

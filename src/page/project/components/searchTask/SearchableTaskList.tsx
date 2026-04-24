@@ -17,8 +17,7 @@ import {useNavigate} from "react-router-dom";
 export interface TaskOption {
     id: string;
     name: string;
-    project: string
-
+    status: string;
 }
 
 interface SearchableTaskListProps {
@@ -65,8 +64,9 @@ const SearchableList: React.FC<SearchableTaskListProps> = ({ options, label }) =
                 <Table size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Ключ задачи</TableCell>
+                            <TableCell>Название</TableCell>
+                            <TableCell>Статус</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -86,6 +86,11 @@ const SearchableList: React.FC<SearchableTaskListProps> = ({ options, label }) =
                                 <TableCell>
                                     <Typography color='#656565'>
                                         {row.name}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography color='#656565'>
+                                        {row.status}
                                     </Typography>
                                 </TableCell>
                             </TableRow>

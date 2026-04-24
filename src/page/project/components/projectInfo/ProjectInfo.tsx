@@ -97,7 +97,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
             <Stack sx={{backgroundColor: '#F4F5F7', p: 2, borderRadius: 1, gap: 2}}>
                 <Box sx={{borderRadius: 1, backgroundColor: "white", p: 1}}>
                     <Typography sx={typographyStyle} variant="h6">
-                        Устав проекта
+                        Устав проекта {getProjectById.data.name}
                     </Typography>
                 </Box>
                 <Grid2 container columns={20} sx={{borderRadius: 1, backgroundColor: "white", p: 2}}>

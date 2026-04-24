@@ -8,7 +8,7 @@ export const SearchTaskTab = () => {
         return (
             <SearchableList
                 options={tasks.data.map(task => {
-                    return {id: task.key, name: task.name, project: task.project}
+                    return {id: task.key, name: task.name, status: task.status}
                 })}
                 label="Поиск задачи"
             />

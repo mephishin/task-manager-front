@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Stack } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
@@ -23,16 +23,15 @@ const CreateTaskForm = ({ }: CreateTaskFormProps) => {
     const { projectId, projectName } = useParams();
 
     const users = useUsersGet();
-    const createTask = useTaskCreate();
+    const {mutate, isPending, isSuccess} = useTaskCreate();
 
     const onSubmit = (data: CreateTask) => {
-        createTask.mutate({
+        mutate({
             name: data.name,
             description: data.description,
             assignee: data.assignee?.id,
             project: projectId!,
         })
-        reset()
     }
 
     const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateTask>({

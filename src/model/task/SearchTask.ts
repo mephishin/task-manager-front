@@ -2,7 +2,7 @@ export interface SearchTask {
     key: string,
     name: string,
     description: string,
-    project: string,
+    status: string,
     assignee: string,
     reporter: string
 }

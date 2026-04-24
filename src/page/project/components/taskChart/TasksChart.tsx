@@ -44,7 +44,7 @@ export const TasksChart = ({projectId}: TaskTableProps) => {
                             <StatusCard status={_status}/>
                         </Grid2>)}
                 </Grid2>
-                <Stack gap={1} sx={scrollableStack}>
+                <Stack gap={4} sx={scrollableStack}>
                     {taskChartQuery.data.participants.map((participant) =>
                         <Grid2 container spacing={3}>
                             {taskStatusesQuery.data.map((_status) =>
