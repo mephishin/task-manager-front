@@ -17,7 +17,7 @@ export const TaskAutocomplete = () => {
         <Box>
             <FormControl sx={{minWidth: 300, backgroundColor: "white", borderRadius: 2, margin: 1, padding: 1}}>
                 <Autocomplete
-                    options={searchTasks.data}
+                    options={searchTasks.data!}
                     loading={searchTasks.isLoading}
                     onChange={(event, newValue) => onChangeSearchTaskHandler(newValue)}
                     getOptionLabel={(option: SearchTask) => option.name}

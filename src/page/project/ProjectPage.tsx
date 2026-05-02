@@ -5,6 +5,7 @@ import {TasksChart} from "./components/taskChart/TasksChart";
 import {ProjectInfo} from "./components/projectInfo/ProjectInfo";
 import {SearchTaskTab} from "./components/searchTask/SearchTaskTab";
 import {CreateTaskTab} from "./components/createTask/CreateTaskTab";
+import {ParticipantsInfo} from "./components/participants/ParticipantsInfo";
 
 
 interface TabPanelProps {
@@ -57,6 +58,7 @@ export const ProjectPage = () => {
                 }}
             >
                 <Tab label="О проекте"/>
+                <Tab label="Участники"/>
                 <Tab label="Доска"/>
                 <Tab label="Задачи"/>
                 <Tab label="Создание задачи"/>
@@ -67,12 +69,15 @@ export const ProjectPage = () => {
                     <ProjectInfo projectId={projectId!}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <TasksChart projectId={projectId!}/>
+                    <ParticipantsInfo projectId={projectId!}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <SearchTaskTab/>
+                    <TasksChart projectId={projectId!}/>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
+                    <SearchTaskTab/>
+                </TabPanel>
+                <TabPanel value={value} index={4}>
                     <CreateTaskTab/>
                 </TabPanel>
             </Box>

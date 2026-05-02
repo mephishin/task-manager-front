@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Stack } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateTask, UpdateTaskAssignee, UpdateTaskFormValidationSchema } from "./UpdateTaskFormScheme";
 import { Task } from "../../../../model/task/Task";
 import {getLabel, Users} from "../../../../model/participant/Participant";
-import AuthService from "../../../../AuthService";
 import {AutocompleteController, InputController} from "../../../../components/forms/FormFieldsControllers";
+import {useTaskUpdate} from "../../../../hooks/query/task/useTask";
 
 interface UpdateTaskFormProps {
     taskKey: string,
@@ -16,21 +16,36 @@ interface UpdateTaskFormProps {
 }
 
 export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: UpdateTaskFormProps) => {
-    const { control, handleSubmit, formState: { errors } } = useForm<UpdateTask>({
+    const { control, handleSubmit, formState: { errors }, resetField } = useForm<UpdateTask>({
         defaultValues: {
             key: taskKey,
             name: task.name,
             description: task.description,
             status: task.status,
-            assignee: {id: AuthService.getId(), name: AuthService.getFullName()}
+            assignee: {id: task.assignee, name: task.assignee}
         },
         resolver: zodResolver(UpdateTaskFormValidationSchema)
     })
 
     const onSubmit = (data: UpdateTask) => {
         console.log(data)
-        updateTask(data)
+        mutate({
+            key: data.key,
+            name: data.name,
+            assignee: data.assignee.id,
+            description: data.description,
+        })
     }
+
+    const {mutate, isSuccess, isPending} = useTaskUpdate(task.key);
+
+    useEffect(() => {
+        if (isSuccess && !isPending) {
+            resetField("assignee", {defaultValue: {id: task.assignee, name: task.assignee}});
+            resetField("name", {defaultValue: task.name});
+            resetField("description", {defaultValue: task.description});
+        }
+    }, [isPending, isSuccess, resetField]);
 
     return (
             <Stack>

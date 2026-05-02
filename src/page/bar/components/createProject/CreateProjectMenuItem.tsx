@@ -3,7 +3,7 @@ import { Box, MenuItem, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import { CreateProjectForm } from "./CreateProjectForm";
 import AuthService from "../../../../AuthService";
-import { useUsersGet } from "../../../../hooks/query/users/useUsers";
+import { useUsersByProjectIdGet } from "../../../../hooks/query/users/useUsers";
 import { CreateProject } from "./CreateProjectFormSchema";
 import { useProjectCreate } from "../../../../hooks/query/project/useProject";
 
@@ -24,7 +24,7 @@ interface CreateProjectMenuItemProps {
 }
 
 export const CreateProjectMenuItem = ({ onClose }: CreateProjectMenuItemProps) => {
-    const users = useUsersGet();
+    const users = useUsersByProjectIdGet();
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
     const onSubmitCreateProject = (data: CreateProject) => {
         createProject.mutate({

@@ -22,15 +22,12 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
-    const putTask = (task: UpdateTaskRq): Promise<Task> =>
+    const putTask = (task: UpdateTaskRq): Promise<void> =>
         axiosInstance.put("/task", task, {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-            .then((response: AxiosResponse) => {
-                return response.data
-            })
 
     const getTask = (key: string | undefined): Promise<Task> =>
         axiosInstance.get(`/task/${key}`)

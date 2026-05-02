@@ -3,11 +3,15 @@ import { getKey } from "../QueryUtility";
 import { useProjectHttp } from "./useProjectHttp";
 import { useCreateAxiosInstance } from "../HttpUtils";
 import {Project} from "./useProjectHttpDto";
+import {data} from "react-router-dom";
+import AuthService from "../../../AuthService";
 
 const KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE', 'QUERY'),
     get: getKey('GET', 'PROJECT', 'SINGLE', 'QUERY'),
     create: getKey('POST', 'PROJECT', 'SINGLE', 'MUTATION'),
+    getInvite: getKey('GET', 'PROJECT-INVITE', 'SINGLE', 'QUERY'),
+    acceptInvite: getKey('GET', 'PROJECT-INVITE', 'SINGLE', 'MUTATION'),
     getAllProjectFiles: getKey('GET', 'PROJECT-FILE', 'MULTIPLE', 'QUERY'),
     saveProjectFile: getKey('POST', 'PROJECT-FILE', 'SINGLE', 'MUTATION'),
 }
@@ -18,7 +22,6 @@ export function useProjectsGet() {
     return useQuery({
         queryKey: [KEYS.getAll],
         queryFn: getProjects,
-        initialData: new Array<Project>()
     });
 }
 
@@ -44,8 +47,29 @@ export function useAuthParticipantProjectGet() {
     const { getProjectByAuth } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.get, "Auth"],
+        queryKey: [KEYS.get, AuthService.getId()],
         queryFn: getProjectByAuth
+    });
+}
+
+export function useProjectInviteGet(projectId: string) {
+    const { getProjectInviteByProjectId } = useProjectHttp(useCreateAxiosInstance());
+
+    return useQuery({
+        queryKey: [KEYS.getInvite, projectId],
+        queryFn: () => getProjectInviteByProjectId(projectId)
+    });
+}
+
+export function useProjectInviteAccept() {
+    const { acceptProjectInvite } = useProjectHttp(useCreateAxiosInstance());
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: [KEYS.acceptInvite],
+        mutationFn: (inviteKey: string) => acceptProjectInvite(inviteKey),
+        onSuccess: (data) =>
+            queryClient.invalidateQueries({ queryKey: [KEYS.get, AuthService.getId()] })
     });
 }
 

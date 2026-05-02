@@ -8,12 +8,12 @@ const KEYS = {
     get: getKey('GET', 'PARTICIPANT', 'MULTIPLE','QUERY')
 }
 
-export function useUsersGet() {
+export function useUsersByProjectIdGet(projectId?: string) {
     const { getParticipants } = useUsersHttp(useCreateAxiosInstance());
 
     return useQuery({
         queryKey: [KEYS.get],
-        queryFn: getParticipants,
-        initialData: new Array<Users>()
+        queryFn: () => getParticipants(projectId!),
+        enabled: !!projectId
     });
 }

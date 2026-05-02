@@ -2,13 +2,13 @@ import {AxiosInstance, AxiosResponse} from "axios";
 import {Users} from "../../../model/participant/Participant";
 
 export function useUsersHttp(axiosInstance: AxiosInstance) {
-    const getParticipants = (): Promise<Array<Users>> =>
-        axiosInstance.get("/users")
+    const getParticipantsByProjectId = (projectId: string): Promise<Array<Users>> =>
+        axiosInstance.get(`/users?projectId=${projectId}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
 
     return {
-        getParticipants
+        getParticipants: getParticipantsByProjectId
     }
 }

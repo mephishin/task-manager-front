@@ -12,7 +12,7 @@ import {
 import { getLabel } from "../../../../model/participant/Participant";
 import AuthService from "../../../../AuthService";
 import { AutocompleteController, InputController } from "../../../../components/forms/FormFieldsControllers";
-import {useUsersGet} from "../../../../hooks/query/users/useUsers";
+import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
 import {useTaskCreate} from "../../../../hooks/query/task/useTask";
 import {useParams} from "react-router-dom";
 
@@ -22,7 +22,7 @@ interface CreateTaskFormProps {
 const CreateTaskForm = ({ }: CreateTaskFormProps) => {
     const { projectId, projectName } = useParams();
 
-    const users = useUsersGet();
+    const users = useUsersByProjectIdGet(projectId);
     const {mutate, isPending, isSuccess} = useTaskCreate();
 
     const onSubmit = (data: CreateTask) => {
@@ -61,7 +61,7 @@ const CreateTaskForm = ({ }: CreateTaskFormProps) => {
                     label={'Исполнитель'}
                     control={control}
                     name={"assignee"}
-                    options={users.data.map(user => { return { id: user.id, name: getLabel(user) }; })}
+                    options={users.data.filter(user => user.project).map(user => { return { id: user.id, name: getLabel(user) }; })}
                     errors={errors}
                     getLabel={(assignee: CreateTaskAssignee) => assignee?.name ? assignee?.name : ""}
                     getId={(assignee: CreateTaskAssignee) => assignee?.id ? assignee.id : ""} />

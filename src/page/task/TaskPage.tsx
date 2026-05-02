@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Box, CircularProgress, Grid2, IconButton, List, Stack, TextField, Typography} from "@mui/material";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import {useTaskGet, useTaskTypesGet, useTaskUpdate} from "../../hooks/query/task/useTask";
-import {useUsersGet} from "../../hooks/query/users/useUsers";
+import {useUsersByProjectIdGet} from "../../hooks/query/users/useUsers";
 import {formatISORus} from "../../util/LocalInterval";
 import {UpdateTask} from "./components/updateTask/UpdateTaskFormScheme";
 import {UpdateTaskForm} from "./components/updateTask/UpdateTaskForm";
@@ -68,8 +68,8 @@ export const TaskPage = () => {
     const {key} = useParams();
     const navigate = useNavigate();
 
-    const participantsQuery = useUsersGet();
     const taskQuery = useTaskGet(key);
+    const participantsQuery = useUsersByProjectIdGet(taskQuery.data?.project?.id);
     const updateTaskMutation = useTaskUpdate(key);
     const taskComments = useTaskCommentsGet(key!)
 
@@ -84,9 +84,7 @@ export const TaskPage = () => {
     }
 
     return (<Box sx={mainBoxStyle}>
-        {(participantsQuery.isFetched && participantsQuery.data
-            && taskQuery.isFetched && taskQuery.data
-        ) ? (
+        { (participantsQuery.data && taskQuery.data ) && (
             <Box sx={boxStyle}>
                 <Grid2 container spacing={2}>
                     <Grid2>
@@ -134,7 +132,7 @@ export const TaskPage = () => {
                     </Grid2>
                 </Grid2>
             </Box>
-        ) : <CircularProgress color={"secondary"}/>}
+        )}
     </Box>)
 }
 

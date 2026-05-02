@@ -33,7 +33,6 @@ export function useSearchTaskGet() {
     return useQuery({
         queryKey: [KEYS.getSearchTasks],
         queryFn: getTasksToSearch,
-        initialData: new Array<SearchTask>()
     })
 }
 
@@ -43,7 +42,6 @@ export function useTaskTypesGet() {
     return useQuery({
         queryKey: [KEYS.getTaskTypes],
         queryFn: getTaskTypes,
-        initialData: new Array<string>()
     });
 }
 
@@ -53,7 +51,6 @@ export function useTaskStatusesGet(key?: string) {
     return useQuery({
         queryKey: [KEYS.getTaskStatuses, key],
         queryFn: () => getTaskStatuses(key),
-        initialData: new Array<string>()
     });
 }
 

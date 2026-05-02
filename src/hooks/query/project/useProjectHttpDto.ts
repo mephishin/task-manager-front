@@ -23,5 +23,10 @@ export interface Project {
     key: string,
     name: string,
     description: string,
-    participant: Participant[]
+    participants: Participant[]
+}
+
+export interface ProjectInviteRs {
+    key: string,
+    projectId: string,
 }

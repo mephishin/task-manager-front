@@ -234,6 +234,9 @@ interface MultipleAutocompleteControllerProps<T> {
     errors?: FieldErrors<any>
 }
 
+type ComposedMultipleAutocompleteControllerProps = MultipleAutocompleteControllerProps<any> & ComponentPropsWithoutRef<typeof Autocomplete>;
+
+
 export function MultipleAutocompleteController<T, >({
                                                         label,
                                                         control,
@@ -241,7 +244,8 @@ export function MultipleAutocompleteController<T, >({
                                                         options,
                                                         errors,
                                                         getId,
-                                                        getLabel
+                                                        getLabel,
+    ...autocompleteProps
                                                     }: MultipleAutocompleteControllerProps<T>) {
     const {
         field,
@@ -267,7 +271,6 @@ export function MultipleAutocompleteController<T, >({
                 label={label}
                 error={!!errors?.[name]}
                 helperText={errors?.[name]?.message?.toString()}/>}
-            sx={{margin: 5}}
         >
         </Autocomplete>
     )

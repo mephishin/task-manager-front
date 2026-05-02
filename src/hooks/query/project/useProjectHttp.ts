@@ -1,6 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { transformZipToFiles } from "../../../util/ZIp";
+import axios, {AxiosInstance, AxiosResponse} from "axios";
+import {transformZipToFiles} from "../../../util/ZIp";
 import {CreateProjectRq, Project} from "./useProjectHttpDto";
+import {files} from "jszip";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>
@@ -17,6 +18,20 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
 
     const getProjectById = (projectId: string): Promise<Project> =>
         axiosInstance.get(`/project/${projectId}`)
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
+    const getProjectInviteByProjectId = (projectId: string): Promise<String> =>
+        axiosInstance.get(`/project/${projectId}/invite`)
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
+    const acceptProjectInvite = (
+        inviteKey: string,
+    ): Promise<string> =>
+        axiosInstance.put(`/project/acceptInvite/${inviteKey}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -59,7 +74,7 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         filename: string
     ): Promise<void> =>
         axiosInstance.delete(`/project/${projectId}/file`, {
-            data: axios.toFormData({ "filename": filename }),
+            data: axios.toFormData({"filename": filename}),
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -72,6 +87,8 @@ export function useProjectHttp(axiosInstance: AxiosInstance) {
         getProjectsFiles,
         updateProject,
         deleteProjectFile,
-        getProjectById
+        getProjectById,
+        getProjectInviteByProjectId,
+        acceptProjectInvite,
     }
 }
