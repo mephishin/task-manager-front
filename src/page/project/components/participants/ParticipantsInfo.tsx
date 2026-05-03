@@ -11,18 +11,16 @@ import {
     Typography
 } from "@mui/material";
 import React, {useState} from "react";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
     useProjectGetById, useProjectInviteGet
 } from "../../../../hooks/query/project/useProject";
-import AuthService from "../../../../AuthService";
 import PersonIcon from '@mui/icons-material/Person';
 import {getLabel, Participant} from "../../../../hooks/query/project/useProjectHttpDto";
-import {useRemoveUserFromProject, useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
+import {useRemoveUserFromProject} from "../../../../hooks/query/users/useUsers";
 import Button from "@mui/material/Button";
+import {useAuthService} from "../../../../AuthProvider";
 interface ProjectInfoPageProps {
     projectId: string
 }
@@ -60,7 +58,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectInviteByProjectId = useProjectInviteGet(projectId);
     const {mutate} = useRemoveUserFromProject(projectId)
 
-    const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
+    const {hasRole, LEADER_ROLE, getId} = useAuthService();
 
     const [open, setOpen] = useState("");
 
@@ -94,7 +92,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                     <List>
                         {getProjectById.data?.participants.map((participant) => (
                             <ListItem secondaryAction={
-                                isLeader && AuthService.getId() !== participant.id && (
+                                hasRole(LEADER_ROLE) && getId() !== participant.id && (
                                     <>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleClickOpen(participant)}>
                                             <DeleteIcon/>

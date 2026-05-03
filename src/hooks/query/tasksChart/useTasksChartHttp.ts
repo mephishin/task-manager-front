@@ -1,22 +1,11 @@
-import axios from "axios";
-import AuthService from "../../../AuthService";
+import axios, {AxiosInstance} from "axios";
 import {TasksChart} from "../../../model/task/TasksChart";
 import {AxiosResponse} from "axios";
 
-export function useTasksChartHttp() {
-    const api = axios.create({
-        baseURL: "http://localhost:8080"
-    });
-
-    api.interceptors.request.use(async (config: any) => {
-        if (AuthService.isLoggedIn()) {
-            await AuthService.updateToken(() => config.headers.Authorization = `Bearer ${AuthService.getToken()}`)
-            return config
-        }
-    })
+export function useTasksChartHttp(axiosInstance: AxiosInstance) {
 
     const getTasksChart = (projectId?: string): Promise<TasksChart> =>
-        api.get<TasksChart>(projectId ? `/tasksChart?projectId=${projectId}` : `/tasksChart`)
+        axiosInstance.get<TasksChart>(projectId ? `/tasksChart?projectId=${projectId}` : `/tasksChart`)
             .then((response: AxiosResponse) => {
                 return response.data
             })

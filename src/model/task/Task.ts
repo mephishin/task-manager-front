@@ -1,4 +1,3 @@
-import {Users} from "../../hooks/query/users/Participant";
 
 export interface Task {
     key: string,

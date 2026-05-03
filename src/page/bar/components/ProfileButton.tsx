@@ -1,9 +1,11 @@
 import * as React from "react";
 import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
-import AuthService from "../../../AuthService";
+import {useAuthService} from "../../../AuthProvider";
 
 export const ProfileButton = () => {
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
+
+    const {logout, getRoles} = useAuthService();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -28,12 +30,12 @@ export const ProfileButton = () => {
             >
                 <MenuItem key="Logout" onClick={() => {
                     handleCloseUserMenu();
-                    AuthService.doLogout();
+                    logout();
                 }}>
                     <Typography sx={{textAlign: 'center'}}>Выйти</Typography>
                 </MenuItem>
                 <MenuItem key="Role">
-                    <Typography sx={{textAlign: 'center'}}>Роли: {AuthService.getRoles()}</Typography>
+                    <Typography sx={{textAlign: 'center'}}>Роли: {getRoles()}</Typography>
                 </MenuItem>
             </Menu>
         </Box>

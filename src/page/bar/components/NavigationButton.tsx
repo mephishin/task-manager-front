@@ -2,8 +2,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import AuthService from "../../../AuthService";
-import {CreateProjectMenuItem} from "./createProject/CreateProjectMenuItem";
 
 interface NavigationButtonProps {
 }
@@ -41,12 +39,6 @@ export const NavigationButton = ({}: NavigationButtonProps) => {
                 <MenuItem onClick={() => handleCloseNavMenu("/")}>
                     <Typography sx={{textAlign: 'center'}}>Мой проект</Typography>
                 </MenuItem>
-                {AuthService.hasRole(AuthService.ADMIN_ROLE) && (
-                    <MenuItem onClick={() => handleCloseNavMenu("projectSearch")}>
-                        <Typography sx={{textAlign: 'center'}}>Найти проект</Typography>
-                    </MenuItem>)}
-                {AuthService.hasRole(AuthService.ADMIN_ROLE) && (
-                    <CreateProjectMenuItem onClose={() => handleCloseNavMenu(undefined)}/>)}
             </Menu>
         </Box>
     )

@@ -9,21 +9,23 @@ import {
     CreateTaskAssignee,
     createTaskFormValidationSchema
 } from "./CreateTaskFormSchema";
-import { getLabel } from "../../../../hooks/query/users/Participant";
-import AuthService from "../../../../AuthService";
+import { getLabel } from "../../../../hooks/query/users/useUsersHttpDto";
 import { AutocompleteController, InputController } from "../../../../components/forms/FormFieldsControllers";
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
 import {useTaskCreate} from "../../../../hooks/query/task/useTask";
 import {useParams} from "react-router-dom";
+import {useAuthService} from "../../../../AuthProvider";
 
 interface CreateTaskFormProps {
 }
 
 const CreateTaskForm = ({ }: CreateTaskFormProps) => {
-    const { projectId, projectName } = useParams();
+    const { projectId } = useParams();
 
     const users = useUsersByProjectIdGet(projectId);
-    const {mutate, isPending, isSuccess} = useTaskCreate();
+    const {mutate} = useTaskCreate();
+
+    const {getId, getFullName} = useAuthService();
 
     const onSubmit = (data: CreateTask) => {
         mutate({
@@ -36,7 +38,7 @@ const CreateTaskForm = ({ }: CreateTaskFormProps) => {
 
     const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateTask>({
         defaultValues: {
-            assignee: {id: AuthService.getId(), name: AuthService.getFullName()}
+            assignee: {id: getId(), name: getFullName()}
         } ,
         resolver: zodResolver(createTaskFormValidationSchema),
     })

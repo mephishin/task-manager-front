@@ -1,14 +1,16 @@
 import axios from "axios";
-import AuthService from "../../AuthService";
+import {useAuthService} from "../../AuthProvider";
 
 export function useCreateAxiosInstance() {
+    const {updateToken, getToken, isLoggedIn} = useAuthService();
+
     const axiosInstance = axios.create({
         baseURL: "http://localhost:8080"
     });
 
     axiosInstance.interceptors.request.use(async (config: any) => {
-        if (AuthService.isLoggedIn()) {
-            await AuthService.updateToken(() => config.headers.Authorization = `Bearer ${AuthService.getToken()}`)
+        if (isLoggedIn()) {
+            await updateToken(() => config.headers.Authorization = `Bearer ${getToken()}`)
             return config
         }
     })

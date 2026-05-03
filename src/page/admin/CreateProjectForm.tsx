@@ -5,18 +5,27 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProject, createProjectFormValidationSchema, CreateProjectParticipant } from "./CreateProjectFormSchema";
-import { getLabel, Users } from "../../../../hooks/query/users/Participant";
-import { InputController, MultipleAutocompleteController } from "../../../../components/forms/FormFieldsControllers";
+import {useProjectCreate} from "../../hooks/query/project/useProject";
+import {InputController, MultipleAutocompleteController} from "../../components/forms/FormFieldsControllers";
+import {getLabel} from "../../model/task/Task";
+import {useUsersByProjectIdGet} from "../../hooks/query/users/useUsers";
 
-interface CreateProjectFormProps {
-    onSubmit: SubmitHandler<CreateProject>,
-    participants: Array<Users>
-}
-
-export const CreateProjectForm = ({ onSubmit, participants }: CreateProjectFormProps) => {
+export const CreateProjectForm = () => {
     const { control, handleSubmit, formState: { errors } } = useForm<CreateProject>({
         resolver: zodResolver(createProjectFormValidationSchema)
     })
+
+    const onSubmit = (data: CreateProject) => {
+        createProject.mutate({
+            name: data.name,
+            description: data.description,
+            participants: data.participants.map(p => p.id),
+            taskPrefix: data.taskPrefix,
+        })
+    }
+    const createProject = useProjectCreate();
+    const {data: users} = useUsersByProjectIdGet();
+
 
     return (
         <Box sx={{ borderRadius: 20 }}>
@@ -44,7 +53,7 @@ export const CreateProjectForm = ({ onSubmit, participants }: CreateProjectFormP
                     control={control}
                     name={"participants"}
                     errors={errors}
-                    options={participants.map(participant => { return { id: participant.id, name: getLabel(participant) }; })}
+                    options={users?.map(participant => { return { id: participant.id, name: getLabel(participant) }; })}
                     getLabel={(option: CreateProjectParticipant) => option.name}
                     getId={(option: CreateProjectParticipant) => option.id} />
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>

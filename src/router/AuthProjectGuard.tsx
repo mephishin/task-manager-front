@@ -3,10 +3,9 @@ import {useAuthParticipantProjectGet} from "../hooks/query/project/useProject";
 import {CircularProgress} from "@mui/material";
 
 interface RoleGuardProps {
-    allowedRoles?: string[]
 }
 
-export const AuthProjectGuard = ({allowedRoles}: RoleGuardProps) => {
+export const AuthProjectGuard = ({}: RoleGuardProps) => {
     const location = useLocation();
     const {data, isLoading, isError, isSuccess} = useAuthParticipantProjectGet();
     const navigate = useNavigate();

@@ -11,7 +11,6 @@ import {
     Typography
 } from "@mui/material";
 import React, {useState} from "react";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,9 +18,9 @@ import {
     useProjectFileDelete,
     useProjectFilesGet, useProjectGetById
 } from "../../../../hooks/query/project/useProject";
-import AuthService from "../../../../AuthService";
 import {EditProjectInfoForm} from "./EditProjectInfoForm";
 import EditIcon from "@mui/icons-material/Edit";
+import {useAuthService} from "../../../../AuthProvider";
 
 interface ProjectInfoPageProps {
     projectId: string
@@ -72,7 +71,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectById = useProjectGetById(projectId);
     const deleteProjectFile = useProjectFileDelete();
 
-    const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
+    const {hasRole, LEADER_ROLE} = useAuthService();
 
     const handleDownloadFile = (file: File) => {
         const link = document.createElement('a');
@@ -122,7 +121,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
                         <List>
                             {getProjectFiles.data?.map((file) => (
                                 <ListItem key={file.name} secondaryAction={
-                                    isLeader && (
+                                    hasRole(LEADER_ROLE) && (
                                         <IconButton edge="end" aria-label="delete" onClick={() => {
                                             handleDeleteFile(file)
                                         }}>

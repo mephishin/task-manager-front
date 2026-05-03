@@ -1,7 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {transformZipToFiles} from "../../../util/ZIp";
 import {CreateProjectRq, Project} from "./useProjectHttpDto";
-import {files} from "jszip";
 
 export function useProjectHttp(axiosInstance: AxiosInstance) {
     const getProjects = (): Promise<Array<Project>> =>

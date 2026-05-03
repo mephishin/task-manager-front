@@ -227,7 +227,7 @@ export function SearchProjectAutocompleteController({
 interface MultipleAutocompleteControllerProps<T> {
     control: Control<any, any, any>,
     name: string,
-    options: T[],
+    options?: T[],
     getLabel: (option: T) => string,
     getId: (option: T) => string,
     label: string,
@@ -258,14 +258,14 @@ export function MultipleAutocompleteController<T, >({
     return (
         <Autocomplete
             multiple
-            value={field.value}
+            value={field.value ? field.value : []}
             onChange={(_, newValue) => {
                 field.onChange(newValue);
             }}
             onBlur={field.onBlur}
             getOptionLabel={getLabel}
             isOptionEqualToValue={(option: T, value: T) => getId(option) === getId(value)}
-            options={options}
+            options={options ? options : []}
             renderInput={(params) => <TextField
                 {...params}
                 label={label}

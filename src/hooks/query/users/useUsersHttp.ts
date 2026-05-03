@@ -1,5 +1,5 @@
 import {AxiosInstance, AxiosResponse} from "axios";
-import {Users} from "./Participant";
+import {Users} from "./useUsersHttpDto";
 
 export function useUsersHttp(axiosInstance: AxiosInstance) {
     const getParticipantsByProjectId = (projectId: string): Promise<Array<Users>> =>

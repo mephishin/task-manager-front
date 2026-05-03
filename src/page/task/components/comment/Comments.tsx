@@ -5,9 +5,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {useParams} from "react-router-dom";
 import {getLabel, TaskComment} from "../../../../model/task/TaskComment";
-import AuthService from "../../../../AuthService";
 import {EditCommentForm} from "./EditCommentForm";
 import {useCommentDelete, useCommentFileDelete} from "../../../../hooks/query/comment/useComment";
+import {useAuthService} from "../../../../AuthProvider";
 
 const deleteButtonStyle = {
     '&:hover': {
@@ -34,6 +34,7 @@ const commentHeadStyle = {
 
 export const Comments = ({comments}: CommentsProps) => {
     const {key} = useParams();
+    const {getUsername} = useAuthService();
 
     const deleteCommentFile = useCommentFileDelete(key!)
     const deleteComment = useCommentDelete(key!)
@@ -54,7 +55,7 @@ export const Comments = ({comments}: CommentsProps) => {
     };
 
     const isAuthUserComment = (comment: TaskComment): boolean => {
-        return AuthService.getUsername() === comment.author.username
+        return getUsername() === comment.author.username
     }
 
     const [isEditing, setIsEditing] = useState('');
