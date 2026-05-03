@@ -1,3 +1,5 @@
+import {Users} from "../../hooks/query/users/Participant";
+
 export interface Task {
     key: string,
     name: string,
@@ -5,7 +7,7 @@ export interface Task {
     status: string,
     type: string,
     project: Project,
-    assignee: string,
+    assignee: Assignee,
     reporter: string
     created: string,
     edited: string
@@ -15,5 +17,21 @@ export interface Task {
 export interface Project {
     id: string,
     name: string,
+}
+
+export interface Assignee {
+    id: string,
+    username: string,
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    group: string,
+    project: string
+}
+
+export function getLabel(participant?: Assignee): string {
+    return participant?.group
+        ? participant.lastName + " " + participant.firstName + " " + participant.group
+        : participant?.lastName + " " + participant?.firstName;
 }
 

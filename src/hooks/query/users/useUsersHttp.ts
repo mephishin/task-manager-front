@@ -1,5 +1,5 @@
 import {AxiosInstance, AxiosResponse} from "axios";
-import {Users} from "../../../model/participant/Participant";
+import {Users} from "./Participant";
 
 export function useUsersHttp(axiosInstance: AxiosInstance) {
     const getParticipantsByProjectId = (projectId: string): Promise<Array<Users>> =>
@@ -8,7 +8,11 @@ export function useUsersHttp(axiosInstance: AxiosInstance) {
                 return response.data
             })
 
+    const removeParticipantFromProject = (userId: string): Promise<void> =>
+        axiosInstance.delete(`/users/${userId}/project`)
+
     return {
-        getParticipants: getParticipantsByProjectId
+        getParticipants: getParticipantsByProjectId,
+        removeParticipantFromProject
     }
 }

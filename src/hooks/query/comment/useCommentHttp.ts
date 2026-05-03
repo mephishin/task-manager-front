@@ -19,8 +19,6 @@ export function useCommentHttp(axiosInstance: AxiosInstance) {
                         }
                     })
 
-                    console.log(res)
-
                     return res
                 } else {
                     return []

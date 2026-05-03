@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProject, createProjectFormValidationSchema, CreateProjectParticipant } from "./CreateProjectFormSchema";
-import { getLabel, Users } from "../../../../model/participant/Participant";
+import { getLabel, Users } from "../../../../hooks/query/users/Participant";
 import { InputController, MultipleAutocompleteController } from "../../../../components/forms/FormFieldsControllers";
 
 interface CreateProjectFormProps {

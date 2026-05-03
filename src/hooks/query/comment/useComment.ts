@@ -3,18 +3,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
 import { useCreateAxiosInstance } from "../HttpUtils";
 
-const KEYS = {
+const COMMENT_QUERY_KEYS = {
     getTaskComments: getKey('GET', 'TASK-COMMENT', 'MULTIPLE', 'QUERY'),
-    saveTaskComment: getKey("POST", 'TASK-COMMENT', 'SINGLE', 'MUTATION'),
-    deleteCommentFile: getKey('DELETE', 'COMMENT-FILE', 'SINGLE', 'MUTATION'),
-    updateTaskComment: getKey('PATCH', 'TASK-COMMENT', 'SINGLE', 'MUTATION')
 }
 
 export function useTaskCommentsGet(key: string) {
     const { getTaskComments } = useCommentHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getTaskComments, key],
+        queryKey: [COMMENT_QUERY_KEYS.getTaskComments, key],
         queryFn: () => getTaskComments({ taskKey: key })
     });
 }
@@ -24,13 +21,12 @@ export function useTaskCommentSave(key: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.saveTaskComment],
         mutationFn: (variables: {
             zippedFiles?: ArrayBuffer,
             text: string,
         }) => postTaskComment(key, variables.text, variables.zippedFiles),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, key] })
+            queryClient.invalidateQueries({ queryKey: [COMMENT_QUERY_KEYS.getTaskComments, key] })
     });
 }
 
@@ -39,14 +35,13 @@ export function useTaskCommentUpdate(key: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.updateTaskComment],
         mutationFn: (variables: {
             commentId: string,
             zippedFiles?: ArrayBuffer,
             text: string,
         }) => patchTaskComment(variables.commentId, variables.text, variables.zippedFiles),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, key] })
+            queryClient.invalidateQueries({ queryKey: [COMMENT_QUERY_KEYS.getTaskComments, key] })
     });
 }
 
@@ -55,7 +50,6 @@ export function useCommentFileDelete(taskKey: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.deleteCommentFile],
         mutationFn: (variables: {
             commentId: string,
             filename: string
@@ -65,7 +59,7 @@ export function useCommentFileDelete(taskKey: string) {
                 variables.filename
             ),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, taskKey] })
+            queryClient.invalidateQueries({ queryKey: [COMMENT_QUERY_KEYS.getTaskComments, taskKey] })
     });
 }
 
@@ -74,7 +68,6 @@ export function useCommentDelete(taskKey: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.deleteCommentFile],
         mutationFn: (variables: {
             commentId: string
         }) =>
@@ -82,6 +75,6 @@ export function useCommentDelete(taskKey: string) {
                 variables.commentId
             ),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getTaskComments, taskKey] })
+            queryClient.invalidateQueries({ queryKey: [COMMENT_QUERY_KEYS.getTaskComments, taskKey] })
     });
 }

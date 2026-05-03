@@ -6,21 +6,18 @@ import {Project} from "./useProjectHttpDto";
 import {data} from "react-router-dom";
 import AuthService from "../../../AuthService";
 
-const KEYS = {
+export const PROJECT_QUERY_KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE', 'QUERY'),
     get: getKey('GET', 'PROJECT', 'SINGLE', 'QUERY'),
-    create: getKey('POST', 'PROJECT', 'SINGLE', 'MUTATION'),
     getInvite: getKey('GET', 'PROJECT-INVITE', 'SINGLE', 'QUERY'),
-    acceptInvite: getKey('GET', 'PROJECT-INVITE', 'SINGLE', 'MUTATION'),
     getAllProjectFiles: getKey('GET', 'PROJECT-FILE', 'MULTIPLE', 'QUERY'),
-    saveProjectFile: getKey('POST', 'PROJECT-FILE', 'SINGLE', 'MUTATION'),
 }
 
 export function useProjectsGet() {
     const { getProjects } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getAll],
+        queryKey: [PROJECT_QUERY_KEYS.getAll],
         queryFn: getProjects,
     });
 }
@@ -29,7 +26,7 @@ export function useProjectGetById(projectId: string) {
     const { getProjectById } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.get, projectId],
+        queryKey: [PROJECT_QUERY_KEYS.get, projectId],
         queryFn: () => getProjectById(projectId),
     });
 }
@@ -38,7 +35,7 @@ export function useProjectFilesGet(projectId: string) {
     const { getProjectsFiles } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getAllProjectFiles],
+        queryKey: [PROJECT_QUERY_KEYS.getAllProjectFiles],
         queryFn: () => getProjectsFiles(projectId),
     });
 }
@@ -47,7 +44,7 @@ export function useAuthParticipantProjectGet() {
     const { getProjectByAuth } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.get, AuthService.getId()],
+        queryKey: [PROJECT_QUERY_KEYS.get, AuthService.getId()],
         queryFn: getProjectByAuth
     });
 }
@@ -56,7 +53,7 @@ export function useProjectInviteGet(projectId: string) {
     const { getProjectInviteByProjectId } = useProjectHttp(useCreateAxiosInstance());
 
     return useQuery({
-        queryKey: [KEYS.getInvite, projectId],
+        queryKey: [PROJECT_QUERY_KEYS.getInvite, projectId],
         queryFn: () => getProjectInviteByProjectId(projectId)
     });
 }
@@ -66,10 +63,9 @@ export function useProjectInviteAccept() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.acceptInvite],
         mutationFn: (inviteKey: string) => acceptProjectInvite(inviteKey),
         onSuccess: (data) =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.get, AuthService.getId()] })
+            queryClient.invalidateQueries({ queryKey: [PROJECT_QUERY_KEYS.get, AuthService.getId()] })
     });
 }
 
@@ -78,10 +74,9 @@ export function useProjectCreate() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.create],
         mutationFn: createProject,
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: [KEYS.getAll] })
+            queryClient.invalidateQueries({ queryKey: [PROJECT_QUERY_KEYS.getAll] })
     });
 }
 
@@ -90,7 +85,6 @@ export function useProjectInfoSave(projectId: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.saveProjectFile],
         mutationFn: (variables: {
             files?: ArrayBuffer,
             description: string
@@ -101,8 +95,8 @@ export function useProjectInfoSave(projectId: string) {
                 variables.files,
             ),
         onSuccess: () => Promise.all([
-            queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] }),
-            queryClient.invalidateQueries({ queryKey: [KEYS.get, projectId] })
+            queryClient.invalidateQueries({ queryKey: [PROJECT_QUERY_KEYS.getAllProjectFiles] }),
+            queryClient.invalidateQueries({ queryKey: [PROJECT_QUERY_KEYS.get, projectId] })
         ])
     });
 }
@@ -112,7 +106,6 @@ export function useProjectFileDelete() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: [KEYS.saveProjectFile],
         mutationFn: (variables: {
             projectId: string,
             filename: string
@@ -122,6 +115,6 @@ export function useProjectFileDelete() {
                 variables.filename
             ),
         onSuccess: () =>
-                    queryClient.invalidateQueries({ queryKey: [KEYS.getAllProjectFiles] })
+                    queryClient.invalidateQueries({ queryKey: [PROJECT_QUERY_KEYS.getAllProjectFiles] })
     });
 }

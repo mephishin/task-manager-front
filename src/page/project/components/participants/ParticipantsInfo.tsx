@@ -1,5 +1,5 @@
 import {
-    Box,
+    Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     Grid2,
     IconButton,
     Link,
@@ -20,7 +20,9 @@ import {
 } from "../../../../hooks/query/project/useProject";
 import AuthService from "../../../../AuthService";
 import PersonIcon from '@mui/icons-material/Person';
-import {getLabel} from "../../../../hooks/query/project/useProjectHttpDto";
+import {getLabel, Participant} from "../../../../hooks/query/project/useProjectHttpDto";
+import {useRemoveUserFromProject, useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
+import Button from "@mui/material/Button";
 interface ProjectInfoPageProps {
     projectId: string
 }
@@ -56,8 +58,28 @@ const typographyStyle = {
 export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectById = useProjectGetById(projectId);
     const getProjectInviteByProjectId = useProjectInviteGet(projectId);
+    const {mutate} = useRemoveUserFromProject(projectId)
 
     const isLeader = AuthService.hasRole(AuthService.LEADER_ROlE)
+
+    const [open, setOpen] = useState("");
+
+    const handleClickOpen = (participant: Participant) => {
+        setOpen(participant.id);
+        console.log(open);
+    };
+
+    const handleClose = () => {
+        setOpen("");
+        console.log(open)
+
+    };
+
+    const handleConfirm = (participant: Participant) => {
+        setOpen("");
+        mutate(participant.id);
+        console.log(open);
+    };
 
 
     if (getProjectById.data && getProjectInviteByProjectId.data) {
@@ -72,11 +94,36 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                     <List>
                         {getProjectById.data?.participants.map((participant) => (
                             <ListItem secondaryAction={
-                                isLeader && (
-                                    <IconButton edge="end" aria-label="delete" onClick={() => {
-                                    }}>
-                                        <DeleteIcon/>
-                                    </IconButton>)
+                                isLeader && AuthService.getId() !== participant.id && (
+                                    <>
+                                        <IconButton edge="end" aria-label="delete" onClick={() => handleClickOpen(participant)}>
+                                            <DeleteIcon/>
+
+                                        </IconButton>
+                                        <Dialog
+                                            open={open === participant.id}
+                                            onClose={handleClose}
+                                        >
+                                            <DialogTitle>{"Подтверждение удаления"}</DialogTitle>
+
+                                            <DialogContent>
+                                                <DialogContentText>
+                                                    Вы точно хотите удалить этот объект? Это действие нельзя будет отменить.
+                                                </DialogContentText>
+                                            </DialogContent>
+
+                                            <DialogActions>
+                                                <Button onClick={handleClose} color="inherit">
+                                                    Нет
+                                                </Button>
+
+                                                <Button onClick={() => handleConfirm(participant)} color="error" autoFocus>
+                                                    Да, удалить
+                                                </Button>
+                                            </DialogActions>
+                                        </Dialog>
+                                    </>
+                                    )
                             }>
                                 <ListItemIcon>
                                     <PersonIcon/>
@@ -96,6 +143,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                                sx={readOnlyTextFieldStyle}
                                focused defaultValue={getProjectInviteByProjectId.data}></TextField>
                 </Box>
+
             </Stack>
         )
     }

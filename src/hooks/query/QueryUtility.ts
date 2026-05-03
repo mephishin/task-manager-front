@@ -1,5 +1,3 @@
-import type from "ajv/lib/vocabularies/jtd/type";
-
 export const getKey = (
     key: string,
     entity: 'TASK'
@@ -9,6 +7,7 @@ export const getKey = (
         | 'COMMENT-FILE'
         | 'PROJECT'
         | 'PARTICIPANT'
+        | 'PARTICIPANT-PROJECT'
         | 'ALLOWED-TASK-STATUS'
         | 'SEARCH-TASKS'
         | 'PERIOD'

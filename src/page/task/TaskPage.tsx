@@ -68,71 +68,52 @@ export const TaskPage = () => {
     const {key} = useParams();
     const navigate = useNavigate();
 
-    const taskQuery = useTaskGet(key);
-    const participantsQuery = useUsersByProjectIdGet(taskQuery.data?.project?.id);
-    const updateTaskMutation = useTaskUpdate(key);
+    const {data: task} = useTaskGet(key);
     const taskComments = useTaskCommentsGet(key!)
 
-    const updateTask = (data: UpdateTask) => {
-        updateTaskMutation.mutate({
-            key: data.key,
-            name: data.name,
-            assignee: data.assignee.id,
-            description: data.description,
-        })
-        return taskQuery.data
-    }
-
     return (<Box sx={mainBoxStyle}>
-        { (participantsQuery.data && taskQuery.data ) && (
-            <Box sx={boxStyle}>
-                <Grid2 container spacing={2}>
-                    <Grid2>
-                        <IconButton onClick={() => navigate(-1)} sx={{margin: 1}}>
-                            <ArrowBackIosNewOutlinedIcon/>
-                        </IconButton>
-                    </Grid2>
-                    <Grid2 container size={12} sx={gridElemStyle}>
-                        <TextField label={"Ключ задачи"} slotProps={readOnlyTextFieldSlotProps}
-                                   sx={readOnlyTextFieldStyle}
-                                   focused defaultValue={taskQuery.data.key}></TextField>
-                    </Grid2>
-                    <Grid2 size={7} sx={gridElemStyle}>
-                        <UpdateTaskForm
-                            taskKey={key!}
-                            participants={participantsQuery.data}
-                            task={taskQuery.data}
-                            updateTask={updateTask}
-                        />
-                    </Grid2>
-                    <Grid2 size={5} sx={gridElemStyle}>
-                        <Stack>
-                            <TextField label={"Создана"} slotProps={readOnlyTextFieldSlotProps} sx={readOnlyTextFieldStyle}
-                                       focused defaultValue={taskQuery.data.created}></TextField>
-                            <TextField label={"Отредактирована"} slotProps={readOnlyTextFieldSlotProps}
-                                       sx={readOnlyTextFieldStyle} focused
-                                       defaultValue={taskQuery.data.edited}></TextField>
-                            <TextField label={"Общее время работы над задачей"} slotProps={readOnlyTextFieldSlotProps}
-                                       sx={readOnlyTextFieldStyle} focused
-                                       defaultValue={formatISORus(taskQuery.data.total!)}></TextField>
-                        </Stack>
-                    </Grid2>
-                    <Grid2 size={12} sx={gridElemStyle}>
-                        <Typography sx={typographyStyle} variant="h6">
-                            Комментарии
-                        </Typography>
-                    </Grid2>
-                    {(taskComments.isFetched && taskComments.data) ? (<Grid2 size={12}>
-                        <List sx={commentSectionStyle}>
-                            <Comments comments={taskComments.data}/>
-                        </List>
-                    </Grid2>) : <CircularProgress color={"secondary"}/>}
-                    <Grid2 size={12} sx={gridElemStyle}>
-                        <PostCommentForm/>
-                    </Grid2>
+        <Box sx={boxStyle}>
+            <Grid2 container spacing={2}>
+                <Grid2>
+                    <IconButton onClick={() => navigate(-1)} sx={{margin: 1}}>
+                        <ArrowBackIosNewOutlinedIcon/>
+                    </IconButton>
                 </Grid2>
-            </Box>
-        )}
+                <Grid2 container size={12} sx={gridElemStyle}>
+                    <TextField label={"Ключ задачи"} slotProps={readOnlyTextFieldSlotProps}
+                               sx={readOnlyTextFieldStyle}
+                               focused defaultValue={key}></TextField>
+                </Grid2>
+                <Grid2 size={7} sx={gridElemStyle}>
+                    <UpdateTaskForm/>
+                </Grid2>
+                <Grid2 size={5} sx={gridElemStyle}>
+                    <Stack>
+                        <TextField label={"Создана"} slotProps={readOnlyTextFieldSlotProps} sx={readOnlyTextFieldStyle}
+                                   focused defaultValue={task?.created}></TextField>
+                        <TextField label={"Отредактирована"} slotProps={readOnlyTextFieldSlotProps}
+                                   sx={readOnlyTextFieldStyle} focused
+                                   defaultValue={task?.edited}></TextField>
+                        <TextField label={"Общее время работы над задачей"} slotProps={readOnlyTextFieldSlotProps}
+                                   sx={readOnlyTextFieldStyle} focused
+                                   defaultValue={task ? formatISORus(task?.total) : ""}></TextField>
+                    </Stack>
+                </Grid2>
+                <Grid2 size={12} sx={gridElemStyle}>
+                    <Typography sx={typographyStyle} variant="h6">
+                        Комментарии
+                    </Typography>
+                </Grid2>
+                {(taskComments.isFetched && taskComments.data) ? (<Grid2 size={12}>
+                    <List sx={commentSectionStyle}>
+                        <Comments comments={taskComments.data}/>
+                    </List>
+                </Grid2>) : <CircularProgress color={"secondary"}/>}
+                <Grid2 size={12} sx={gridElemStyle}>
+                    <PostCommentForm/>
+                </Grid2>
+            </Grid2>
+        </Box>
     </Box>)
 }
 

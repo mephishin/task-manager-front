@@ -131,7 +131,7 @@ export function SelectController({label, control, name, options, errors}: Select
 interface AutocompleteControllerProps<T> {
     control: Control<any, any, any>
     name: string
-    options: T[]
+    options?: T[]
     getLabel: (option: T) => string,
     getId: (option: T) => string,
     label: string
@@ -156,14 +156,14 @@ export function AutocompleteController<T, >({
 
     return (
         <Autocomplete
-            value={field.value}
+            value={field.value ? field.value : null}
             onChange={(_, newValue) => {
                 field.onChange(newValue)
             }}
             onBlur={field.onBlur}
             getOptionLabel={getLabel}
             isOptionEqualToValue={(option: T, value: T) => getId(option) === getId(value)}
-            options={options}
+            options={options ? options : []}
             renderInput={(params) => <TextField
                 {...params}
                 label={label}

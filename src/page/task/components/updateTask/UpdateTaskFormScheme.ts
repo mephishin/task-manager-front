@@ -8,10 +8,8 @@ export const UpdateTaskFormAssigneeValidationSchema = z.object({
 export type UpdateTaskAssignee = z.infer<typeof UpdateTaskFormAssigneeValidationSchema>;
 
 export const UpdateTaskFormValidationSchema = z.object({
-    key: z.string({ error: 'Обязательное поле' }),
     name: z.string({ error: 'Обязательное поле' }),
     description: z.string({ error: 'Обязательное поле' }),
-    status: z.string({ error: 'Обязательное поле' }),
     assignee: UpdateTaskFormAssigneeValidationSchema,
 });
 

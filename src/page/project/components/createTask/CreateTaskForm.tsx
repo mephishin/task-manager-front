@@ -9,7 +9,7 @@ import {
     CreateTaskAssignee,
     createTaskFormValidationSchema
 } from "./CreateTaskFormSchema";
-import { getLabel } from "../../../../model/participant/Participant";
+import { getLabel } from "../../../../hooks/query/users/Participant";
 import AuthService from "../../../../AuthService";
 import { AutocompleteController, InputController } from "../../../../components/forms/FormFieldsControllers";
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";

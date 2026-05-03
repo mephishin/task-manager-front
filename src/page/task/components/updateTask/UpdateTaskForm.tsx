@@ -1,51 +1,42 @@
 import React, {useEffect} from "react";
-import { Stack } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Button from "@mui/material/Button";
+import {Button, Stack} from "@mui/material";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateTask, UpdateTaskAssignee, UpdateTaskFormValidationSchema } from "./UpdateTaskFormScheme";
-import { Task } from "../../../../model/task/Task";
-import {getLabel, Users} from "../../../../model/participant/Participant";
+import { getLabel } from "../../../../model/task/Task";
 import {AutocompleteController, InputController} from "../../../../components/forms/FormFieldsControllers";
-import {useTaskUpdate} from "../../../../hooks/query/task/useTask";
+import {useTaskGet, useTaskUpdate} from "../../../../hooks/query/task/useTask";
+import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
+import {useParams} from "react-router-dom";
 
-interface UpdateTaskFormProps {
-    taskKey: string,
-    task: Task,
-    participants: Users[],updateTask: SubmitHandler<UpdateTask>
-}
+export const UpdateTaskForm = () => {
+    const {key} = useParams();
 
-export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: UpdateTaskFormProps) => {
-    const { control, handleSubmit, formState: { errors }, resetField } = useForm<UpdateTask>({
-        defaultValues: {
-            key: taskKey,
-            name: task.name,
-            description: task.description,
-            status: task.status,
-            assignee: {id: task.assignee, name: task.assignee}
-        },
+    const {data: task, isSuccess: taskIsSuccess, isPending: taskIsPending} = useTaskGet(key);
+    const {mutate: updateTask} = useTaskUpdate(task?.key);
+    const {data: participants, isSuccess: participantsIsSuccess, isPending: participantsIsPending} = useUsersByProjectIdGet(task?.project?.id);
+
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm<UpdateTask>({
         resolver: zodResolver(UpdateTaskFormValidationSchema)
     })
 
+
+    useEffect(() => {
+        if (taskIsSuccess && !taskIsPending) {
+            setValue("name",  task!.name);
+            setValue("description",task!.description);
+            setValue("assignee", {id: task!.assignee.id, name: getLabel(task!.assignee)});
+        }
+    }, [taskIsSuccess, taskIsPending, setValue]);
+
     const onSubmit = (data: UpdateTask) => {
-        console.log(data)
-        mutate({
-            key: data.key,
+        updateTask({
+            key: key!,
             name: data.name,
             assignee: data.assignee.id,
             description: data.description,
         })
     }
-
-    const {mutate, isSuccess, isPending} = useTaskUpdate(task.key);
-
-    useEffect(() => {
-        if (isSuccess && !isPending) {
-            resetField("assignee", {defaultValue: {id: task.assignee, name: task.assignee}});
-            resetField("name", {defaultValue: task.name});
-            resetField("description", {defaultValue: task.description});
-        }
-    }, [isPending, isSuccess, resetField]);
 
     return (
             <Stack>
@@ -62,12 +53,12 @@ export const UpdateTaskForm = ({ taskKey, task, participants, updateTask }: Upda
                     name={"description"}
                     sx={{ m: 5 }}
                     multiline />
-                <AutocompleteController<UpdateTaskAssignee>
+                 <AutocompleteController<UpdateTaskAssignee>
                     label="Исоплнитель задачи"
                     control={control}
                     name={"assignee"}
                     errors={errors}
-                    options={participants.map(user => { return { id: user.id, name: getLabel(user) } })}
+                    options={participants?.map(user => { return { id: user.id, name: getLabel(user) } })}
                     getLabel={(assignee: UpdateTaskAssignee) => assignee.name}
                     getId={(assignee: UpdateTaskAssignee) => assignee.id}/>
                 <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
