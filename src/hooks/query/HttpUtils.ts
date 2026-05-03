@@ -1,8 +1,8 @@
 import axios from "axios";
-import {useAuthService} from "../../AuthProvider";
+import {useAuth} from "../../AuthProvider";
 
 export function useCreateAxiosInstance() {
-    const {updateToken, getToken, isLoggedIn} = useAuthService();
+    const {updateToken, getToken, isLoggedIn} = useAuth();
 
     const axiosInstance = axios.create({
         baseURL: "http://localhost:8080"

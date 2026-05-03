@@ -55,7 +55,8 @@ export const CreateProjectForm = () => {
                     errors={errors}
                     options={users?.map(participant => { return { id: participant.id, name: getLabel(participant) }; })}
                     getLabel={(option: CreateProjectParticipant) => option.name}
-                    getId={(option: CreateProjectParticipant) => option.id} />
+                    getId={(option: CreateProjectParticipant) => option.id}
+                    sx={{ m: 5 }}/>
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>
             </Stack>
         </Box>

@@ -20,7 +20,7 @@ import {
 } from "../../../../hooks/query/project/useProject";
 import {EditProjectInfoForm} from "./EditProjectInfoForm";
 import EditIcon from "@mui/icons-material/Edit";
-import {useAuthService} from "../../../../AuthProvider";
+import {useAuth} from "../../../../AuthProvider";
 
 interface ProjectInfoPageProps {
     projectId: string
@@ -71,7 +71,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectById = useProjectGetById(projectId);
     const deleteProjectFile = useProjectFileDelete();
 
-    const {hasRole, LEADER_ROLE} = useAuthService();
+    const {hasRole, LEADER_ROLE} = useAuth();
 
     const handleDownloadFile = (file: File) => {
         const link = document.createElement('a');

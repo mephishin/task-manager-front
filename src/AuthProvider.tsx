@@ -112,7 +112,7 @@ export const AuthProvider = ({ children, client }: AuthProviderProps) => {
     )
 }
 
-export const useAuthService = () => {
+export const useAuth = () => {
     const context = useContext(AuthContext);
 
     if (context === undefined) {
