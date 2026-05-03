@@ -20,7 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import {getLabel, Participant} from "../../../../hooks/query/project/useProjectHttpDto";
 import {useRemoveUserFromProject} from "../../../../hooks/query/users/useUsers";
 import Button from "@mui/material/Button";
-import {useAuthService} from "../../../../AuthProvider";
+import {useAuth} from "../../../../AuthProvider";
 interface ProjectInfoPageProps {
     projectId: string
 }
@@ -58,7 +58,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectInviteByProjectId = useProjectInviteGet(projectId);
     const {mutate} = useRemoveUserFromProject(projectId)
 
-    const {hasRole, LEADER_ROLE, getId} = useAuthService();
+    const {hasRole, LEADER_ROLE, getId} = useAuth();
 
     const [open, setOpen] = useState("");
 

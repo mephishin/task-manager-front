@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
 import { useCreateAxiosInstance } from "../HttpUtils";
 import {useNavigate} from "react-router-dom";
+import {TASK_CHART_QUERY_KEYS_KEYS} from "../tasksChart/useTasksChart";
 
 const TASK_QUERY_KEYS = {
     getTasksChart: getKey('GET', 'TASK', 'MULTIPLE', 'QUERY'),
@@ -104,7 +105,7 @@ export function useCloseTask(key?: string) {
     });
 }
 
-export function useTaskUpdate(key?: string) {
+export function useTaskUpdate(key?: string, projectId?: string) {
     const { putTask } = useTaskHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
 
@@ -112,6 +113,7 @@ export function useTaskUpdate(key?: string) {
         mutationFn: putTask,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTask, key] })
+            queryClient.invalidateQueries({ queryKey: [TASK_CHART_QUERY_KEYS_KEYS.getTasksChart, projectId] })
         },
     });
 }

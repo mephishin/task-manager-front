@@ -3,7 +3,7 @@ import {useTasksChartHttp} from "./useTasksChartHttp";
 import {useQuery} from "@tanstack/react-query";
 import {useCreateAxiosInstance} from "../HttpUtils";
 
-const TASK_CHART_QUERY_KEYS_KEYS = {
+export const TASK_CHART_QUERY_KEYS_KEYS = {
     getTasksChart: getKey('GET', 'TASK', 'MULTIPLE','QUERY'),
 }
 

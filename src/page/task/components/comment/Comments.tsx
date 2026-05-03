@@ -7,7 +7,7 @@ import {useParams} from "react-router-dom";
 import {getLabel, TaskComment} from "../../../../model/task/TaskComment";
 import {EditCommentForm} from "./EditCommentForm";
 import {useCommentDelete, useCommentFileDelete} from "../../../../hooks/query/comment/useComment";
-import {useAuthService} from "../../../../AuthProvider";
+import {useAuth} from "../../../../AuthProvider";
 
 const deleteButtonStyle = {
     '&:hover': {
@@ -34,7 +34,7 @@ const commentHeadStyle = {
 
 export const Comments = ({comments}: CommentsProps) => {
     const {key} = useParams();
-    const {getUsername} = useAuthService();
+    const {getUsername} = useAuth();
 
     const deleteCommentFile = useCommentFileDelete(key!)
     const deleteComment = useCommentDelete(key!)

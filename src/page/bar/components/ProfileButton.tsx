@@ -1,11 +1,11 @@
 import * as React from "react";
 import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
-import {useAuthService} from "../../../AuthProvider";
+import {useAuth} from "../../../AuthProvider";
 
 export const ProfileButton = () => {
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
 
-    const {logout, getRoles} = useAuthService();
+    const {logout, getRoles} = useAuth();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);

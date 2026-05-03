@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
 import { useProjectHttp } from "./useProjectHttp";
 import { useCreateAxiosInstance } from "../HttpUtils";
-import {useAuthService} from "../../../AuthProvider";
+import {useAuth} from "../../../AuthProvider";
 
 export const PROJECT_QUERY_KEYS = {
     getAll: getKey('GET', 'PROJECT', 'MULTIPLE', 'QUERY'),
@@ -40,7 +40,7 @@ export function useProjectFilesGet(projectId: string) {
 
 export function useAuthParticipantProjectGet() {
     const { getProjectByAuth } = useProjectHttp(useCreateAxiosInstance());
-    const {getId} = useAuthService();
+    const {getId} = useAuth();
 
     return useQuery({
         queryKey: [PROJECT_QUERY_KEYS.get, getId()],
@@ -60,7 +60,7 @@ export function useProjectInviteGet(projectId: string) {
 export function useProjectInviteAccept() {
     const { acceptProjectInvite } = useProjectHttp(useCreateAxiosInstance());
     const queryClient = useQueryClient();
-    const {getId} = useAuthService();
+    const {getId} = useAuth();
 
     return useMutation({
         mutationFn: (inviteKey: string) => acceptProjectInvite(inviteKey),

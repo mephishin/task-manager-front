@@ -14,7 +14,7 @@ import { AutocompleteController, InputController } from "../../../../components/
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
 import {useTaskCreate} from "../../../../hooks/query/task/useTask";
 import {useParams} from "react-router-dom";
-import {useAuthService} from "../../../../AuthProvider";
+import {useAuth} from "../../../../AuthProvider";
 
 interface CreateTaskFormProps {
 }
@@ -25,7 +25,7 @@ const CreateTaskForm = ({ }: CreateTaskFormProps) => {
     const users = useUsersByProjectIdGet(projectId);
     const {mutate} = useTaskCreate();
 
-    const {getId, getFullName} = useAuthService();
+    const {getId, getFullName} = useAuth();
 
     const onSubmit = (data: CreateTask) => {
         mutate({

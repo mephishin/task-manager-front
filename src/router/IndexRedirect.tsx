@@ -1,10 +1,11 @@
 import {Navigate, useLocation} from 'react-router-dom';
 import {useAuthParticipantProjectGet} from "../hooks/query/project/useProject";
 import {CircularProgress} from "@mui/material";
+import {useAuth} from "../AuthProvider";
 
-export const AuthProjectRedirect = () => {
-    const location = useLocation();
+export const IndexRedirect = () => {
     const {data, isLoading, isError, isSuccess, isFetching} = useAuthParticipantProjectGet();
+    const {hasRole, ADMIN_ROLE} = useAuth();
 
     if (isLoading) {
         return <CircularProgress/>
@@ -15,14 +16,18 @@ export const AuthProjectRedirect = () => {
     }
 
     if (isError) {
-        return <Navigate to="/noProject" replace state={{from: location}}/>
+        return <Navigate to="/noProject" replace/>
     }
 
     if (isSuccess) {
         if (data) {
-            return <Navigate to={`/project/${data.key}/${data.name}`} replace state={{from: location}}/>
+            return <Navigate to={`/project/${data.key}/${data.name}`} replace/>
         } else {
-            return <Navigate to="/noProject" replace state={{from: location}}/>
+            if (hasRole(ADMIN_ROLE)) {
+                return <Navigate to="/admin"/>
+            } else {
+                return <Navigate to="/noProject" replace/>
+            }
         }
 
     }

@@ -13,13 +13,12 @@ export const UpdateTaskForm = () => {
     const {key} = useParams();
 
     const {data: task, isSuccess: taskIsSuccess, isPending: taskIsPending} = useTaskGet(key);
-    const {mutate: updateTask} = useTaskUpdate(task?.key);
+    const {mutate: updateTask} = useTaskUpdate(task?.key, task?.project.id);
     const {data: participants, isSuccess: participantsIsSuccess, isPending: participantsIsPending} = useUsersByProjectIdGet(task?.project?.id);
 
     const { control, handleSubmit, formState: { errors }, setValue } = useForm<UpdateTask>({
         resolver: zodResolver(UpdateTaskFormValidationSchema)
     })
-
 
     useEffect(() => {
         if (taskIsSuccess && !taskIsPending) {

@@ -6,24 +6,21 @@ interface RoleGuardProps {
 }
 
 export const AuthProjectGuard = ({}: RoleGuardProps) => {
-    const location = useLocation();
     const {data, isLoading, isError, isSuccess} = useAuthParticipantProjectGet();
-    const navigate = useNavigate();
 
     if (isLoading) {
         return <CircularProgress/>
     }
 
     if (isError) {
-        return <Navigate to="/noProject" replace state={{from: location}}/>
+        return <Navigate to="/noProject" replace />
     }
 
     if (isSuccess) {
         if (data) {
-
             return <Outlet />
         } else {
-            return <Navigate to="/noProject" replace state={{from: location}}/>
+            return <Navigate to="/noProject" replace />
         }
     }
 }

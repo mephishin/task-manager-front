@@ -14,11 +14,10 @@ export const CreateProjectPage = () => {
             <Grid2 container spacing={2}>
                 <Grid2 size={12} sx={gridElemStyle}>
                     <Typography sx={{m: 2, color: '#656565'}} variant="h6">
-                        Создание новой задачи
+                        Создание нового проекта
                     </Typography>
                 </Grid2>
                 <Grid2 size={12} sx={gridElemStyle}>
-                    <Typography>Создание нового проекта</Typography>
                     <CreateProjectForm/>
                 </Grid2>
             </Grid2>
