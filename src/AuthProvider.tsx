@@ -52,7 +52,7 @@ export const AuthProvider = ({ children, client }: AuthProviderProps) => {
     const getRoles = () => {
         return client.realmAccess?.roles
             .filter(str => str.startsWith(client.realm!))
-            .map(str => str.slice(client.realm!.length + 1))
+
     }
 
     const getTokenParsed = () => client.tokenParsed;

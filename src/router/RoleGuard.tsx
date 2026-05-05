@@ -9,7 +9,7 @@ export const RoleGuard = ({allowedRoles}: RoleGuardProps) => {
     const navigate = useNavigate();
     const { getRoles } = useAuth();
 
-    if (allowedRoles.filter(item => getRoles()?.includes(item)).length === 0) {
+    if (!allowedRoles.some(allowedRole => getRoles()?.includes(allowedRole))) {
         navigate("/noAccess")
     }
 

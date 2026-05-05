@@ -8,7 +8,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {AcceptInviteFormScheme, acceptInviteFormValidationScheme} from "./AcceptInviteFormScheme";
 import {useNavigate} from "react-router-dom";
 
-export const NoProjectPage = () => {
+export const AcceptInvitePage = () => {
     const {mutate, isSuccess, isPending} = useProjectInviteAccept()
     const navigate = useNavigate();
 

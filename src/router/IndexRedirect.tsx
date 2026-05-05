@@ -16,7 +16,7 @@ export const IndexRedirect = () => {
     }
 
     if (isError) {
-        return <Navigate to="/noProject" replace/>
+        return <Navigate to="/acceptInvite" replace/>
     }
 
     if (isSuccess) {
@@ -26,7 +26,7 @@ export const IndexRedirect = () => {
             if (hasRole(ADMIN_ROLE)) {
                 return <Navigate to="/admin"/>
             } else {
-                return <Navigate to="/noProject" replace/>
+                return <Navigate to="/acceptInvite" replace/>
             }
         }
 

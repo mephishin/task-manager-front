@@ -13,14 +13,14 @@ export const AuthProjectGuard = ({}: RoleGuardProps) => {
     }
 
     if (isError) {
-        return <Navigate to="/noProject" replace />
+        return <Navigate to="/acceptInvite" replace />
     }
 
     if (isSuccess) {
         if (data) {
             return <Outlet />
         } else {
-            return <Navigate to="/noProject" replace />
+            return <Navigate to="/acceptInvite" replace />
         }
     }
 }

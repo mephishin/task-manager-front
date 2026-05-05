@@ -6,7 +6,6 @@ interface RoleGuardProps {
 }
 
 export const NoAuthProjectGuard = ({}: RoleGuardProps) => {
-    const location = useLocation();
     const {data, isLoading, isError, isSuccess} = useAuthParticipantProjectGet();
 
     if (isLoading) {
@@ -14,12 +13,12 @@ export const NoAuthProjectGuard = ({}: RoleGuardProps) => {
     }
 
     if (isError) {
-        return <Navigate to="/noProject" replace state={{from: location}}/>
+        return <Navigate to="/acceptInvite" replace />
     }
 
     if (isSuccess) {
         if (data) {
-            return <Navigate to={`/project/${data.key}/${data.name}`} replace state={{from: location}}/>
+            return <Navigate to={`/project/${data.key}/${data.name}`} replace />
         } else {
             return <Outlet />
         }
