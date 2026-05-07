@@ -71,7 +71,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectById = useProjectGetById(projectId);
     const deleteProjectFile = useProjectFileDelete();
 
-    const {hasRole, LEADER_ROLE} = useAuth();
+    const {hasRole, LEADER} = useAuth();
 
     const handleDownloadFile = (file: File) => {
         const link = document.createElement('a');
@@ -121,7 +121,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
                         <List>
                             {getProjectFiles.data?.map((file) => (
                                 <ListItem key={file.name} secondaryAction={
-                                    hasRole(LEADER_ROLE) && (
+                                    hasRole(LEADER) && (
                                         <IconButton edge="end" aria-label="delete" onClick={() => {
                                             handleDeleteFile(file)
                                         }}>

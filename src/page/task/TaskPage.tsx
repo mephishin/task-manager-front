@@ -7,6 +7,7 @@ import {UpdateTaskForm} from "./components/updateTask/UpdateTaskForm";
 import {Comments} from "./components/comment/Comments";
 import {useTaskCommentsGet} from "../../hooks/query/comment/useComment";
 import {PostCommentForm} from "./components/comment/PostCommentForm";
+import {useNavigate} from "@tanstack/react-router";
 
 const readOnlyTextFieldStyle = {
     m: 5,
@@ -64,12 +65,15 @@ const mainBoxStyle = {
 export const TaskPage = (taskKey: string) => {
     const {data: task} = useTaskGet(taskKey);
     const taskComments = useTaskCommentsGet(taskKey)
+    const navigate = useNavigate();
 
     return (<Box sx={mainBoxStyle}>
         <Box sx={boxStyle}>
             <Grid2 container spacing={2}>
                 <Grid2>
-                    <IconButton onClick={() => {}} sx={{margin: 1}}>
+                    <IconButton onClick={() => { // @ts-ignore
+                        navigate({to: `/project/${task?.project.id}`})
+                    }} sx={{margin: 1}}>
                         <ArrowBackIosNewOutlinedIcon/>
                     </IconButton>
                 </Grid2>

@@ -62,12 +62,10 @@ export function useAllowedTaskStatusesGet(key?: string) {
 export function useTaskCreate() {
     const { postTask } = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationFn: postTask,
-        onSuccess: (data) => {
-            navigate(`/task/${data}`)
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTasksChart] })
         }
     });

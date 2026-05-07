@@ -1,16 +1,16 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {TaskPage} from "../page/task/TaskPage";
+import { createFileRoute } from '@tanstack/react-router'
+import {AcceptInvitePage} from "../page/acceptInvite/AcceptInvitePage";
 import {useProjectHttp} from "../hooks/query/project/useProjectHttp";
 import {PROJECT_QUERY_KEYS} from "../hooks/query/project/useProject";
 
-export const Route = createFileRoute('/task/$key')({
+export const Route = createFileRoute('/acceptInvite')({
   component: RouteComponent,
   beforeLoad: async ({context}) => {
-    const {axiosInstance} = context;
+    const { axiosInstance } = context;
     const {getProjectByAuth} = useProjectHttp(axiosInstance);
-    const authProject = await getProjectByAuth()
+    const authProject = await getProjectByAuth();
 
-    if (!authProject) {
+    if (authProject) {
       throw Route.redirect({
         to: `/`
       })
@@ -19,7 +19,5 @@ export const Route = createFileRoute('/task/$key')({
 })
 
 function RouteComponent() {
-  const { key } = Route.useParams()
-
-  return TaskPage(key)
+  return AcceptInvitePage()
 }

@@ -12,9 +12,12 @@ const gridElemStyle = {
 };
 
 interface CreateTaskMenuItemProps {
+    projectId: string
+    setTab: React.Dispatch<React.SetStateAction<number>>
+
 }
 
-export const CreateTaskTab = ({}: CreateTaskMenuItemProps) => {
+export const CreateTaskTab = ({projectId, setTab}: CreateTaskMenuItemProps) => {
     return <Box sx={{backgroundColor: '#F4F5F7', borderRadius: 1, p: 1}}>
             <Grid2 container spacing={2}>
                 <Grid2 size={12} sx={gridElemStyle}>
@@ -23,7 +26,7 @@ export const CreateTaskTab = ({}: CreateTaskMenuItemProps) => {
                     </Typography>
                 </Grid2>
                 <Grid2 size={12} sx={gridElemStyle}>
-                    <CreateTaskForm/>
+                    <CreateTaskForm projectId={projectId} setTab={setTab}/>
                 </Grid2>
             </Grid2>
         </Box>

@@ -15,7 +15,7 @@ import React, {ComponentPropsWithoutRef} from "react";
 import ListItemText from "@mui/material/ListItemText";
 
 interface InputControllerProps {
-    control: Control<any, any, any>,
+    control: any,
     name: string,
     label?: string
     errors?: FieldErrors<any>,
@@ -45,7 +45,7 @@ export function InputController({label, control, name, errors, ...textFieldProps
 }
 
 type InputFileControllerProps = {
-    control: Control<any, any, any>;
+    control: any;
     name: string;
     label: string;
     errors?: FieldErrors<any>;
@@ -92,7 +92,7 @@ export function InputFileController({label, control, name, errors, ...buttonProp
 }
 
 interface SelectControllerProps {
-    control: Control<any, any, any>
+    control: any
     name: string
     options?: Array<string>
     label: string
@@ -129,7 +129,7 @@ export function SelectController({label, control, name, options, errors}: Select
 }
 
 interface AutocompleteControllerProps<T> {
-    control: Control<any, any, any>
+    control: any
     name: string
     options?: T[]
     getLabel: (option: T) => string,
@@ -182,7 +182,7 @@ type Options = {
 }
 
 interface SearchProjectAutocompleteControllerProps {
-    control: Control<any, any, any>
+    control: any
     name: string
     options: Options[]
     label: string
@@ -225,7 +225,7 @@ export function SearchProjectAutocompleteController({
 }
 
 interface MultipleAutocompleteControllerProps<T> {
-    control: Control<any, any, any>,
+    control: any,
     name: string,
     options?: T[],
     getLabel: (option: T) => string,

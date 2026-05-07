@@ -8,7 +8,7 @@ const gridElemStyle = {
 };
 
 
-export const CreateProjectPage = () => {
+export const AdminPage = () => {
     return (
         <Box sx={{backgroundColor: '#F4F5F7', borderRadius: 1, p: 1}}>
             <Grid2 container spacing={2}>

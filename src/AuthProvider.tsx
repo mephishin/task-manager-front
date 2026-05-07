@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useEffect, useState} from "react";
+import {createContext, useContext} from "react";
 import Keycloak from "keycloak-js";
 import {createRouter, RouterProvider} from "@tanstack/react-router";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
@@ -12,9 +12,9 @@ export interface AppContextType {
         login: () => Promise<void>;
         logout: () => void;
 
-        PARTICIPANT_ROLE: string;
-        LEADER_ROLE: string;
-        ADMIN_ROLE: string;
+        PARTICIPANT: string;
+        LEADER: string;
+        ADMIN: string;
 
         getToken: () => string | undefined;
         getTokenParsed: () => any;
@@ -33,12 +33,11 @@ export interface AppContextType {
         updateToken: (successCallback?: () => void) => Promise<void | boolean>;
     },
     axiosInstance: AxiosInstance,
-    queryClient: QueryClient
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const router = (appContext: AppContextType) => {
+export const router = (appContext: AppContextType) => {
     return createRouter({
         routeTree,
         context: appContext,
@@ -47,16 +46,10 @@ const router = (appContext: AppContextType) => {
     });
 }
 
-declare module '@tanstack/react-router' {
-    interface Register {
-        router: typeof router
-    }
-}
-
 export const AuthProvider = (client: Keycloak) => {
-    const PARTICIPANT_ROLE = 'task-manager_participant'
-    const LEADER_ROLE = 'task-manager_leader'
-    const ADMIN_ROLE = 'task-manager_admin'
+    const PARTICIPANT = 'task-manager_participant'
+    const LEADER = 'task-manager_leader'
+    const ADMIN = 'task-manager_admin'
 
     const login = client.login;
 
@@ -125,9 +118,9 @@ export const AuthProvider = (client: Keycloak) => {
             getRoles,
             getId,
 
-            PARTICIPANT_ROLE,
-            LEADER_ROLE,
-            ADMIN_ROLE,
+            PARTICIPANT,
+            LEADER,
+            ADMIN,
 
             getFirstName,
             getMiddleName,
@@ -136,7 +129,6 @@ export const AuthProvider = (client: Keycloak) => {
             getGroup,
         },
         axiosInstance: axiosInstance,
-        queryClient: queryClient
     };
 
     return (

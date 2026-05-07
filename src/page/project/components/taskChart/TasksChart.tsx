@@ -1,11 +1,11 @@
 import {Box, CircularProgress, Grid2, Stack} from "@mui/material";
 import React from "react";
 import {TaskCard} from "./TaskCard";
-import {Task} from "../../../../model/task/TasksChart";
 import {StatusCard} from "./StatusCard";
+import {useNavigate} from "@tanstack/react-router";
 import {useTaskStatusesGet} from "../../../../hooks/query/task/useTask";
 import {useTasksChartGet} from "../../../../hooks/query/tasksChart/useTasksChart";
-import {useLocation, useNavigate} from "@tanstack/react-router";
+import {Task} from "../../../../model/task/TasksChart";
 
 const styleGrid = {
     p: 1,
@@ -23,13 +23,14 @@ interface TaskTableProps {
     projectId: string
 }
 
-export const TasksChart = ({projectId}: TaskTableProps) => {
+const TasksChart = ({projectId}: TaskTableProps) => {
     const taskStatusesQuery = useTaskStatusesGet(projectId);
     const taskChartQuery = useTasksChartGet(projectId);
 
     const navigate = useNavigate();
 
     const handleLink = (task: Task) => {
+        // @ts-ignore
         navigate({to: `/task/${task.key}`})
     }
 
@@ -76,8 +77,8 @@ export const TasksChart = ({projectId}: TaskTableProps) => {
                         </Grid2>
                     )}
                 </Stack>
-
             </Stack>
     }
 };
+export default TasksChart
 

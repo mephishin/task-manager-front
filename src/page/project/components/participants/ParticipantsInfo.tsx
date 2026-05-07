@@ -1,26 +1,28 @@
 import {
-    Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-    Grid2,
+    Box,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     IconButton,
-    Link,
     List,
     ListItem,
     ListItemIcon,
     Stack,
-    styled, TextField,
+    TextField,
     Typography
 } from "@mui/material";
 import React, {useState} from "react";
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    useProjectGetById, useProjectInviteGet
-} from "../../../../hooks/query/project/useProject";
+import {useProjectGetById, useProjectInviteGet} from "../../../../hooks/query/project/useProject";
 import PersonIcon from '@mui/icons-material/Person';
 import {getLabel, Participant} from "../../../../hooks/query/project/useProjectHttpDto";
 import {useRemoveUserFromProject} from "../../../../hooks/query/users/useUsers";
 import Button from "@mui/material/Button";
 import {useAuth} from "../../../../AuthProvider";
+
 interface ProjectInfoPageProps {
     projectId: string
 }
@@ -58,7 +60,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
     const getProjectInviteByProjectId = useProjectInviteGet(projectId);
     const {mutate} = useRemoveUserFromProject(projectId)
 
-    const {hasRole, LEADER_ROLE, getId} = useAuth();
+    const {hasRole, LEADER, getId} = useAuth();
 
     const [open, setOpen] = useState("");
 
@@ -92,9 +94,10 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                     <List>
                         {getProjectById.data?.participants.map((participant) => (
                             <ListItem secondaryAction={
-                                hasRole(LEADER_ROLE) && getId() !== participant.id && (
+                                hasRole(LEADER) && getId() !== participant.id && (
                                     <>
-                                        <IconButton edge="end" aria-label="delete" onClick={() => handleClickOpen(participant)}>
+                                        <IconButton edge="end" aria-label="delete"
+                                                    onClick={() => handleClickOpen(participant)}>
                                             <DeleteIcon/>
 
                                         </IconButton>
@@ -121,7 +124,7 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                                             </DialogActions>
                                         </Dialog>
                                     </>
-                                    )
+                                )
                             }>
                                 <ListItemIcon>
                                     <PersonIcon/>
@@ -146,3 +149,4 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
         )
     }
 }
+

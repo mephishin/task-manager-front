@@ -1,9 +1,9 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {TaskPage} from "../page/task/TaskPage";
+import { createFileRoute } from '@tanstack/react-router'
+import {ProjectPage} from "../page/project/ProjectPage";
 import {useProjectHttp} from "../hooks/query/project/useProjectHttp";
 import {PROJECT_QUERY_KEYS} from "../hooks/query/project/useProject";
 
-export const Route = createFileRoute('/task/$key')({
+export const Route = createFileRoute('/project/$projectId')({
   component: RouteComponent,
   beforeLoad: async ({context}) => {
     const {axiosInstance} = context;
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/task/$key')({
 })
 
 function RouteComponent() {
-  const { key } = Route.useParams()
+  const { projectId } = Route.useParams()
 
-  return TaskPage(key)
+  return ProjectPage(projectId)
 }

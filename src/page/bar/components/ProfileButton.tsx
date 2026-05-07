@@ -5,7 +5,7 @@ import {useAuth} from "../../../AuthProvider";
 export const ProfileButton = () => {
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement | null>();
 
-    const {logout, getRoles} = useAuth();
+    const {logout, getRoles, getUsername} = useAuth();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -22,20 +22,22 @@ export const ProfileButton = () => {
                 </IconButton>
             </Tooltip>
             <Menu
-                id="menu-appbar"
                 anchorEl={anchorElUser}
                 keepMounted
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                <MenuItem key="Logout" onClick={() => {
+                <MenuItem onClick={() => {
                     handleCloseUserMenu();
                     logout();
                 }}>
                     <Typography sx={{textAlign: 'center'}}>Выйти</Typography>
                 </MenuItem>
-                <MenuItem key="Role">
-                    <Typography sx={{textAlign: 'center'}}>Роли: {getRoles()}</Typography>
+                <MenuItem>
+                    <Typography sx={{textAlign: 'center'}}>Никнейм: {getUsername()}</Typography>
+                </MenuItem>
+                <MenuItem>
+                    <Typography sx={{textAlign: 'center'}}>Роли: [{getRoles()}]</Typography>
                 </MenuItem>
             </Menu>
         </Box>

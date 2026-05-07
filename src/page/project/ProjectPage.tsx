@@ -1,6 +1,6 @@
 import {Box, Tab, Tabs} from "@mui/material";
 import React from "react";
-import {TasksChart} from "./components/taskChart/TasksChart";
+import TasksChart from "./components/taskChart/TasksChart";
 import {ProjectInfo} from "./components/projectInfo/ProjectInfo";
 import {SearchTaskTab} from "./components/searchTask/SearchTaskTab";
 import {CreateTaskTab} from "./components/createTask/CreateTaskTab";
@@ -34,17 +34,17 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export const ProjectPage = (projectId: string) => {
-    const [value, setValue] = React.useState(0);
+    const [tab, setTab] = React.useState(0);
 
     const handleChange = (_: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        setTab(newValue);
     };
 
     return (
         <Box display={'flex'}>
             <Tabs
                 orientation="vertical"
-                value={value}
+                value={tab}
                 onChange={handleChange}
                 sx={{
                     borderRight: 1,
@@ -61,20 +61,20 @@ export const ProjectPage = (projectId: string) => {
             </Tabs>
 
             <Box sx={{width: '100%'}}>
-                <TabPanel value={value} index={0}>
-                    <ProjectInfo projectId={projectId!}/>
+                <TabPanel value={tab} index={0}>
+                    <ProjectInfo projectId={projectId}/>
                 </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <ParticipantsInfo projectId={projectId!}/>
+                <TabPanel value={tab} index={1}>
+                    <ParticipantsInfo projectId={projectId}/>
                 </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <TasksChart projectId={projectId!}/>
+                <TabPanel value={tab} index={2}>
+                    <TasksChart projectId={projectId}/>
                 </TabPanel>
-                <TabPanel value={value} index={3}>
+                <TabPanel value={tab} index={3}>
                     <SearchTaskTab/>
                 </TabPanel>
-                <TabPanel value={value} index={4}>
-                    <CreateTaskTab/>
+                <TabPanel value={tab} index={4}>
+                    <CreateTaskTab projectId={projectId} setTab={setTab}/>
                 </TabPanel>
             </Box>
         </Box>
