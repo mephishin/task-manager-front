@@ -1,42 +1,59 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import Keycloak from "keycloak-js";
+import {createRouter, RouterProvider} from "@tanstack/react-router";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {routeTree} from "./routeTree.gen";
+import axios, {AxiosInstance} from "axios";
 
-interface AuthContextType {
-    isLoggedIn: () => boolean;
+export interface AppContextType {
+    auth: {
+        isLoggedIn: () => boolean;
 
-    login: () => Promise<void>;
-    logout: () => void;
+        login: () => Promise<void>;
+        logout: () => void;
 
-    PARTICIPANT_ROLE: string;
-    LEADER_ROLE: string;
-    ADMIN_ROLE: string;
+        PARTICIPANT_ROLE: string;
+        LEADER_ROLE: string;
+        ADMIN_ROLE: string;
 
-    getToken: () => string | undefined;
-    getTokenParsed: () => any;
-    getUsername: () => string;
-    getFirstName: () => string;
-    getMiddleName: () => string | undefined;
-    getLastName: () => string;
-    getGroup: () => string | undefined;
-    getFullName: () => string;
-    getId: () => string;
+        getToken: () => string | undefined;
+        getTokenParsed: () => any;
+        getUsername: () => string;
+        getFirstName: () => string;
+        getMiddleName: () => string | undefined;
+        getLastName: () => string;
+        getGroup: () => string | undefined;
+        getFullName: () => string;
+        getId: () => string;
 
-    hasRole: (role: string) => boolean;
-    realmAccess: () => any;
-    getRoles: () => string[] | undefined;
+        hasRole: (role: string) => boolean;
+        realmAccess: () => any;
+        getRoles: () => string[] | undefined;
 
-    updateToken: (successCallback?: () => void) => Promise<void | boolean>;
+        updateToken: (successCallback?: () => void) => Promise<void | boolean>;
+    },
+    axiosInstance: AxiosInstance,
+    queryClient: QueryClient
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
-interface AuthProviderProps {
-    client: Keycloak
-    children: ReactNode;
+const router = (appContext: AppContextType) => {
+    return createRouter({
+        routeTree,
+        context: appContext,
+        defaultPreload: 'intent',
+        scrollRestoration: true,
+    });
 }
 
-export const AuthProvider = ({ children, client }: AuthProviderProps) => {
+declare module '@tanstack/react-router' {
+    interface Register {
+        router: typeof router
+    }
+}
 
+export const AuthProvider = (client: Keycloak) => {
     const PARTICIPANT_ROLE = 'task-manager_participant'
     const LEADER_ROLE = 'task-manager_leader'
     const ADMIN_ROLE = 'task-manager_admin'
@@ -59,7 +76,7 @@ export const AuthProvider = ({ children, client }: AuthProviderProps) => {
 
     const isLoggedIn = () => !!client.token;
 
-    const updateToken = (successCallback:any) =>
+    const updateToken = (successCallback: any) =>
         client.updateToken(1)
             .then(successCallback)
             .catch(login);
@@ -77,47 +94,77 @@ export const AuthProvider = ({ children, client }: AuthProviderProps) => {
 
     const getId = () => client.tokenParsed?.sub!;
 
-    const hasRole = (role:string) => client.hasRealmRole(role);
+    const hasRole = (role: string) => client.hasRealmRole(role);
+
+    const axiosInstance = axios.create({
+        baseURL: "http://localhost:8080"
+    });
+
+    axiosInstance.interceptors.request.use(async (config: any) => {
+        if (isLoggedIn()) {
+            await updateToken(() => config.headers.Authorization = `Bearer ${getToken()}`)
+            return config
+        }
+    })
+
+    const queryClient = new QueryClient()
 
     const contextValue = {
-        isLoggedIn,
+        auth: {
+            isLoggedIn,
 
-        login,
-        logout,
+            login,
+            logout,
 
-        getToken,
-        getTokenParsed,
-        updateToken,
-        getUsername,
-        hasRole,
-        realmAccess,
-        getRoles,
-        getId,
+            getToken,
+            getTokenParsed,
+            updateToken,
+            getUsername,
+            hasRole,
+            realmAccess,
+            getRoles,
+            getId,
 
-        PARTICIPANT_ROLE,
-        LEADER_ROLE,
-        ADMIN_ROLE,
+            PARTICIPANT_ROLE,
+            LEADER_ROLE,
+            ADMIN_ROLE,
 
-        getFirstName,
-        getMiddleName,
-        getLastName,
-        getFullName,
-        getGroup,
+            getFirstName,
+            getMiddleName,
+            getLastName,
+            getFullName,
+            getGroup,
+        },
+        axiosInstance: axiosInstance,
+        queryClient: queryClient
     };
 
     return (
-        <AuthContext.Provider value={contextValue}>
-            {children}
-        </AuthContext.Provider>
+        <AppContext.Provider value={contextValue}>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router(contextValue)}/>
+            </QueryClientProvider>
+        </AppContext.Provider>
     )
 }
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
+    const context = useContext(AppContext);
 
     if (context === undefined) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
 
-    return context;
+    return context.auth;
 };
+
+export const useAxiosInstance = () => {
+    const context = useContext(AppContext);
+
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+
+    return context.axiosInstance;
+};
+

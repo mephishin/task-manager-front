@@ -7,21 +7,18 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import {CommentFormScheme, commentFormValidationScheme} from "./CommentFormScheme";
 import {InputController, InputFileController} from "../../../../components/forms/FormFieldsControllers";
 import {useTaskCommentSave} from "../../../../hooks/query/comment/useComment";
-import {useParams} from "react-router-dom";
 import {transformFilesToZip} from "../../../../util/ZIp";
 
 interface PostCommentFormProps {
-
+    taskKey: string
 }
 
-export const PostCommentForm = ({ }: PostCommentFormProps) => {
+export const PostCommentForm = ({ taskKey }: PostCommentFormProps) => {
     const { control, handleSubmit, formState: { errors }, reset } = useForm<CommentFormScheme>({
         resolver: zodResolver(commentFormValidationScheme)
     })
 
-    const {key} = useParams();
-
-    const {mutate, isSuccess, isPending} = useTaskCommentSave(key!);
+    const {mutate, isSuccess, isPending} = useTaskCommentSave(taskKey);
 
     const onSubmit = (comment: CommentFormScheme) => {
         comment.files

@@ -1,7 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import * as React from "react";
 import {Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "@tanstack/react-router";
 
 interface NavigationButtonProps {
 }
@@ -13,7 +13,7 @@ export const NavigationButton = ({}: NavigationButtonProps) => {
     };
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>();
     const handleCloseNavMenu = (path?: string) => {
-        path && navigate(path)
+        path && navigate({to: path})
         setAnchorElNav(null);
     };
 

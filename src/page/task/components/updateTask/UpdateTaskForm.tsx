@@ -7,12 +7,13 @@ import { getLabel } from "../../../../model/task/Task";
 import {AutocompleteController, InputController} from "../../../../components/forms/FormFieldsControllers";
 import {useTaskGet, useTaskUpdate} from "../../../../hooks/query/task/useTask";
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
-import {useParams} from "react-router-dom";
 
-export const UpdateTaskForm = () => {
-    const {key} = useParams();
+interface UpdateTaskFormProps {
+    taskKey: string
+}
 
-    const {data: task, isSuccess: taskIsSuccess, isPending: taskIsPending} = useTaskGet(key);
+export const UpdateTaskForm = ({taskKey}:UpdateTaskFormProps) => {
+    const {data: task, isSuccess: taskIsSuccess, isPending: taskIsPending} = useTaskGet(taskKey);
     const {mutate: updateTask} = useTaskUpdate(task?.key, task?.project.id);
     const {data: participants, isSuccess: participantsIsSuccess, isPending: participantsIsPending} = useUsersByProjectIdGet(task?.project?.id);
 
@@ -30,7 +31,7 @@ export const UpdateTaskForm = () => {
 
     const onSubmit = (data: UpdateTask) => {
         updateTask({
-            key: key!,
+            key: taskKey!,
             name: data.name,
             assignee: data.assignee.id,
             description: data.description,

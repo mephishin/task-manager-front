@@ -1,6 +1,5 @@
-import {Box, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Tab, Tabs} from "@mui/material";
 import React from "react";
-import {useParams} from "react-router-dom";
 import {TasksChart} from "./components/taskChart/TasksChart";
 import {ProjectInfo} from "./components/projectInfo/ProjectInfo";
 import {SearchTaskTab} from "./components/searchTask/SearchTaskTab";
@@ -34,11 +33,8 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-export const ProjectPage = () => {
+export const ProjectPage = (projectId: string) => {
     const [value, setValue] = React.useState(0);
-
-    const {projectId} = useParams();
-
 
     const handleChange = (_: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);

@@ -1,14 +1,14 @@
 import { useCommentHttp } from "./useCommentHttp";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
-import { useCreateAxiosInstance } from "../HttpUtils";
+import {useAxiosInstance} from "../../../AuthProvider";
 
 const COMMENT_QUERY_KEYS = {
     getTaskComments: getKey('GET', 'TASK-COMMENT', 'MULTIPLE', 'QUERY'),
 }
 
 export function useTaskCommentsGet(key: string) {
-    const { getTaskComments } = useCommentHttp(useCreateAxiosInstance());
+    const { getTaskComments } = useCommentHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [COMMENT_QUERY_KEYS.getTaskComments, key],
@@ -17,7 +17,7 @@ export function useTaskCommentsGet(key: string) {
 }
 
 export function useTaskCommentSave(key: string) {
-    const { postTaskComment } = useCommentHttp(useCreateAxiosInstance());
+    const { postTaskComment } = useCommentHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -31,7 +31,7 @@ export function useTaskCommentSave(key: string) {
 }
 
 export function useTaskCommentUpdate(key: string) {
-    const { patchTaskComment } = useCommentHttp(useCreateAxiosInstance());
+    const { patchTaskComment } = useCommentHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -46,7 +46,7 @@ export function useTaskCommentUpdate(key: string) {
 }
 
 export function useCommentFileDelete(taskKey: string) {
-    const { deleteCommentFile } = useCommentHttp(useCreateAxiosInstance());
+    const { deleteCommentFile } = useCommentHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -64,7 +64,7 @@ export function useCommentFileDelete(taskKey: string) {
 }
 
 export function useCommentDelete(taskKey: string) {
-    const { deleteComment } = useCommentHttp(useCreateAxiosInstance());
+    const { deleteComment } = useCommentHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({

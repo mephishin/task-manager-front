@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import {App} from "./App";
 import Keycloak from "keycloak-js";
 import {AuthProvider} from "./AuthProvider";
 
@@ -29,9 +28,7 @@ const renderApp = () =>
     createRoot(document.getElementById("root") as HTMLElement)
         .render(
             <React.StrictMode>
-                <AuthProvider client={client}>
-                    <App />
-                </AuthProvider>
+                {AuthProvider(client)}
             </React.StrictMode>
         );
 

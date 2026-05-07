@@ -1,9 +1,9 @@
 import { useTaskHttp } from "./useTaskHttp";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKey } from "../QueryUtility";
-import { useCreateAxiosInstance } from "../HttpUtils";
-import {useNavigate} from "react-router-dom";
 import {TASK_CHART_QUERY_KEYS_KEYS} from "../tasksChart/useTasksChart";
+import {useNavigate} from "@tanstack/react-router";
+import {useAxiosInstance} from "../../../AuthProvider";
 
 const TASK_QUERY_KEYS = {
     getTasksChart: getKey('GET', 'TASK', 'MULTIPLE', 'QUERY'),
@@ -14,8 +14,8 @@ const TASK_QUERY_KEYS = {
     getSearchTasks: getKey('GET', 'SEARCH-TASKS', 'MULTIPLE', 'QUERY'),
 }
 
-export function useTaskGet(key?: string) {
-    const { getTask } = useTaskHttp(useCreateAxiosInstance());
+export function useTaskGet(key: string) {
+    const { getTask } = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTask, key],
@@ -24,7 +24,7 @@ export function useTaskGet(key?: string) {
 }
 
 export function useSearchTaskGet() {
-    const { getTasksToSearch } = useTaskHttp(useCreateAxiosInstance());
+    const { getTasksToSearch } = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getSearchTasks],
@@ -33,7 +33,7 @@ export function useSearchTaskGet() {
 }
 
 export function useTaskTypesGet() {
-    const { getTaskTypes } = useTaskHttp(useCreateAxiosInstance());
+    const { getTaskTypes } = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTaskTypes],
@@ -42,7 +42,7 @@ export function useTaskTypesGet() {
 }
 
 export function useTaskStatusesGet(key?: string) {
-    const { getTaskStatuses } = useTaskHttp(useCreateAxiosInstance());
+    const { getTaskStatuses } = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTaskStatuses, key],
@@ -51,7 +51,7 @@ export function useTaskStatusesGet(key?: string) {
 }
 
 export function useAllowedTaskStatusesGet(key?: string) {
-    const { getAllowedTaskStatuses } = useTaskHttp(useCreateAxiosInstance());
+    const { getAllowedTaskStatuses } = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getAllowedTaskStatuses, key],
@@ -60,7 +60,7 @@ export function useAllowedTaskStatusesGet(key?: string) {
 }
 
 export function useTaskCreate() {
-    const { postTask } = useTaskHttp(useCreateAxiosInstance());
+    const { postTask } = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -74,7 +74,7 @@ export function useTaskCreate() {
 }
 
 export function useChangeTaskStatus(key?: string) {
-    const { changeTaskStatus } = useTaskHttp(useCreateAxiosInstance());
+    const { changeTaskStatus } = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
 
@@ -91,7 +91,7 @@ export function useChangeTaskStatus(key?: string) {
 }
 
 export function useCloseTask(key?: string) {
-    const { closeTask } = useTaskHttp(useCreateAxiosInstance());
+    const { closeTask } = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
 
@@ -106,7 +106,7 @@ export function useCloseTask(key?: string) {
 }
 
 export function useTaskUpdate(key?: string, projectId?: string) {
-    const { putTask } = useTaskHttp(useCreateAxiosInstance());
+    const { putTask } = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({

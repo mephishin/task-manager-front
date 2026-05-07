@@ -2,12 +2,10 @@ import {CommentFormScheme, commentFormValidationScheme} from "./CommentFormSchem
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Box from "@mui/material/Box";
-import {Stack} from "@mui/material";
+import {Button, Stack} from "@mui/material";
 import {InputController, InputFileController} from "../../../../components/forms/FormFieldsControllers";
-import Button from "@mui/material/Button";
 import React, {useEffect} from "react";
 import {TaskComment} from "../../../../model/task/TaskComment";
-import {useParams} from "react-router-dom";
 import {transformFilesToZip} from "../../../../util/ZIp";
 import {useTaskCommentUpdate} from "../../../../hooks/query/comment/useComment";
 
@@ -15,9 +13,10 @@ interface EditCommentFormProps {
     editable: boolean,
     comment: TaskComment,
     setIsEditing: React.Dispatch<React.SetStateAction<string>>
+    taskKey: string
 }
 
-export const EditCommentForm = ({editable, comment, setIsEditing}: EditCommentFormProps) => {
+export const EditCommentForm = ({editable, comment, setIsEditing, taskKey}: EditCommentFormProps) => {
     const {control, resetField, handleSubmit, formState: {errors}} = useForm<CommentFormScheme>({
         defaultValues: {
             commentId: comment.id,
@@ -25,8 +24,7 @@ export const EditCommentForm = ({editable, comment, setIsEditing}: EditCommentFo
         },
         resolver: zodResolver(commentFormValidationScheme)
     })
-    const {key} = useParams();
-    const {mutate, isPending, isSuccess} = useTaskCommentUpdate(key!);
+    const {mutate, isPending, isSuccess} = useTaskCommentUpdate(taskKey);
 
     const onSubmit = (comment: CommentFormScheme) => {
         comment.files

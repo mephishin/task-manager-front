@@ -13,14 +13,13 @@ import { getLabel } from "../../../../hooks/query/users/useUsersHttpDto";
 import { AutocompleteController, InputController } from "../../../../components/forms/FormFieldsControllers";
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
 import {useTaskCreate} from "../../../../hooks/query/task/useTask";
-import {useParams} from "react-router-dom";
 import {useAuth} from "../../../../AuthProvider";
 
 interface CreateTaskFormProps {
+    projectId: string
 }
 
-const CreateTaskForm = ({ }: CreateTaskFormProps) => {
-    const { projectId } = useParams();
+const CreateTaskForm = ({ projectId }: CreateTaskFormProps) => {
 
     const users = useUsersByProjectIdGet(projectId);
     const {mutate} = useTaskCreate();

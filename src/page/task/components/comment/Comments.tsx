@@ -3,7 +3,6 @@ import React, {useState} from "react";
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {useParams} from "react-router-dom";
 import {getLabel, TaskComment} from "../../../../model/task/TaskComment";
 import {EditCommentForm} from "./EditCommentForm";
 import {useCommentDelete, useCommentFileDelete} from "../../../../hooks/query/comment/useComment";
@@ -25,6 +24,7 @@ const commentStyle = {
 
 interface CommentsProps {
     comments: TaskComment[]
+    taskKey: string
 }
 
 const commentHeadStyle = {
@@ -32,12 +32,11 @@ const commentHeadStyle = {
     display: 'inline'
 };
 
-export const Comments = ({comments}: CommentsProps) => {
-    const {key} = useParams();
+export const Comments = ({comments, taskKey}: CommentsProps) => {
     const {getUsername} = useAuth();
 
-    const deleteCommentFile = useCommentFileDelete(key!)
-    const deleteComment = useCommentDelete(key!)
+    const deleteCommentFile = useCommentFileDelete(taskKey!)
+    const deleteComment = useCommentDelete(taskKey!)
 
     const downloadCommentFile = (file: File) => {
         const link = document.createElement('a');
@@ -100,7 +99,8 @@ export const Comments = ({comments}: CommentsProps) => {
                             <EditCommentForm
                                 comment={comment}
                                 editable={isEditing === comment.id}
-                                setIsEditing={setIsEditing}/>
+                                setIsEditing={setIsEditing}
+                                taskKey={taskKey}/>
                         </ListItemText>)
                     </ListItem>
                     {comment.files.length > 0 &&

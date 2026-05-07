@@ -29,7 +29,7 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
             }
         })
 
-    const getTask = (key: string | undefined): Promise<Task> =>
+    const getTask = (key: string): Promise<Task> =>
         axiosInstance.get(`/task/${key}`)
             .then((response: AxiosResponse) => {
                 return response.data

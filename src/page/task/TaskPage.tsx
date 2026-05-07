@@ -1,11 +1,8 @@
 import React from "react";
-import {useNavigate, useParams} from "react-router-dom";
 import {Box, CircularProgress, Grid2, IconButton, List, Stack, TextField, Typography} from "@mui/material";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import {useTaskGet, useTaskTypesGet, useTaskUpdate} from "../../hooks/query/task/useTask";
-import {useUsersByProjectIdGet} from "../../hooks/query/users/useUsers";
+import {useTaskGet} from "../../hooks/query/task/useTask";
 import {formatISORus} from "../../util/LocalInterval";
-import {UpdateTask} from "./components/updateTask/UpdateTaskFormScheme";
 import {UpdateTaskForm} from "./components/updateTask/UpdateTaskForm";
 import {Comments} from "./components/comment/Comments";
 import {useTaskCommentsGet} from "../../hooks/query/comment/useComment";
@@ -64,28 +61,25 @@ const mainBoxStyle = {
     height: '100%', overflow: 'auto'
 };
 
-export const TaskPage = () => {
-    const {key} = useParams();
-    const navigate = useNavigate();
-
-    const {data: task} = useTaskGet(key);
-    const taskComments = useTaskCommentsGet(key!)
+export const TaskPage = (taskKey: string) => {
+    const {data: task} = useTaskGet(taskKey);
+    const taskComments = useTaskCommentsGet(taskKey)
 
     return (<Box sx={mainBoxStyle}>
         <Box sx={boxStyle}>
             <Grid2 container spacing={2}>
                 <Grid2>
-                    <IconButton onClick={() => navigate(-1)} sx={{margin: 1}}>
+                    <IconButton onClick={() => {}} sx={{margin: 1}}>
                         <ArrowBackIosNewOutlinedIcon/>
                     </IconButton>
                 </Grid2>
                 <Grid2 container size={12} sx={gridElemStyle}>
                     <TextField label={"Ключ задачи"} slotProps={readOnlyTextFieldSlotProps}
                                sx={readOnlyTextFieldStyle}
-                               focused defaultValue={key}></TextField>
+                               focused defaultValue={taskKey}></TextField>
                 </Grid2>
                 <Grid2 size={7} sx={gridElemStyle}>
-                    <UpdateTaskForm/>
+                    <UpdateTaskForm taskKey={taskKey}/>
                 </Grid2>
                 <Grid2 size={5} sx={gridElemStyle}>
                     <Stack>
@@ -106,11 +100,11 @@ export const TaskPage = () => {
                 </Grid2>
                 {(taskComments.isFetched && taskComments.data) ? (<Grid2 size={12}>
                     <List sx={commentSectionStyle}>
-                        <Comments comments={taskComments.data}/>
+                        <Comments taskKey={taskKey} comments={taskComments.data}/>
                     </List>
                 </Grid2>) : <CircularProgress color={"secondary"}/>}
                 <Grid2 size={12} sx={gridElemStyle}>
-                    <PostCommentForm/>
+                    <PostCommentForm taskKey={taskKey}/>
                 </Grid2>
             </Grid2>
         </Box>

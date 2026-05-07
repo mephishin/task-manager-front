@@ -12,7 +12,7 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "@tanstack/react-router";
 
 export interface TaskOption {
     id: string;
@@ -46,7 +46,7 @@ const SearchableList: React.FC<SearchableTaskListProps> = ({ options, label }) =
     };
 
     const handleSelect = (option: TaskOption) => {
-        navigate(`/task/${option.id}`);
+        // navigate({to: `/task/${option.id}`});
     };
 
     return (

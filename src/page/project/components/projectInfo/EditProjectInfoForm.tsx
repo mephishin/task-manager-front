@@ -1,11 +1,9 @@
 import React, {useEffect} from "react";
-import { Stack } from "@mui/material";
+import {Button, Stack} from "@mui/material";
 import { useForm } from "react-hook-form";
-import Button from "@mui/material/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {ProjectInfoScheme, projectInfoFormValidationScheme} from "./ProjectInfoScheme";
 import {InputController, InputFileController} from "../../../../components/forms/FormFieldsControllers";
-import {useParams} from "react-router-dom";
 import {transformFilesToZip} from "../../../../util/ZIp";
 import Box from "@mui/material/Box";
 import {useProjectInfoSave} from "../../../../hooks/query/project/useProject";
@@ -13,11 +11,11 @@ import {useProjectInfoSave} from "../../../../hooks/query/project/useProject";
 interface EditProjectInfoFormProps {
     editable: boolean,
     description: string,
-    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>,
+    projectId: string
 }
 
-export const EditProjectInfoForm = ({editable, description, setIsEditing}: EditProjectInfoFormProps) => {
-    const {projectId} = useParams();
+export const EditProjectInfoForm = ({editable, description, setIsEditing, projectId}: EditProjectInfoFormProps) => {
     const {control, resetField, handleSubmit, formState: {errors}} = useForm<ProjectInfoScheme>({
         defaultValues: {
             projectId: projectId,

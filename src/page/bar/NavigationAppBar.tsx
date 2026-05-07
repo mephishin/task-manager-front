@@ -1,10 +1,10 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import {Outlet} from "react-router-dom";
 import {Box,} from "@mui/material";
 import {NavigationButton} from './components/NavigationButton';
 import {ProfileButton} from './components/ProfileButton';
+import {Outlet} from "@tanstack/react-router";
 
 export const NavigationAppBar = () => {
     return (
