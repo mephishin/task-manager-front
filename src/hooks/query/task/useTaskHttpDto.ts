@@ -9,5 +9,5 @@ export interface UpdateTaskRq {
     key: string
     name: string,
     description: string,
-    assignee: string,
+    assignee: string | null,
 }
