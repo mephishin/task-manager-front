@@ -1,11 +1,10 @@
-import { Task } from "../../../model/task/Task";
-import { AxiosInstance, AxiosResponse } from "axios";
-import { SearchTask } from "../../../model/task/SearchTask";
-import { CreateTaskRq, UpdateTaskRq } from "./useTaskHttpDto";
+import {Task} from "../../../model/task/Task";
+import {AxiosInstance, AxiosResponse} from "axios";
+import {CreateTaskRq, UpdateTaskRq} from "./useTaskHttpDto";
 
 export function useTaskHttp(axiosInstance: AxiosInstance) {
-    const getTasksToSearch = (): Promise<SearchTask[]> =>
-        axiosInstance.get("/task/search?filter=userProject")
+    const getTasks = (projectId: string): Promise<Task[]> =>
+        axiosInstance.get(`/task?projectId=${projectId}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -73,6 +72,6 @@ export function useTaskHttp(axiosInstance: AxiosInstance) {
         changeTaskStatus,
         closeTask,
         getAllowedTaskStatuses,
-        getTasksToSearch,
+        getTasks,
     }
 }

@@ -1,8 +1,7 @@
-import { useTaskHttp } from "./useTaskHttp";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getKey } from "../QueryUtility";
+import {useTaskHttp} from "./useTaskHttp";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {getKey} from "../QueryUtility";
 import {TASK_CHART_QUERY_KEYS_KEYS} from "../tasksChart/useTasksChart";
-import {useNavigate} from "@tanstack/react-router";
 import {useAxiosInstance} from "../../../AuthProvider";
 
 const TASK_QUERY_KEYS = {
@@ -15,7 +14,7 @@ const TASK_QUERY_KEYS = {
 }
 
 export function useTaskGet(key: string) {
-    const { getTask } = useTaskHttp(useAxiosInstance());
+    const {getTask} = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTask, key],
@@ -23,17 +22,17 @@ export function useTaskGet(key: string) {
     })
 }
 
-export function useSearchTaskGet() {
-    const { getTasksToSearch } = useTaskHttp(useAxiosInstance());
+export function useTasks(projectId: string) {
+    const {getTasks} = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getSearchTasks],
-        queryFn: getTasksToSearch,
+        queryFn: () => getTasks(projectId),
     })
 }
 
 export function useTaskTypesGet() {
-    const { getTaskTypes } = useTaskHttp(useAxiosInstance());
+    const {getTaskTypes} = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTaskTypes],
@@ -42,7 +41,7 @@ export function useTaskTypesGet() {
 }
 
 export function useTaskStatusesGet(key?: string) {
-    const { getTaskStatuses } = useTaskHttp(useAxiosInstance());
+    const {getTaskStatuses} = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getTaskStatuses, key],
@@ -51,35 +50,35 @@ export function useTaskStatusesGet(key?: string) {
 }
 
 export function useAllowedTaskStatusesGet(key?: string) {
-    const { getAllowedTaskStatuses } = useTaskHttp(useAxiosInstance());
+    const {getAllowedTaskStatuses} = useTaskHttp(useAxiosInstance());
 
     return useQuery({
         queryKey: [TASK_QUERY_KEYS.getAllowedTaskStatuses, key],
-        queryFn: () => getAllowedTaskStatuses({ taskKey: key })
+        queryFn: () => getAllowedTaskStatuses({taskKey: key})
     });
 }
 
 export function useTaskCreate() {
-    const { postTask } = useTaskHttp(useAxiosInstance());
+    const {postTask} = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: postTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTasksChart] })
+            queryClient.invalidateQueries({queryKey: [TASK_QUERY_KEYS.getTasksChart]})
         }
     });
 }
 
 export function useChangeTaskStatus(key?: string) {
-    const { changeTaskStatus } = useTaskHttp(useAxiosInstance());
+    const {changeTaskStatus} = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
 
     return useMutation({
         mutationFn: changeTaskStatus,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTasksChart] })
+            queryClient.invalidateQueries({queryKey: [TASK_QUERY_KEYS.getTasksChart]})
             queryClient.invalidateQueries({
                 predicate: (query) =>
                     query.queryKey[0] === TASK_QUERY_KEYS.getAllowedTaskStatuses && query.queryKey[1] === key,
@@ -89,29 +88,29 @@ export function useChangeTaskStatus(key?: string) {
 }
 
 export function useCloseTask(key?: string) {
-    const { closeTask } = useTaskHttp(useAxiosInstance());
+    const {closeTask} = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
 
     return useMutation({
         mutationFn: closeTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTasksChart] })
-            queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTask, key] })
+            queryClient.invalidateQueries({queryKey: [TASK_QUERY_KEYS.getTasksChart]})
+            queryClient.invalidateQueries({queryKey: [TASK_QUERY_KEYS.getTask, key]})
         }
 
     });
 }
 
 export function useTaskUpdate(key?: string, projectId?: string) {
-    const { putTask } = useTaskHttp(useAxiosInstance());
+    const {putTask} = useTaskHttp(useAxiosInstance());
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: putTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEYS.getTask, key] })
-            queryClient.invalidateQueries({ queryKey: [TASK_CHART_QUERY_KEYS_KEYS.getTasksChart, projectId] })
+            queryClient.invalidateQueries({queryKey: [TASK_QUERY_KEYS.getTask, key]})
+            queryClient.invalidateQueries({queryKey: [TASK_CHART_QUERY_KEYS_KEYS.getTasksChart, projectId]})
         },
     });
 }

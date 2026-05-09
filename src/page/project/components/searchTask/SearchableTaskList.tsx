@@ -18,6 +18,7 @@ export interface TaskOption {
     id: string;
     name: string;
     status: string;
+    assignee: string;
 }
 
 interface SearchableTaskListProps {
@@ -67,6 +68,7 @@ const SearchableList: React.FC<SearchableTaskListProps> = ({options, label}) => 
                         <TableRow>
                             <TableCell>Ключ задачи</TableCell>
                             <TableCell>Название</TableCell>
+                            <TableCell>Исполнитель</TableCell>
                             <TableCell>Статус</TableCell>
                         </TableRow>
                     </TableHead>
@@ -87,6 +89,11 @@ const SearchableList: React.FC<SearchableTaskListProps> = ({options, label}) => 
                                 <TableCell>
                                     <Typography color='#656565'>
                                         {row.name}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography color='#656565'>
+                                        {row.assignee}
                                     </Typography>
                                 </TableCell>
                                 <TableCell>

@@ -71,7 +71,7 @@ export const ProjectPage = (projectId: string) => {
                     <TasksChart projectId={projectId}/>
                 </TabPanel>
                 <TabPanel value={tab} index={3}>
-                    <SearchTaskTab/>
+                    <SearchTaskTab projectId={projectId}/>
                 </TabPanel>
                 <TabPanel value={tab} index={4}>
                     <CreateTaskTab projectId={projectId} setTab={setTab}/>
