@@ -63,7 +63,7 @@ export function useProjectInviteAccept() {
 
     return useMutation({
         mutationFn: (inviteKey: string) => acceptProjectInvite(inviteKey),
-        onSuccess: (data) =>
+        onSuccess: () =>
             queryClient.invalidateQueries({queryKey: [PROJECT_QUERY_KEYS.get, getId()]})
     });
 }

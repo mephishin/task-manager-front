@@ -4,11 +4,7 @@ import {useForm} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {
-    CreateTask,
-    CreateTaskAssignee,
-    createTaskFormValidationSchema
-} from "./CreateTaskFormSchema";
+import {CreateTask, CreateTaskAssignee, createTaskFormValidationSchema} from "./CreateTaskFormSchema";
 import {getLabel} from "../../../../hooks/query/users/useUsersHttpDto";
 import {AutocompleteController, InputController} from "../../../../components/forms/FormFieldsControllers";
 import {useUsersByProjectIdGet} from "../../../../hooks/query/users/useUsers";
@@ -76,6 +72,7 @@ const CreateTaskForm = ({projectId, setTab}: CreateTaskFormProps) => {
                         return {id: user.id, name: getLabel(user)};
                     })}
                     errors={errors}
+                    sx={{margin: 5}}
                     getLabel={(assignee: CreateTaskAssignee) => assignee?.name ? assignee?.name : ""}
                     getId={(assignee: CreateTaskAssignee) => assignee?.id ? assignee.id : ""}/>
                 <Button onClick={handleSubmit(onSubmit)}>Подтвердить</Button>

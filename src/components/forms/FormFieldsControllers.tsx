@@ -1,4 +1,4 @@
-import {Control, FieldErrors, useController} from "react-hook-form";
+import {FieldErrors, useController} from "react-hook-form";
 import {
     Autocomplete,
     Box as Stack,
@@ -6,9 +6,10 @@ import {
     FormControl,
     FormHelperText,
     InputLabel,
+    List,
     Select,
     TextField,
-    Typography, List
+    Typography
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import React, {ComponentPropsWithoutRef} from "react";
@@ -136,6 +137,7 @@ interface AutocompleteControllerProps<T> {
     getId: (option: T) => string,
     label: string
     errors?: FieldErrors<any>
+    sx: any
 }
 
 export function AutocompleteController<T, >({
@@ -145,7 +147,8 @@ export function AutocompleteController<T, >({
                                                 options,
                                                 errors,
                                                 getLabel,
-                                                getId
+                                                getId,
+                                                sx
                                             }: AutocompleteControllerProps<T>) {
     const {
         field,
@@ -169,7 +172,7 @@ export function AutocompleteController<T, >({
                 label={label}
                 error={!!errors?.[name]}
                 helperText={errors?.[name]?.message?.toString()}/>}
-            sx={{margin: 5}}
+            sx={sx}
         >
         </Autocomplete>
     )

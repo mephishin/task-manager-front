@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 import {Button, Stack} from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {ProjectInfoScheme, projectInfoFormValidationScheme} from "./ProjectInfoScheme";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {projectInfoFormValidationScheme, ProjectInfoScheme} from "./ProjectInfoScheme";
 import {InputController, InputFileController} from "../../../../components/forms/FormFieldsControllers";
 import {transformFilesToZip} from "../../../../util/ZIp";
 import Box from "@mui/material/Box";
@@ -40,6 +40,7 @@ export const EditProjectInfoForm = ({editable, description, setIsEditing, projec
     useEffect(() => {
         if (isSuccess && !isPending) {
             resetField("description", {defaultValue: description});
+            resetField("files")
         }
     }, [isPending, isSuccess, resetField]);
 

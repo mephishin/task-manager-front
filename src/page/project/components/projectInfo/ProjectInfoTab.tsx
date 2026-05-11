@@ -1,23 +1,9 @@
-import {
-    Box,
-    Grid2,
-    IconButton,
-    Link,
-    List,
-    ListItem,
-    ListItemIcon,
-    Stack,
-    styled,
-    Typography
-} from "@mui/material";
+import {Box, Grid2, IconButton, Link, List, ListItem, ListItemIcon, Stack, styled, Typography} from "@mui/material";
 import React, {useState} from "react";
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    useProjectFileDelete,
-    useProjectFilesGet, useProjectGetById
-} from "../../../../hooks/query/project/useProject";
+import {useProjectFileDelete, useProjectFilesGet, useProjectGetById} from "../../../../hooks/query/project/useProject";
 import {EditProjectInfoForm} from "./EditProjectInfoForm";
 import EditIcon from "@mui/icons-material/Edit";
 import {useAuth} from "../../../../AuthProvider";
@@ -66,7 +52,7 @@ const typographyStyle = {
     color: '#656565'
 };
 
-export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
+export const ProjectInfoTab = ({projectId}: ProjectInfoPageProps) => {
     const getProjectFiles = useProjectFilesGet(projectId);
     const getProjectById = useProjectGetById(projectId);
     const deleteProjectFile = useProjectFileDelete();
@@ -102,9 +88,9 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
                 <Grid2 container columns={20} sx={{borderRadius: 1, backgroundColor: "white", p: 2}}>
                     <Grid2 size={19}>
                         <EditProjectInfoForm editable={isEditing} description={getProjectById.data.description}
-                                             setIsEditing={setIsEditing}/>
+                                             setIsEditing={setIsEditing} projectId={projectId}/>
                     </Grid2>
-                    <Grid2 container sx={{
+                    {hasRole(LEADER) && <Grid2 container sx={{
                         justifyContent: 'center',
                         alignItems: 'center',
                         p: 1
@@ -114,7 +100,7 @@ export const ProjectInfo = ({projectId}: ProjectInfoPageProps) => {
                             size="small">
                             <EditIcon/>
                         </IconButton>
-                    </Grid2>
+                    </Grid2>}
                 </Grid2>
                 <Box sx={{borderRadius: 1, backgroundColor: "white"}}>
                     {getProjectFiles.data?.length ? (

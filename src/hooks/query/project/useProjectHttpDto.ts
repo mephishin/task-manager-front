@@ -1,7 +1,7 @@
 export interface CreateProjectRq {
     name: string,
     description: string,
-    participants: string[],
+    leader: string,
     taskPrefix: string,
 }
 
@@ -11,6 +11,7 @@ export interface Participant {
     middleName: string,
     lastName: string,
     group: string,
+    roles: string[],
 }
 
 export function getLabel(participant: Participant): string {

@@ -133,18 +133,20 @@ export const ParticipantsInfo = ({projectId}: ProjectInfoPageProps) => {
                                     <Typography color="primary">
                                         {getLabel(participant)}
                                     </Typography>
+                                    {participant.roles.includes(LEADER) && <Typography color="primary">
+                                        Лидер проекта
+                                    </Typography>}
                                 </ListItemText>
                             </ListItem>
                         ))}
                     </List>
                 </Box>
-                <Box sx={{borderRadius: 1, backgroundColor: "white", p: 1, display: "flex"}}>
+                {hasRole(LEADER) && <Box sx={{borderRadius: 1, backgroundColor: "white", p: 1, display: "flex"}}>
                     <TextField label={"Ключ приглашения"} slotProps={readOnlyTextFieldSlotProps}
                                helperText="Ключ нужен для того, чтобы пользователь стал участником проекта. Ключ одноразовый."
                                sx={readOnlyTextFieldStyle}
                                focused defaultValue={getProjectInviteByProjectId.data}></TextField>
-                </Box>
-
+                </Box>}
             </Stack>
         )
     }

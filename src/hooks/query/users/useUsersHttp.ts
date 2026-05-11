@@ -2,8 +2,14 @@ import {AxiosInstance, AxiosResponse} from "axios";
 import {Users} from "./useUsersHttpDto";
 
 export function useUsersHttp(axiosInstance: AxiosInstance) {
-    const getParticipantsByProjectId = (projectId: string): Promise<Array<Users>> =>
+    const getParticipantsByProjectId = (projectId?: string): Promise<Array<Users>> =>
         axiosInstance.get(`/users?projectId=${projectId}`)
+            .then((response: AxiosResponse) => {
+                return response.data
+            })
+
+    const getParticipantsByRole = (role?: string, withoutProject?: boolean): Promise<Array<Users>> =>
+        axiosInstance.get(`/users?role=${role}&withoutProject=${withoutProject}`)
             .then((response: AxiosResponse) => {
                 return response.data
             })
@@ -12,7 +18,8 @@ export function useUsersHttp(axiosInstance: AxiosInstance) {
         axiosInstance.delete(`/users/${userId}/project`)
 
     return {
-        getParticipants: getParticipantsByProjectId,
-        removeParticipantFromProject
+        getParticipantsByProjectId,
+        removeParticipantFromProject,
+        getParticipantsByRole,
     }
 }

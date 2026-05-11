@@ -1,7 +1,7 @@
 import {Box, Tab, Tabs} from "@mui/material";
 import React from "react";
 import TasksChart from "./components/taskChart/TasksChart";
-import {ProjectInfo} from "./components/projectInfo/ProjectInfo";
+import {ProjectInfoTab} from "./components/projectInfo/ProjectInfoTab";
 import {SearchTaskTab} from "./components/searchTask/SearchTaskTab";
 import {CreateTaskTab} from "./components/createTask/CreateTaskTab";
 import {ParticipantsInfo} from "./components/participants/ParticipantsInfo";
@@ -62,7 +62,7 @@ export const ProjectPage = (projectId: string) => {
 
             <Box sx={{width: '100%'}}>
                 <TabPanel value={tab} index={0}>
-                    <ProjectInfo projectId={projectId}/>
+                    <ProjectInfoTab projectId={projectId}/>
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
                     <ParticipantsInfo projectId={projectId}/>

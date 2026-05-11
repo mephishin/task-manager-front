@@ -66,7 +66,8 @@ export const UpdateTaskForm = ({taskKey}: UpdateTaskFormProps) => {
                     return {id: user.id, name: getLabel(user)}
                 })}
                 getLabel={(assignee: UpdateTaskAssignee) => assignee?.name ? assignee?.name : ""}
-                getId={(assignee: UpdateTaskAssignee) => assignee?.id ? assignee.id : ""}/>
+                getId={(assignee: UpdateTaskAssignee) => assignee?.id ? assignee.id : ""}
+                sx={{m: 5}}/>
             <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
         </Stack>
     )
